@@ -1,0 +1,20 @@
+[versions]
+kotest = "5.9.1"
+mockito = "5.12.0"
+kotlin = "2.0.0"
+ktlint = "10.3.0"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotest-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+
+[bundles]
+kotlin-testing = [ "kotest-junit5-jvm", "kotest-assertions-core-jvm", "mockito-core" ]
+
+[plugins]
+dokka = "org.jetbrains.dokka:1.9.20"
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.7" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
