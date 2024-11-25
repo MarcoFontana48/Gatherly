@@ -1,7 +1,14 @@
 # Knowledge Crunching
-[« Back to Index](../docs.md)
+[« Back to Index](../docs.md)\
+This section contains domain-specific knowledge useful for understanding
+the terminology and requirements of this project.
 
 ## User Stories
+
+To define the system requirements and extract the ubiquitous language, user stories have been written.
+These allow us to reason about the system from the perspective of the end user,
+guiding the modeling and development process in line with the expectations of the client;
+in this case, the future community and system administrators.
 
 ### Registration and Authentication
 
