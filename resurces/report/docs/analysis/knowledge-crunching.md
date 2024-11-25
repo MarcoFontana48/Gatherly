@@ -47,3 +47,41 @@
    As a **user**,\
    I want to receive notifications for new messages,\
    so that I know when I have a new message from a friend.
+
+### Contents
+
+1. **Publish Contents**\
+   As a **user with friends**,\
+   I want to publish posts,\
+   so that I can share my thoughts with my friends.
+
+
+2. **View Contents**\
+   As a **user with friends**,\
+   I want to visualize posts published by my friends,\
+   so that I can stay updated on what’s on my friends' minds.
+
+
+3. **Search by Keyword**\
+   As a **user**,\
+   I want to be able to search through my friends' posts by entering a keyword,\
+   so that I can see the posts that contain it.
+
+### Administration
+
+1. **Dashboard**\
+   As an **administrator**,\
+   I want to see a dashboard,\
+   so that I can monitor the total number of users.
+
+
+2. **Block and Unblock Users**\
+   As an **administrator**,\
+   I want to block and unblock users,\
+   so that I can maintain the social network a safe place for all the users.
+
+
+3. **Emergency Management**\
+   As an **administrator**,\
+   I want to receive a notification when something critical happens in the system,\
+   so that I can prevent the system crash when users publish too much posts.
