@@ -1,0 +1,37 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events on specified branches
+  push:
+    branches: [ "master" , "dev"]
+  pull_request:
+    branches: [ "master" , "dev"]
+
+  # Allows the run of this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs
+jobs:
+  # runs various CI steps like build, test, test coverage
+  build-and-test:
+    strategy:
+      # defines a matrix of OS, languages and versions to check whether it works on each possible combination of them
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+        java-version: [11, 17, 21]
+        java-distribution: [corretto, temurin]
+    runs-on: ${{ matrix.os }}
+    concurrency:
+      group: build-${{ github.workflow }}-${{ matrix.os }}-${{ matrix.java-version }}-${{ matrix.java-distribution }}-${{ github.event.number || github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        # we chose this action because it already contains several CI steps we needed, like 'build' 'test' and 'test coverage'
+      - name: Build using Gradle
+        uses: DanySK/build-check-deploy-gradle-action@3.5.25
+        with:
+          java-version: ${{ matrix.java-version }}
+          java-distribution: ${{ matrix.java-distribution }}
+          should-run-codecov: false
