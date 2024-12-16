@@ -12,3 +12,5 @@ gitHooks {
 }
 
 rootProject.name = "Social-Network"
+
+include("commons")
