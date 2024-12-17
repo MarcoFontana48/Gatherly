@@ -4,7 +4,7 @@ import social.ddd.Entity
 import social.ddd.Factory
 import social.ddd.ID
 
-class User (userID: UserID, private val username: String) : Entity<UserID>(userID)
+class User (val email: UserID, val username: String) : Entity<UserID>(email)
 
 data class UserID (val userID: String) : ID<String>(userID)
 
