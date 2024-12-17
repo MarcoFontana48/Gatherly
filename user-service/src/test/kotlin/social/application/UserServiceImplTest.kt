@@ -23,8 +23,7 @@ class UserServiceImplTest {
 
     @Test
     fun addUser() {
-        service.addUser(user)
-        assertDoesNotThrow { repository.save(user) }
+        assertDoesNotThrow { service.addUser(user) }
     }
 
     @Test
