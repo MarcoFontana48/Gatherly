@@ -7,7 +7,7 @@ interface FriendshipEvent : DomainEvent
 data class FriendshipRequestSent(
     val sender: String,
     val receiver: String,
-): FriendshipEvent {
+) : FriendshipEvent {
     companion object {
         const val TOPIC = "friendship-request-sent"
     }
@@ -16,7 +16,7 @@ data class FriendshipRequestSent(
 data class FriendshipRequestAccepted(
     val sender: String,
     val receiver: String,
-): FriendshipEvent {
+) : FriendshipEvent {
     companion object {
         const val TOPIC = "friendship-request-accepted"
     }
@@ -25,7 +25,7 @@ data class FriendshipRequestAccepted(
 data class FriendshipRequestRejected(
     val sender: String,
     val receiver: String,
-): FriendshipEvent {
+) : FriendshipEvent {
     companion object {
         const val TOPIC = "friendship-request-rejected"
     }

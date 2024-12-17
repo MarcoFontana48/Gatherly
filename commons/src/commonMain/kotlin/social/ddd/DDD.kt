@@ -27,7 +27,7 @@ open class ID<I> (open val id: I) : ValueObject {
 /**
  * class to identify a DDD object as Entity
  */
-open class Entity<I: ID<*>>(open val id: I) {
+open class Entity<I : ID<*>>(open val id: I) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Entity<*>) return false
@@ -51,12 +51,12 @@ interface ValueObject
 /**
  * Marker interface to easily identify a domain object as aggregate root.
  */
-open class AggregateRoot<I : ID<*>> (id: I): Entity<I>(id)
+open class AggregateRoot<I : ID<*>> (id: I) : Entity<I>(id)
 
 /**
  * Marker interface to easily identify a domain object as repository.
  */
-interface Repository<I: ID<*>, E: Entity<*>> {
+interface Repository<I : ID<*>, E : Entity<*>> {
     fun findById(id: I): E?
     fun save(entity: E)
     fun deleteById(id: I): E?
@@ -67,7 +67,7 @@ interface Repository<I: ID<*>, E: Entity<*>> {
 /**
  * Marker interface to easily identify a domain object as factory.
  */
-interface Factory<E: Entity<*>>
+interface Factory<E : Entity<*>>
 
 /**
  * Marker interface to easily identify a domain object as domain event

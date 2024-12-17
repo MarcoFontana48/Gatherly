@@ -13,7 +13,7 @@ interface UserEvent : DomainEvent
 data class UserCreated(
     val username: String,
     val email: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "user-created"
     }
@@ -24,7 +24,7 @@ data class UserCreated(
  */
 data class UserBlocked(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "user-blocked"
     }
@@ -35,7 +35,7 @@ data class UserBlocked(
  */
 data class UserUnblocked(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "user-unblocked"
     }
@@ -46,7 +46,7 @@ data class UserUnblocked(
  */
 data class UserLoggedOut(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "user-logged-out"
     }
@@ -57,7 +57,7 @@ data class UserLoggedOut(
  */
 data class AdminLoggedOut(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "admin-logged-out"
     }
@@ -68,7 +68,7 @@ data class AdminLoggedOut(
  */
 data class UserLoggedIn(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "user-logged-in"
     }
@@ -79,7 +79,7 @@ data class UserLoggedIn(
  */
 data class AdminLoggedIn(
     val username: String,
-): UserEvent {
+) : UserEvent {
     companion object {
         const val TOPIC = "admin-logged-in"
     }
