@@ -3,12 +3,17 @@ kotest = "5.9.1"
 mockito = "5.12.0"
 kotlin = "2.0.0"
 ktlint = "10.3.0"
+log4j = "2.20.0"
+archunit-version = "1.3.0"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotest-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit-version" }
 
 [bundles]
 kotlin-testing = [ "kotest-junit5-jvm", "kotest-assertions-core-jvm", "mockito-core" ]
