@@ -9,12 +9,13 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
-    testImplementation(libs.archunit)
     implementation(libs.vertx.core)
     implementation(project(":commons"))
+    testImplementation(kotlin("test"))
+    testImplementation(libs.archunit)
+    testImplementation(libs.mockito.core)
 }
 
 tasks.test {
