@@ -1,6 +1,7 @@
 // defines a list of plugins to be applied to the project
 plugins {
     id("kotlin-multiplatform")
+    alias(libs.plugins.ktlint)
 }
 
 // what repositories to use for resolving dependencies
@@ -29,13 +30,9 @@ kotlin {
         // target consists of a node project
         nodejs {
             // configuration of project running
-            runTask {
-
-            }
+            runTask {}
             // configuration of test execution
-            testRuns {
-
-            }
+            testRuns {}
         }
     }
 
