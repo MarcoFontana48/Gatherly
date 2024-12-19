@@ -5,7 +5,7 @@ import io.vertx.core.Verticle
 import social.ddd.Repository
 import social.ddd.Service
 import social.domain.User
-import social.domain.UserID
+import social.domain.User.UserID
 
 interface UserService : Verticle, Service {
     fun addUser(user: User)

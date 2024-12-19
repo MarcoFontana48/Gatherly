@@ -4,17 +4,19 @@ import social.ddd.Entity
 import social.ddd.Factory
 import social.ddd.ID
 
-class User(val email: UserID, val username: String) : Entity<UserID>(email)
+class User private constructor(val email: String, val username: String) : Entity<User.UserID>(UserID(email)) {
+    /**
+     * Data class to represent the user ID.
+     */
+    data class UserID(val value: String) : ID<String>(value)
 
-data class UserID(val userID: String) : ID<String>(userID)
+    companion object : Factory<User> {
+        fun of(email: String, username: String): User = User(asId(email), username)
 
-object UserFactory : Factory<User> {
-    fun userOf(email: String, username: String): User = User(userIDOf(email), username)
-
-    private fun userIDOf(email: String): UserID {
-        // check if the email is valid, if no match is found, returns null, else returns the email as UserID
-        return Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}\$").find(email)?.value?.let {
-            UserID(it)
-        } ?: throw IllegalArgumentException("Invalid email") // if there is no match (null), throw an exception
+        private fun asId(email: String): String {
+            // check if the email is valid, if no match is found, returns null, else returns the email as UserID
+            return Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}\$")
+                .find(email)?.value ?: throw IllegalArgumentException("Invalid email")
+        }
     }
 }
