@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.log4j.core)
     implementation(libs.vertx.core)
     implementation(project(":commons"))
+    implementation("mysql:mysql-connector-java:8.0.33")
     testImplementation(kotlin("test"))
     testImplementation(libs.archunit)
     testImplementation(libs.mockito.core)
