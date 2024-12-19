@@ -1,6 +1,6 @@
-package social.events
+package social.common.events
 
-import social.ddd.DomainEvent
+import social.common.ddd.DomainEvent
 
 /**
  * Interface to represent a user event.

@@ -1,14 +1,16 @@
 package social.application
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import social.ddd.Repository
-import social.domain.User
-import social.domain.User.UserID
-import social.infrastructure.persitence.sql.UserSQLRepository
-import kotlin.test.assertEquals
+import social.common.ddd.Repository
+import social.user.application.UserService
+import social.user.application.UserServiceImpl
+import social.user.domain.User
+import social.user.domain.User.UserID
+import social.user.infrastructure.persitence.sql.UserSQLRepository
 
 class UserServiceImplTest {
     private val repository: Repository<UserID, User> = mock(UserSQLRepository::class.java)

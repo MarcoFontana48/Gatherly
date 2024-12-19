@@ -1,10 +1,10 @@
-package social.infrastructure.persitence.sql
+package social.user.infrastructure.persitence.sql
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException
 import org.apache.logging.log4j.LogManager
-import social.ddd.Repository
-import social.domain.User
-import social.domain.User.UserID
+import social.common.ddd.Repository
+import social.user.domain.User
+import social.user.domain.User.UserID
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement

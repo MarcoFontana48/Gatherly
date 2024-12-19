@@ -1,4 +1,4 @@
-package social.ddd
+package social.common.ddd
 
 /**
  * Marker interface to easily identify a domain object as service.

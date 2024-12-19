@@ -1,8 +1,8 @@
-package social.domain
+package social.user.domain
 
-import social.ddd.Entity
-import social.ddd.Factory
-import social.ddd.ID
+import social.common.ddd.Entity
+import social.common.ddd.Factory
+import social.common.ddd.ID
 
 class User private constructor(val email: String, val username: String) : Entity<User.UserID>(UserID(email)) {
     /**

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import social.domain.User
-import social.infrastructure.persitence.sql.UserSQLRepository
+import social.user.domain.User
+import social.user.infrastructure.persitence.sql.UserSQLRepository
 import java.io.File
 import java.sql.SQLIntegrityConstraintViolationException
 
