@@ -8,6 +8,7 @@ import social.user.domain.User.UserID
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
+import java.sql.SQLIntegrityConstraintViolationException
 
 class UserSQLRepository : Repository<UserID, User> {
     private val logger = LogManager.getLogger(UserSQLRepository::class)
@@ -84,7 +85,9 @@ class UserSQLRepository : Repository<UserID, User> {
             entity.username,
             entity.email
         )
-        ps.executeUpdate()
+        if (ps.executeUpdate() == 0) {
+            throw SQLIntegrityConstraintViolationException("no rows affected")
+        }
     }
 }
 
