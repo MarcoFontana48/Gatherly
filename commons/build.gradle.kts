@@ -1,3 +1,7 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 // defines a list of plugins to be applied to the project
 plugins {
     id("kotlin-multiplatform")
@@ -12,6 +16,10 @@ repositories {
 
 // top-level block for multiplatform project configuration
 kotlin {
+    compilerOptions {
+        // allWarningsAsErrors = true
+        freeCompilerArgs.add("-opt-in=kotlin.js.ExperimentalJsExport")
+    }
     jvmToolchain(21)
 
     // defines as target for the project jvm

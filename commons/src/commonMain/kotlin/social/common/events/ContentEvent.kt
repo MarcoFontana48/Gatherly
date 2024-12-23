@@ -1,11 +1,15 @@
 package social.common.events
 
 import social.common.ddd.DomainEvent
+import kotlin.js.JsExport
 
+@JsExport
 interface ContentEvent : DomainEvent
 
+@JsExport
 interface Alert : DomainEvent
 
+@JsExport
 data class PostPublished(
     val title: String,
     val username: String,
@@ -16,6 +20,7 @@ data class PostPublished(
     }
 }
 
+@JsExport
 data class ContentAlert(
     val title: String,
     val username: String,

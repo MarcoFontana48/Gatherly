@@ -1,9 +1,13 @@
 package social.common.endpoint
 
+import kotlin.js.JsExport
+
+@JsExport
 object Endpoint {
     const val USER = "/app/user"
 }
 
+@JsExport
 object StatusCode {
     const val OK = 200
     const val CREATED = 201
@@ -13,6 +17,7 @@ object StatusCode {
     const val INTERNAL_SERVER_ERROR = 500
 }
 
+@JsExport
 object Port {
     const val HTTP = 8080
 }

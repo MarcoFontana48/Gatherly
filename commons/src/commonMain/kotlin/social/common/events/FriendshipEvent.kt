@@ -1,9 +1,12 @@
 package social.common.events
 
 import social.common.ddd.DomainEvent
+import kotlin.js.JsExport
 
+@JsExport
 interface FriendshipEvent : DomainEvent
 
+@JsExport
 data class FriendshipRequestSent(
     val sender: String,
     val receiver: String,
@@ -13,6 +16,7 @@ data class FriendshipRequestSent(
     }
 }
 
+@JsExport
 data class FriendshipRequestAccepted(
     val sender: String,
     val receiver: String,
@@ -22,6 +26,7 @@ data class FriendshipRequestAccepted(
     }
 }
 
+@JsExport
 data class FriendshipRequestRejected(
     val sender: String,
     val receiver: String,

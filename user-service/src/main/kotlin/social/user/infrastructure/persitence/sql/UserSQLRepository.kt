@@ -65,7 +65,7 @@ class UserSQLRepository : Repository<UserID, User> {
         }
     }
 
-    override fun findAll(): Iterable<User> {
+    override fun findAll(): Array<User> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
             SQLOperation.SELECT_ALL_USERS
@@ -75,7 +75,7 @@ class UserSQLRepository : Repository<UserID, User> {
         while (rs.next()) {
             users.add(User.of(rs.getString(SQLColumns.EMAIL), rs.getString(SQLColumns.USERNAME)))
         }
-        return users
+        return users.toTypedArray()
     }
 
     override fun update(entity: User) {
