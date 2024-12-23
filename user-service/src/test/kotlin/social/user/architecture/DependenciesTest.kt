@@ -1,4 +1,4 @@
-package social.architecture
+package social.user.architecture
 
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.library.Architectures.layeredArchitecture
@@ -8,10 +8,10 @@ internal class DependenciesTest {
     @Test
     fun layerDependenciesAreRespected() {
         layeredArchitecture().consideringOnlyDependenciesInLayers()
-            .layer("Infrastructure").definedBy("social.infrastructure..")
-            .layer("Domain").definedBy("social.domain..")
+            .layer("Infrastructure").definedBy("social.user.infrastructure..")
+            .layer("Domain").definedBy("social.user.domain..")
             .whereLayer("Infrastructure").mayNotBeAccessedByAnyLayer()
             .whereLayer("Domain").mayOnlyBeAccessedByLayers("Infrastructure")
-            .check(ClassFileImporter().importPackages("social"))
+            .check(ClassFileImporter().importPackages("social.user"))
     }
 }
