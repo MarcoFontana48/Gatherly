@@ -1,4 +1,4 @@
-package social.infrastructure.persitence
+package social.user.infrastructure.persitence
 
 import org.apache.logging.log4j.LogManager
 import org.junit.jupiter.api.AfterEach
@@ -60,7 +60,7 @@ object UserSQLRepositoryTest {
             "docker", "run", "-d", "-p", "3306:3306", "--name", "user-sql-db", "user-sql-db"
         )
         Thread.sleep(7 * MINUTE)
-        repository.connect("user-sql-db", "3306", "user", "root", "password")
+        repository.connect("user-sql-db", "3306", "social/user", "root", "password")
     }
 
     @AfterEach
