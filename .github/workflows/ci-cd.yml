@@ -19,10 +19,7 @@ jobs:
       # defines a matrix of OS, languages and versions to check whether it works on each possible combination of them
       matrix:
         # disables macOS and windows to execute tests with docker
-        os:
-        - ubuntu-24.04
-#        - macos-14
-#        - windows-2022
+        os: [ubuntu-24.04, macos-14, windows-2022]
         java-version: [11, 17, 21]
         java-distribution: [corretto, temurin]
     runs-on: ${{ matrix.os }}
