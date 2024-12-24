@@ -1,0 +1,21 @@
+{
+  "name": "content-service",
+  "version": "1.0.0",
+  "main": "src/main/typescript/main.js",
+  "scripts": {
+    "build": "tsc --build",
+    "type-checking": "tsc --noEmit",
+    "dev": "nodemon --exec ts-node src/main/typescript/main.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^8.3.4",
+    "socket.io": "^4.7.5"
+  }
+}

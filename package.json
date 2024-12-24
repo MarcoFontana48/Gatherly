@@ -1,0 +1,14 @@
+{
+  "name": "social-network",
+  "description": "A generic implementation of a social network.\r [Explore the report »](./resurces/report/docs/docs.md)",
+  "main": "content-service/src/main/typescript/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiacomoRomagnoli/Social-Network.git"
+  },
+  "author": "Marco Fontana, Giacomo Romagnoli",
+  "license": "GPL-3.0-or-later"
+}

@@ -7,6 +7,7 @@ log4j = "2.20.0"
 archunit-version = "1.3.0"
 vertx = "4.4.5"
 jackson = "2.13.4.2"
+typescript-gradle-plugin-version = "4.3.5"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -29,3 +30,4 @@ dokka = "org.jetbrains.dokka:1.9.20"
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.7" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+typescript-gradle-plugin = { id = "io.github.zucchero-sintattico.typescript-gradle-plugin", version.ref = "typescript-gradle-plugin-version" }

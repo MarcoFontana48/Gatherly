@@ -23,3 +23,4 @@ rootProject.name = "Social-Network"
 
 include("commons")
 include("user-service")
+include("content-service")
