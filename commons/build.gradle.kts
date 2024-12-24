@@ -35,6 +35,10 @@ kotlin {
         // enables tasks for Node packages generation
         binaries.executable()
 
+        binaries.library()
+
+        generateTypeScriptDefinitions()
+
         // target consists of a node project
         nodejs {
             // configuration of project running

@@ -19,6 +19,9 @@ node {
     version = "22.1.0"
 }
 
+val commonsLibDirName = "commons-lib"
+val piperKtCommonsCompiledPath = "src/main/typescript/$commonsLibDirName"
+
 tasks.named("check") {
     dependsOn("compileTypescript")
     doLast {
@@ -28,5 +31,24 @@ tasks.named("check") {
             }
         }
             .onFailure { logger.error(it.stackTraceToString()) }
+    }
+}
+
+tasks.named("npmDependencies") {
+    dependsOn(":commons:jsNodeProductionLibraryDistribution")
+    doFirst {
+        copy {
+            from("../commons/build/dist/js/productionLibrary")
+            into(piperKtCommonsCompiledPath)
+        }
+    }
+}
+
+tasks.named("compileTypescript") {
+    doLast {
+        copy {
+            from(piperKtCommonsCompiledPath)
+            into("build/dist/$commonsLibDirName")
+        }
     }
 }
