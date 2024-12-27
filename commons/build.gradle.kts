@@ -86,4 +86,8 @@ kotlin {
             progressiveMode = true
         }
     }
+
+    tasks.named("jsNodeProductionLibraryDistribution") {
+        dependsOn("jsProductionExecutableCompileSync")
+    }
 }
