@@ -8,10 +8,9 @@ plugins {
 
 typescript {
     entrypoint = "src/main/typescript/main.js"
-    outputDir = "build/dist"
     tsConfig = "tsconfig.json"
-    buildCommandExecutable = BuildCommandExecutable.NPM
-    buildCommand = "run build"
+    buildCommandExecutable = BuildCommandExecutable.NODE
+    buildCommand = "node_modules/typescript/bin/tsc --build"
 }
 
 node {
@@ -23,7 +22,6 @@ val commonsLibDirName = "commons-lib"
 val piperKtCommonsCompiledPath = "src/main/typescript/$commonsLibDirName"
 
 tasks.named("check") {
-    dependsOn("compileTypescript")
     doLast {
         runCatching {
             shellRun(project.projectDir) {
