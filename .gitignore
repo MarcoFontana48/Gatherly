@@ -5,5 +5,4 @@ build/
 bin
 node_modules/
 commons-lib/
-db-password.txt
-db-root-password.txt
+*.txt
