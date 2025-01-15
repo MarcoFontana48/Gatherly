@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
-import kotlin.test.assertEquals
 
 abstract class DockerTest {
     private val logger = LogManager.getLogger(this::class)
@@ -48,20 +47,25 @@ abstract class DockerTest {
         return path
     }
 
-    internal fun executeDockerComposeCmd(composeFile: File, vararg arguments: String, async: Boolean = false): Process {
+    internal fun executeDockerComposeCmd(composeFile: File, vararg arguments: String) {
+        if (!composeFile.exists()) {
+            throw IllegalStateException("File not found: ${composeFile.absolutePath}")
+        }
+
         val command = mutableListOf("docker", "compose", "-f", "\"${composeFile.absolutePath}\"")
         command.addAll(arguments)
-        val commandString = command.joinToString(" ")
-        logger.trace("Executing command: {}", commandString)
-        return ProcessBuilder(command).inheritIO().start().also {
-            if (!async) {
-                it.waitFor()
-                assertEquals(
-                    expected = 0,
-                    actual = it.exitValue(),
-                    message = "Command `$commandString` returned non-zero exit code: ${it.exitValue()}",
-                )
-            }
+        val processBuilder = ProcessBuilder()
+            .command(command)
+            .redirectErrorStream(true)
+            .directory(composeFile.parentFile)
+
+        val process = processBuilder.start()
+        val output = process.inputStream.bufferedReader().use { it.readText() } // Capture output
+        val exitCode = process.waitFor()
+
+        if (exitCode != 0) {
+            logger.error("error when starting docker-compose: $output")
+            throw RuntimeException("Failed to start docker-compose: Exit code $exitCode")
         }
     }
 }
