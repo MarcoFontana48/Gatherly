@@ -19,7 +19,10 @@ jobs:
       # defines a matrix of OS, languages and versions to check whether it works on each possible combination of them
       matrix:
         # disables macOS and windows to execute tests with docker
-        os: [ubuntu-24.04, macos-14, windows-2022]
+        os:
+          - ubuntu-24.04
+        #          - macos-14
+        #          - windows-2022
         java-version: [17, 21]
         java-distribution: [corretto, temurin]
     runs-on: ${{ matrix.os }}
@@ -30,11 +33,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.2.2
 
-      - name: Set up Docker secrets for Compose
-        run: |
-          echo -n "${{ secrets.DB_ROOT_PASSWORD }}" > db-root-password.txt
-          echo -n "${{ secrets.DB_PASSWORD }}" > db-password.txt
-
         # we chose this action because it already contains several CI steps we needed, like 'build' 'test' and 'test coverage'
       - name: Build using Gradle
         uses: DanySK/build-check-deploy-gradle-action@3.5.25
@@ -42,8 +40,3 @@ jobs:
           java-version: ${{ matrix.java-version }}
           java-distribution: ${{ matrix.java-distribution }}
           should-run-codecov: false
-
-      - name: Clear Docker secrets for Compose
-        run: |
-          rm -f db-root-password.txt
-          rm -f db-password.txt
