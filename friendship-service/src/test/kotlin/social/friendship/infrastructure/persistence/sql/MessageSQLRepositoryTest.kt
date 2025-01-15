@@ -3,7 +3,6 @@ package social.friendship.infrastructure.persistence.sql
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
@@ -18,7 +17,7 @@ import java.io.File
 import java.sql.SQLIntegrityConstraintViolationException
 import java.util.UUID
 
-object MessageSQLRepositoryTest : DockerSQLTest() {
+class MessageSQLRepositoryTest : DockerSQLTest() {
     private val userTo = User.of("userToID")
     private val userFrom = User.of("userFromID")
     private val userRepository = UserSQLRepository()
@@ -30,14 +29,9 @@ object MessageSQLRepositoryTest : DockerSQLTest() {
     private val messageRepository = MessageSQLRepository()
     private lateinit var dockerComposeFile: File
 
-    @JvmStatic
-    @BeforeAll
-    fun setUpAll() {
-        dockerComposeFile = generateDockerComposeFile("social/friendship/infrastructure/persistence/sql/")
-    }
-
     @BeforeEach
     fun setUp() {
+        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/persistence/sql/docker-compose.yml")
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
         setUpDatabase()
     }

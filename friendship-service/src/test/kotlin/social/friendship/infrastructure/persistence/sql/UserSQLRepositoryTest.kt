@@ -3,7 +3,6 @@ package social.friendship.infrastructure.persistence.sql
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
@@ -14,20 +13,15 @@ import social.friendship.infrastructure.DockerSQLTest
 import java.io.File
 import java.sql.SQLIntegrityConstraintViolationException
 
-object UserSQLRepositoryTest : DockerSQLTest() {
+class UserSQLRepositoryTest : DockerSQLTest() {
     private val userTo = User.of("userToID")
     private val userFrom = User.of("userFromID")
     private val repository = UserSQLRepository()
     private lateinit var dockerComposeFile: File
 
-    @JvmStatic
-    @BeforeAll
-    fun setUpAll() {
-        dockerComposeFile = generateDockerComposeFile("social/friendship/infrastructure/persistence/sql/")
-    }
-
     @BeforeEach
     fun setUp() {
+        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/persistence/sql/docker-compose.yml")
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
         repository.connect(host, port, database, user, password)
     }

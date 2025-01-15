@@ -57,7 +57,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = generateDockerComposeFile("social/friendship/infrastructure/controller/rest/")
+        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/controller/rest/docker-compose.yml")
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
         vertx = Vertx.vertx()
@@ -88,7 +88,10 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     @AfterEach
     fun tearDown() {
         executeDockerComposeCmd(dockerComposeFile, "down", "-v")
+        closeVertxInstance()
+    }
 
+    private fun closeVertxInstance() {
         val latch = CountDownLatch(1)
         vertx.close().onComplete {
             if (it.succeeded()) {

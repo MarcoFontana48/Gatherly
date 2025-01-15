@@ -10,7 +10,6 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord
 import org.apache.logging.log4j.LogManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -26,7 +25,7 @@ import social.friendship.infrastructure.persistence.sql.UserSQLRepository
 import java.io.File
 import java.util.concurrent.CountDownLatch
 
-object KafkaFriendshipVerticleTest : DockerSQLTest() {
+class KafkaFriendshipVerticleTest : DockerSQLTest() {
     private val logger = LogManager.getLogger(this::class.java)
     private val user1 = User.of("user1")
     private val userRepository = UserSQLRepository()
@@ -37,15 +36,11 @@ object KafkaFriendshipVerticleTest : DockerSQLTest() {
     lateinit var consumer: KafkaFriendshipConsumerVerticle
     private val vertx = Vertx.vertx()
 
-    @JvmStatic
-    @BeforeAll
-    fun setUpAll() {
-        dockerComposeFile = generateDockerComposeFile("social/friendship/infrastructure/controller/event/")
-    }
-
     @BeforeEach
     fun setUp() {
+        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/controller/event/docker-compose.yml")
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
+
         val service = FriendshipServiceVerticle(DatabaseCredentials(host, "3307", database, user, password))
         producer = KafkaFriendshipProducerVerticleTestClass()
         consumer = KafkaFriendshipConsumerVerticle(service)
