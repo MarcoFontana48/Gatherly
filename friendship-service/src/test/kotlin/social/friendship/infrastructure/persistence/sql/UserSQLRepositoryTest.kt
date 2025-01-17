@@ -17,13 +17,15 @@ class UserSQLRepositoryTest : DockerSQLTest() {
     private val userTo = User.of("userToID")
     private val userFrom = User.of("userFromID")
     private val repository = UserSQLRepository()
+    private val dockerComposePath = "/social/friendship/infrastructure/persistence/sql/docker-compose.yml"
     private lateinit var dockerComposeFile: File
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/persistence/sql/docker-compose.yml")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
-        repository.connect(host, port, database, user, password)
+        repository.connect(localhostIP, port, database, user, password)
     }
 
     @AfterEach

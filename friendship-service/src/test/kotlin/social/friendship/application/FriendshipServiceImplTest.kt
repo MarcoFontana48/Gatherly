@@ -7,10 +7,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mock
-import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import social.common.events.FriendshipRemoved
 import social.friendship.domain.Friendship
 import social.friendship.domain.FriendshipRequest
 import social.friendship.domain.Message
@@ -38,7 +36,6 @@ class FriendshipServiceImplTest {
     private val nonExistingReceiver = nonExistingUserFrom
     private val message = Message.of(sender, receiver, "content")
     private val nonExistingMessage = Message.of(nonExistingSender, nonExistingReceiver, "content")
-    private val friendshipRemovedEvent = FriendshipRemoved(sender.id.value, receiver.id.value)
     private lateinit var friendshipService: FriendshipServiceVerticle
     private lateinit var closeable: AutoCloseable
     @Mock
@@ -55,6 +52,7 @@ class FriendshipServiceImplTest {
     @BeforeEach
     fun setUp() {
         closeable = MockitoAnnotations.openMocks(this)
+        kafkaProducer = KafkaFriendshipProducerVerticle()
         friendshipService = FriendshipServiceVerticle(shouldConnectToDB = false)
         friendshipService.apply {
             this::class.java.getDeclaredField("userRepository").apply {
@@ -93,10 +91,9 @@ class FriendshipServiceImplTest {
 
         `when`(userRepository.findById(user.id)).thenReturn(user)
 
-        doNothing().`when`(kafkaProducer).publishEvent(friendshipRemovedEvent)
-
         val vertx = Vertx.vertx()
         vertx.deployVerticle(friendshipService)
+        vertx.deployVerticle(kafkaProducer)
     }
 
     @AfterEach
@@ -146,8 +143,7 @@ class FriendshipServiceImplTest {
 
     @Test
     fun deleteNonExistingFriendship() {
-        val actual = friendshipService.deleteFriendship(nonExistingFriendship.id)
-        assertEquals(null, actual)
+        assertThrows<IllegalArgumentException> { friendshipService.deleteFriendship(nonExistingFriendship.id) }
     }
 
     @Test

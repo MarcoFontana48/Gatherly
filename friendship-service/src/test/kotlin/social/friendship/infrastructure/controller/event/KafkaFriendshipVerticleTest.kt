@@ -31,17 +31,19 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
     private val userRepository = UserSQLRepository()
     private val friendshipRepository = FriendshipSQLRepository()
     private val friendshipRequestRepository = FriendshipRequestSQLRepository()
+    private val dockerComposePath = "/social/friendship/infrastructure/controller/event/docker-compose.yml"
+    private val vertx = Vertx.vertx()
     lateinit var dockerComposeFile: File
     lateinit var producer: KafkaFriendshipProducerVerticleTestClass
     lateinit var consumer: KafkaFriendshipConsumerVerticle
-    private val vertx = Vertx.vertx()
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/controller/event/docker-compose.yml")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
-        val service = FriendshipServiceVerticle(DatabaseCredentials(host, "3307", database, user, password))
+        val service = FriendshipServiceVerticle(DatabaseCredentials(localhostIP, "3307", database, user, password))
         producer = KafkaFriendshipProducerVerticleTestClass()
         consumer = KafkaFriendshipConsumerVerticle(service)
         deployVerticle(vertx, producer, consumer, service)
@@ -65,7 +67,7 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
 
     private fun connectToDatabase() {
         listOf(userRepository, friendshipRepository, friendshipRequestRepository).forEach {
-            it.connect(host, "3307", database, user, password)
+            it.connect(localhostIP, "3307", database, user, password)
         }
     }
 

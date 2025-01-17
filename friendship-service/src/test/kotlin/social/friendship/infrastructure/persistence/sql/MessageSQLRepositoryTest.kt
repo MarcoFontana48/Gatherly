@@ -27,18 +27,20 @@ class MessageSQLRepositoryTest : DockerSQLTest() {
     private val message = Message.of(userTo, userFrom, "content")
     private val message2 = Message.of(userTo, userFrom, "content")
     private val messageRepository = MessageSQLRepository()
+    private val dockerComposePath = "/social/friendship/infrastructure/persistence/sql/docker-compose.yml"
     private lateinit var dockerComposeFile: File
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/persistence/sql/docker-compose.yml")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
         setUpDatabase()
     }
 
     private fun setUpDatabase() {
         listOf(userRepository, friendshipRepository, friendshipRequestRepository, messageRepository).forEach {
-            it.connect(host, port, database, user, password)
+            it.connect(localhostIP, port, database, user, password)
         }
 
         // in order to save a message, two users and a friendship between them are needed. Otherwise, an exception will be thrown.

@@ -23,18 +23,21 @@ class FriendshipRequestSQLRepositoryTest : DockerSQLTest() {
     private val friendshipRequest = FriendshipRequest.of(userTo, userFrom)
     private val friendshipRequest2 = FriendshipRequest.of(userTo2, userFrom2)
     private val friendshipRequestRepository = FriendshipRequestSQLRepository()
+    private val dockerComposePath = "/social/friendship/infrastructure/persistence/sql/docker-compose.yml"
     private lateinit var dockerComposeFile: File
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/persistence/sql/docker-compose.yml")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
+
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
         setUpDatabase()
     }
 
     private fun setUpDatabase() {
         listOf(userRepository, friendshipRequestRepository).forEach {
-            it.connect(host, port, database, user, password)
+            it.connect(localhostIP, port, database, user, password)
         }
 
         // in order to store a friendship request, two users are needed. Otherwise, an exception will be thrown.
