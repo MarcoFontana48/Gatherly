@@ -46,6 +46,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     private val message1 = Message.of(user1, user2, "message")
     private val message2 = Message.of(user1, user2, "message2")
     private val message3 = Message.of(user1, user2, "message3")
+    private val dockerComposePath = "/social/friendship/infrastructure/controller/rest/docker-compose.yml"
     private lateinit var webClient: WebClient
     private lateinit var dockerComposeFile: File
     private lateinit var api: RESTFriendshipAPIVerticle
@@ -57,11 +58,12 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
 
     @BeforeEach
     fun setUp() {
-        dockerComposeFile = File("src/test/kotlin/social/friendship/infrastructure/controller/rest/docker-compose.yml")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
         vertx = Vertx.vertx()
-        service = FriendshipServiceVerticle(DatabaseCredentials(host, port, database, user, password))
+        service = FriendshipServiceVerticle(DatabaseCredentials(localhostIP, port, database, user, password))
         deployVerticle(vertx, service)
         api = RESTFriendshipAPIVerticle(service)
         deployVerticle(vertx, api)
