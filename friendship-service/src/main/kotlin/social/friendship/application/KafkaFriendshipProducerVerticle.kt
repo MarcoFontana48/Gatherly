@@ -9,6 +9,8 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord
 import org.apache.logging.log4j.LogManager
 import social.common.ddd.DomainEvent
 import social.common.events.FriendshipRemoved
+import social.common.events.FriendshipRequestRejected
+import social.common.events.MessageSent
 
 class KafkaFriendshipProducerVerticle : AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
@@ -30,6 +32,8 @@ class KafkaFriendshipProducerVerticle : AbstractVerticle() {
     fun publishEvent(event: DomainEvent) {
         when (event) {
             is FriendshipRemoved -> publish(FriendshipRemoved.Companion.TOPIC, mapper.writeValueAsString(event))
+            is FriendshipRequestRejected -> publish(FriendshipRequestRejected.Companion.TOPIC, mapper.writeValueAsString(event))
+            is MessageSent -> publish(MessageSent.Companion.TOPIC, mapper.writeValueAsString(event))
         }
     }
 
