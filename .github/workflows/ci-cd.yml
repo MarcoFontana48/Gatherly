@@ -4,9 +4,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events on specified branches
   push:
-    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner"]
+    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner" ]
   pull_request:
-    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner"]
+    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner" ]
 
   # Allows the run of this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,8 +21,8 @@ jobs:
         # disables macOS and windows to execute tests with docker
         os:
           - ubuntu-24.04
-        #          - macos-14
-        #          - windows-2022
+#          - macos-14
+#          - windows-2022
         java-version: [17, 21]
         java-distribution: [corretto, temurin]
     runs-on: ${{ matrix.os }}
