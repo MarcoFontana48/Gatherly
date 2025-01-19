@@ -1,75 +1,37 @@
 package social.user.infrastructure.persitence
 
-import org.apache.logging.log4j.LogManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import social.user.domain.User
 import social.user.infrastructure.persitence.sql.UserSQLRepository
+import social.utils.docker.DockerTest
 import java.io.File
 import java.sql.SQLIntegrityConstraintViolationException
 
-object UserSQLRepositoryTest {
-    private val logger = LogManager.getLogger(UserSQLRepositoryTest::class)
+class UserSQLRepositoryTest : DockerTest() {
     private var repository = UserSQLRepository()
-    private const val MINUTE = 60_000L
     private val user1 = User.of("test1@gmail.com", "test1")
     private val user2 = User.of("test2@gmail.com", "test2")
-
-    /**
-     * Starts a process with the given command line and working directory.
-     *
-     * @param workDir the working directory of the process
-     * @param cmdLine the command line of the process
-     * @return the started process
-     */
-    private fun startProcess(workDir: File, vararg cmdLine: String): Process {
-        logger.trace("Starting process on dir '{}', with command line: '{}'", workDir, cmdLine.contentToString())
-        val prefix: String = UserSQLRepositoryTest::class.java.getName() + "-" + cmdLine.contentHashCode()
-        val stdOut = File.createTempFile("$prefix-stdout", ".txt")
-        stdOut.deleteOnExit()
-        val stdErr = File.createTempFile("$prefix-stderr", ".txt")
-        stdErr.deleteOnExit()
-        return ProcessBuilder(*cmdLine)
-            .redirectOutput(ProcessBuilder.Redirect.to(stdOut))
-            .redirectError(ProcessBuilder.Redirect.to(stdErr))
-            .directory(workDir)
-            .start()
-    }
-
-    @JvmStatic
-    @BeforeAll
-    fun setUpAll() {
-        logger.trace("Tearing down containers before testing, if they are running...")
-        // Stop and remove the container if it is running
-        var process = startProcess(File(".."), "docker", "stop", "user-sql-db")
-        process.waitFor()
-        process = startProcess(File(".."), "docker", "rm", "user-sql-db")
-        process.waitFor()
-        startProcess(File(".."), "docker", "build", "-t", "user-sql-db", "-f", "Dockerfile", ".")
-    }
+    private val dockerComposePath = "/social/user/infrastructure/persistence/sql/docker-compose.yml"
+    private lateinit var dockerComposeFile: File
 
     @BeforeEach
     fun setUp() {
-        startProcess(
-            File(".."),
-            "docker", "run", "-d", "-p", "3306:3306", "--name", "user-sql-db", "user-sql-db"
-        )
-        Thread.sleep(7 * MINUTE)
-        repository.connect("user-sql-db", "3306", "social/user", "root", "password")
+        val dockerComposeResource = this::class.java.getResource(dockerComposePath) ?: throw Exception("Resource not found")
+        dockerComposeFile = File(dockerComposeResource.toURI())
+
+        executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
+        repository.connect("127.0.0.1", "3306", "user", "test_user", "password")
     }
 
     @AfterEach
     fun tearDown() {
-        // Stop and remove the container
-        var process = startProcess(File(".."), "docker", "stop", "user-sql-db")
-        process.waitFor()
-        process = startProcess(File(".."), "docker", "rm", "user-sql-db")
-        process.waitFor()
+        // stops and removes the container, also removes the volumes in order to start fresh each time
+        executeDockerComposeCmd(dockerComposeFile, "down", "-v")
     }
 
     @Test
