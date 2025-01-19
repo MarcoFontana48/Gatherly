@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
+import org.apache.logging.log4j.LogManager
 import social.common.ddd.Service
 import social.common.events.FriendshipRemoved
 import social.common.events.FriendshipRequestAccepted
@@ -29,6 +30,7 @@ import java.nio.file.Paths
 interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service
 
 class FriendshipServiceVerticle(val credentials: DatabaseCredentials? = null, shouldConnectToDB: Boolean? = true) : FriendshipService, AbstractVerticle() {
+    private val logger = LogManager.getLogger(this::class)
     private val userRepository = UserSQLRepository()
     private val friendshipRepository = FriendshipSQLRepository()
     private val friendshipRequestRepository = FriendshipRequestSQLRepository()
@@ -62,6 +64,16 @@ class FriendshipServiceVerticle(val credentials: DatabaseCredentials? = null, sh
         val password = Files.readString(Paths.get("/run/secrets/db_password")).trim()
 
         connectToDatabaseWith(DatabaseCredentials(host, port, dbName, username, password))
+    }
+
+    override fun start() {
+        vertx.deployVerticle(kafkaProducer).onComplete { result ->
+            if (result.succeeded()) {
+                logger.trace("Kafka producer verticle deployed")
+            } else {
+                logger.error("Failed to deploy Kafka producer verticle")
+            }
+        }
     }
 
     override fun addFriendship(friendship: Friendship) = friendshipRepository.save(friendship)
