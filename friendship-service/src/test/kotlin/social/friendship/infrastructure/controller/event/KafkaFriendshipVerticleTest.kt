@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.assertAll
 import social.common.ddd.DomainEvent
 import social.common.events.UserCreated
@@ -24,6 +25,7 @@ import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository
 import social.friendship.infrastructure.persistence.sql.UserSQLRepository
 import java.io.File
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class KafkaFriendshipVerticleTest : DockerSQLTest() {
     private val logger = LogManager.getLogger(this::class.java)
@@ -76,6 +78,7 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
         executeDockerComposeCmd(dockerComposeFile, "down", "-v")
     }
 
+    @Timeout(5 * 60)
     @Test
     fun updatesDatabaseUponReceivingUserCreatedEvent() {
         val before = userRepository.findById(user1.id)
@@ -88,9 +91,12 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
             userRepository.findById(user1.id)?.let {
                 after = it
                 latch.countDown()
+            } ?: run {
+                logger.error("User not found")
+                latch.countDown()
             }
         }
-        latch.await()
+        latch.await(4, TimeUnit.MINUTES)
 
         assertAll(
             { assertEquals(null, before) },
@@ -131,7 +137,13 @@ class KafkaFriendshipProducerVerticleTestClass : AbstractVerticle() {
             key,
             value
         )
-        producer.write(record)
+        producer.write(record).onComplete {
+            if (it.succeeded()) {
+                logger.trace("Published event: TOPIC:{}, KEY:{}, VALUE:{}", topic, key, value)
+            } else {
+                logger.error("Failed to publish event: TOPIC:{}, KEY:{}, VALUE:{}", topic, key, value)
+            }
+        }
         logger.trace("Published event: TOPIC:{}, KEY:{}, VALUE:{}", topic, key, value)
     }
 }
