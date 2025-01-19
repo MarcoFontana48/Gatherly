@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.vertx.web)
     implementation(libs.vertx.web.client)
     implementation(project(":commons"))
+    implementation(project(":utils"))
     implementation("mysql:mysql-connector-java:8.0.33")
     testImplementation(kotlin("test"))
     testImplementation(libs.archunit)
@@ -34,8 +35,6 @@ tasks {
 
     test {
         useJUnitPlatform()
-        exclude("**/UserSQLRepositoryTest.class")
-        exclude("**/RESTUserAPIVerticleTest.class")
     }
 
     jar {
