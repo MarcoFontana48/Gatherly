@@ -4,9 +4,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events on specified branches
   push:
-    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner" ]
+    branches: [ "main" , "dev" ]
   pull_request:
-    branches: [ "main" , "dev" , "fix/friendship-service-docker-tests-on-runner" ]
+    branches: [ "main" , "dev" ]
 
   # Allows the run of this workflow manually from the Actions tab
   workflow_dispatch:
