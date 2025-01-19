@@ -1,12 +1,15 @@
-package social.friendship.infrastructure
+package social.utils.docker
 
 import org.apache.logging.log4j.LogManager
 import java.io.File
 
+/**
+ * Abstract class to be extended by tests that need to start docker-compose services.
+ */
 abstract class DockerTest {
     private val logger = LogManager.getLogger(this::class)
 
-    internal fun executeDockerComposeCmd(composeFile: File, vararg arguments: String) {
+    fun executeDockerComposeCmd(composeFile: File, vararg arguments: String) {
         if (!composeFile.exists()) {
             throw IllegalStateException("File not found: ${composeFile.absolutePath}")
         }
