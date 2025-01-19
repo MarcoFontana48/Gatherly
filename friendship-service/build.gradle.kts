@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.module.kotlin)
     implementation(project(":commons"))
+    implementation(project(":utils"))
     implementation("mysql:mysql-connector-java:8.0.33")
     testImplementation(kotlin("test"))
     testImplementation(libs.archunit)
