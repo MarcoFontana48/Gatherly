@@ -36,24 +36,22 @@ class FriendshipServiceImplTest {
     private val nonExistingReceiver = nonExistingUserFrom
     private val message = Message.of(sender, receiver, "content")
     private val nonExistingMessage = Message.of(nonExistingSender, nonExistingReceiver, "content")
-    private lateinit var friendshipService: FriendshipServiceVerticle
+    private val friendshipService = FriendshipServiceVerticle(shouldConnectToDB = false)
     private lateinit var closeable: AutoCloseable
     @Mock
-    private lateinit var userRepository: UserSQLRepository
+    private val userRepository = UserSQLRepository()
     @Mock
-    private lateinit var friendshipRepository: FriendshipSQLRepository
+    private val friendshipRepository = FriendshipSQLRepository()
     @Mock
-    private lateinit var friendshipRequestRepository: FriendshipRequestSQLRepository
+    private val friendshipRequestRepository = FriendshipRequestSQLRepository()
     @Mock
-    private lateinit var messageRepository: MessageSQLRepository
+    private val messageRepository = MessageSQLRepository()
     @Mock
-    private lateinit var kafkaProducer: KafkaFriendshipProducerVerticle
+    private val kafkaProducer = KafkaFriendshipProducerVerticle()
 
     @BeforeEach
     fun setUp() {
         closeable = MockitoAnnotations.openMocks(this)
-        kafkaProducer = KafkaFriendshipProducerVerticle()
-        friendshipService = FriendshipServiceVerticle(shouldConnectToDB = false)
         friendshipService.apply {
             this::class.java.getDeclaredField("userRepository").apply {
                 isAccessible = true
