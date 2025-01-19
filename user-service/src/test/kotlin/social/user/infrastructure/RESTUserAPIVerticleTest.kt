@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import social.common.endpoint.Endpoint
 import social.common.endpoint.StatusCode
 import social.user.application.UserServiceImpl
@@ -102,6 +103,7 @@ object RESTUserAPIVerticleTest {
         process.waitFor()
     }
 
+    @Timeout(5 * 60)
     @Test
     fun addValidUser() {
         lateinit var response: HttpResponse<String>
@@ -127,6 +129,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.CREATED, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun addUserWithNonValidEmail() {
         lateinit var response: HttpResponse<String>
@@ -151,6 +154,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun addUserWithMissingEmail() {
         lateinit var response: HttpResponse<String>
@@ -174,6 +178,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun addUserWithMissingUsername() {
         lateinit var response: HttpResponse<String>
@@ -198,6 +203,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun addDuplicateUser() {
         lateinit var firstUserAddedResponse: HttpResponse<String>
@@ -246,6 +252,7 @@ object RESTUserAPIVerticleTest {
         )
     }
 
+    @Timeout(5 * 60)
     @Test
     fun getUser() {
         lateinit var response: HttpResponse<String>
@@ -286,6 +293,7 @@ object RESTUserAPIVerticleTest {
         )
     }
 
+    @Timeout(5 * 60)
     @Test
     fun getUserWithoutEmailParam() {
         lateinit var response: HttpResponse<String>
@@ -307,6 +315,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun getNonExistingUser() {
         lateinit var response: HttpResponse<String>
@@ -329,6 +338,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.NOT_FOUND, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun updateUser() {
         lateinit var response: HttpResponse<String>
@@ -369,6 +379,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.OK, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun updateNonExistingUser() {
         lateinit var response: HttpResponse<String>
@@ -394,6 +405,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.FORBIDDEN, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun updateUserWithoutSpecifyingEmail() {
         lateinit var response: HttpResponse<String>
@@ -432,6 +444,7 @@ object RESTUserAPIVerticleTest {
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
     }
 
+    @Timeout(5 * 60)
     @Test
     fun updateUserWithoutSpecifyingUsername() {
         lateinit var response: HttpResponse<String>

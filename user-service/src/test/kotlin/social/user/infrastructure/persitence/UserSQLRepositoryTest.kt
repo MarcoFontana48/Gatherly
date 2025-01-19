@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.assertThrows
 import social.user.domain.User
 import social.user.infrastructure.persitence.sql.UserSQLRepository
@@ -34,6 +35,7 @@ class UserSQLRepositoryTest : DockerTest() {
         executeDockerComposeCmd(dockerComposeFile, "down", "-v")
     }
 
+    @Timeout(5 * 60)
     @Test
     fun save() {
         repository.save(user1)
@@ -42,6 +44,7 @@ class UserSQLRepositoryTest : DockerTest() {
         }
     }
 
+    @Timeout(5 * 60)
     @Test
     fun doesNotSaveDoubles() {
         repository.save(user1)
@@ -50,6 +53,7 @@ class UserSQLRepositoryTest : DockerTest() {
         }
     }
 
+    @Timeout(5 * 60)
     @Test
     fun doesNotSaveIfSameEmail() {
         repository.save(user1)
@@ -58,6 +62,7 @@ class UserSQLRepositoryTest : DockerTest() {
         }
     }
 
+    @Timeout(5 * 60)
     @Test
     fun savesIfSameUsername() {
         repository.save(user1)
@@ -71,6 +76,7 @@ class UserSQLRepositoryTest : DockerTest() {
         )
     }
 
+    @Timeout(5 * 60)
     @Test
     fun deleteById() {
         repository.save(user1)
@@ -78,12 +84,14 @@ class UserSQLRepositoryTest : DockerTest() {
         assertTrue(userAfterDeletion == user1)
     }
 
+    @Timeout(5 * 60)
     @Test
     fun deleteByIdNotFound() {
         val userAfterDeletion = repository.deleteById(user1.id)
         assertTrue(userAfterDeletion == null)
     }
 
+    @Timeout(5 * 60)
     @Test
     fun findAll() {
         repository.save(user1)
@@ -96,6 +104,7 @@ class UserSQLRepositoryTest : DockerTest() {
         )
     }
 
+    @Timeout(5 * 60)
     @Test
     fun update() {
         repository.save(user1)
