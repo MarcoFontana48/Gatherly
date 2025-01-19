@@ -1,5 +1,7 @@
 package social.friendship.infrastructure
 
+import social.utils.docker.DockerTest
+
 abstract class DockerSQLTest : DockerTest() {
     internal val friendshipSqlRepositoryHost = "friendship-sql-repository"
     internal val localhostIP = "127.0.0.1"
