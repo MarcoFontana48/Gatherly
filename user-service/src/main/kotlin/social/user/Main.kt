@@ -19,5 +19,6 @@ fun main(args: Array<String>) {
     val service = UserServiceImpl(repository)
     val api = RESTUserAPIVerticle(service)
 
+    vertx.deployVerticle(service)
     vertx.deployVerticle(api)
 }

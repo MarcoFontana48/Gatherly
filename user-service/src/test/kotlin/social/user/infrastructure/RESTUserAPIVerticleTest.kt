@@ -43,6 +43,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
 
         this.vertx = Vertx.vertx()
         deployVerticle(vertx, this.api)
+        deployVerticle(vertx, this.service)
 
         webClient = WebClient.create(vertx, WebClientOptions().setDefaultPort(8080).setDefaultHost("localhost"))
     }
