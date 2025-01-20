@@ -23,6 +23,19 @@ data class UserCreated(
 }
 
 /**
+ * Event to represent a user that has been updated.
+ */
+@JsExport
+data class UserUpdated(
+    val username: String,
+    val email: String,
+) : UserEvent {
+    companion object {
+        const val TOPIC = "user-updated"
+    }
+}
+
+/**
  * Event to represent a user deletion.
  */
 @JsExport
