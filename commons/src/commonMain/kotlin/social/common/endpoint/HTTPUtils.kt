@@ -4,11 +4,12 @@ import kotlin.js.JsExport
 
 @JsExport
 object Endpoint {
+    private const val USER_USERS_PATH = "/users"
     private const val FRIENDSHIP_FRIENDS_PATH = "/friends"
     private const val FRIENDSHIP_REQUESTS_PATH = "$FRIENDSHIP_FRIENDS_PATH/requests"
     private const val FRIENDSHIP_MESSAGES_PATH = "$FRIENDSHIP_FRIENDS_PATH/messages"
 
-    const val USER = "/app/user"
+    const val USER = USER_USERS_PATH
     const val FRIENDSHIP = "$FRIENDSHIP_FRIENDS_PATH/friendships"
     const val FRIENDSHIP_REQUEST = FRIENDSHIP_REQUESTS_PATH
     const val FRIENDSHIP_REQUEST_SEND = "$FRIENDSHIP_REQUESTS_PATH/send"
