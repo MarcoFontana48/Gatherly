@@ -111,7 +111,7 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
 class KafkaFriendshipProducerVerticleTestClass : AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
     private val producerConfig = mapOf(
-        "bootstrap.servers" to "localhost:9092",
+        "bootstrap.servers" to (System.getenv("KAFKA_HOST") ?: "localhost") + ":" + (System.getenv("KAFKA_PORT") ?: "9092"),
         "key.serializer" to "org.apache.kafka.common.serialization.StringSerializer",
         "value.serializer" to "org.apache.kafka.common.serialization.StringSerializer",
         "acks" to "1"

@@ -15,7 +15,7 @@ import java.util.concurrent.Callable
 class KafkaFriendshipConsumerVerticle(private val service: FriendshipService) : AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
     private val consumerConfig = mapOf(
-        "bootstrap.servers" to "localhost:9092",
+        "bootstrap.servers" to (System.getenv("KAFKA_HOST") ?: "localhost") + ":" + (System.getenv("KAFKA_PORT") ?: "9092"),
         "key.deserializer" to "org.apache.kafka.common.serialization.StringDeserializer",
         "value.deserializer" to "org.apache.kafka.common.serialization.StringDeserializer",
         "group.id" to "friendship-service",
