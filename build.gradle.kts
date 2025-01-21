@@ -20,12 +20,29 @@ repositories {
 dependencies {
     implementation(rootProject.libs.kotlin.stdlib)
     testImplementation(rootProject.libs.bundles.kotlin.testing)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    implementation(project(":commons"))
+    implementation(project(":utils"))
+    implementation(libs.log4j.api)
+    implementation(libs.log4j.core)
+    implementation(libs.vertx.core)
+    implementation(libs.vertx.web)
+    implementation(libs.vertx.web.client)
+    implementation(libs.vertx.kafka.client)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.module.kotlin)
 }
 
 kotlin {
+    jvmToolchain(21)
+
     compilerOptions {
         allWarningsAsErrors = true
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 gitSemVer {
