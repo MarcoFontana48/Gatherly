@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
+import io.vertx.ext.web.RequestBody
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
@@ -21,17 +22,19 @@ import social.friendship.domain.User
 import social.friendship.infrastructure.persistence.sql.SQLStateError
 import java.sql.SQLException
 import java.sql.SQLIntegrityConstraintViolationException
+import java.util.UUID
 import java.util.concurrent.Callable
 import kotlin.String
+import kotlin.reflect.KClass
 
 class RESTFriendshipAPIVerticle(private val service: FriendshipService) : AbstractVerticle() {
     private val logger: Logger = LogManager.getLogger(this::class)
-    private val mapper: ObjectMapper = jacksonObjectMapper().apply {
-        registerModule(KotlinModule.Builder().build())
-    }
 
     companion object {
         private val logger: Logger = LogManager.getLogger(this::class)
+        private val mapper: ObjectMapper = jacksonObjectMapper().apply {
+            registerModule(KotlinModule.Builder().build())
+        }
 
         private fun sendResponse(ctx: RoutingContext, statusCode: Int) {
             logger.trace("Sending response with status code: {}", statusCode)
@@ -63,6 +66,51 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
                 else -> sendResponse(ctx, StatusCode.INTERNAL_SERVER_ERROR, error.message)
             }
         }
+
+        private fun <C : Any> deserializeRequestFromClass(requestBody: RequestBody, klass: KClass<C>): C =
+            mapper.readValue(requestBody.asString(), klass.java)
+
+        private fun deserializeFriendship(requestBody: RequestBody): Friendship = try {
+            deserializeRequestFromClass(requestBody, Friendship::class)
+        } catch (e: Exception) {
+            deserializeFriendshipFromJsonFields(requestBody) ?: throw e
+        }
+
+        private fun deserializeFriendshipFromJsonFields(requestBody: RequestBody): Friendship? =
+            requestBody.asJsonObject().getString("user1")?.let { user1 ->
+                requestBody.asJsonObject().getString("user2")?.let { user2 ->
+                    Friendship.of(User.of(user1), User.of(user2))
+                }
+            }
+
+        private fun deserializeFriendshipRequest(requestBody: RequestBody): FriendshipRequest = try {
+            deserializeRequestFromClass(requestBody, FriendshipRequest::class)
+        } catch (e: Exception) {
+            deserializeFriendshipRequestFromJsonFields(requestBody) ?: throw e
+        }
+
+        private fun deserializeFriendshipRequestFromJsonFields(requestBody: RequestBody): FriendshipRequest? =
+            requestBody.asJsonObject().getString("from")?.let { from ->
+                requestBody.asJsonObject().getString("to")?.let { to ->
+                    FriendshipRequest.of(User.of(to), User.of(from))
+                }
+            }
+
+        private fun deserializeMessage(requestBody: RequestBody): Message = try {
+            deserializeRequestFromClass(requestBody, Message::class)
+        } catch (e: Exception) {
+            deserializeMessageFromJsonFields(requestBody) ?: throw e
+        }
+
+        private fun deserializeMessageFromJsonFields(body: RequestBody): Message? =
+            body.asJsonObject().let {
+                Message.of(
+                    UUID.fromString(it.getString("messageId") ?: return null),
+                    User.of(it.getString("sender") ?: return null),
+                    User.of(it.getString("receiver") ?: return null),
+                    it.getString("content") ?: return null
+                )
+            }
     }
 
     override fun start() {
@@ -97,10 +145,11 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
     private fun addFriendship(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
-                val requestBody = ctx.body().asString()
+                val requestBody = ctx.body()
                 logger.debug("Received POST request with body: '{}'", requestBody)
 
-                val friendship: Friendship = mapper.readValue(requestBody, Friendship::class.java)
+                val friendship = deserializeFriendship(requestBody)
+
                 service.addFriendship(friendship)
             }
         ).onComplete {
@@ -144,10 +193,11 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
     private fun addFriendshipRequest(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
-                val requestBody = ctx.body().asString()
+                val requestBody = ctx.body()
                 logger.debug("Received POST request with body: '{}'", requestBody)
 
-                val friendshipRequest: FriendshipRequest = mapper.readValue(requestBody, FriendshipRequest::class.java)
+                val friendshipRequest = deserializeFriendshipRequest(requestBody)
+
                 service.addFriendshipRequest(friendshipRequest)
             }
         ).onComplete {
@@ -164,10 +214,10 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
     private fun acceptFriendshipRequest(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
-                val requestBody = ctx.body().asString()
-                logger.debug("Received PUT request with body: '{}'", requestBody)
+                val requestBody = ctx.body()
+                logger.debug("Received PUT request with body: '{}'", requestBody.asString())
 
-                val friendshipRequest: FriendshipRequest = mapper.readValue(requestBody, FriendshipRequest::class.java)
+                val friendshipRequest = deserializeFriendshipRequest(requestBody)
                 service.acceptFriendshipRequest(friendshipRequest)
             }
         ).onComplete {
@@ -184,10 +234,10 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
     private fun rejectFriendshipRequest(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
-                val requestBody = ctx.body().asString()
-                logger.debug("Received PUT request with body: '{}'", requestBody)
+                val requestBody = ctx.body()
+                logger.debug("Received PUT request with body: '{}'", requestBody.asString())
 
-                val friendshipRequest: FriendshipRequest = mapper.readValue(requestBody, FriendshipRequest::class.java)
+                val friendshipRequest = deserializeFriendshipRequest(requestBody)
                 service.rejectFriendshipRequest(friendshipRequest)
             }
         ).onComplete {
@@ -231,10 +281,10 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
     private fun addMessage(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
-                val requestBody = ctx.body().asString()
-                logger.debug("Received POST request: '{}'", requestBody)
+                val requestBody = ctx.body()
+                logger.debug("Received POST request: '{}'", requestBody.asString())
 
-                val message: Message = mapper.readValue(requestBody, Message::class.java)
+                val message = deserializeMessage(requestBody)
                 service.addMessage(message)
             }
         ).onComplete {

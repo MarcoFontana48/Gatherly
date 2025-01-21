@@ -212,6 +212,26 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
 
     @Timeout(5 * 60)
     @Test
+    fun addFriendshipAboutExistingUsersUsingJsonFields() {
+        val latch = CountDownLatch(1)
+
+        // adds users and friendship request to the database to be able to add a friendship
+        service.addUser(user1)
+        service.addUser(user2)
+        service.addFriendshipRequest(friendshipRequest1)
+
+        val friendshipJson = JsonObject()
+            .put("user1", user1.id.value)
+            .put("user2", user2.id.value)
+
+        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP, webClient)
+
+        latch.await()
+        assertEquals(StatusCode.CREATED, response.statusCode())
+    }
+
+    @Timeout(5 * 60)
+    @Test
     fun addFriendshipRequestAboutExistingUsers() {
         val latch = CountDownLatch(1)
 
@@ -221,6 +241,25 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
 
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
+
+        val response = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient)
+
+        latch.await()
+        assertEquals(StatusCode.CREATED, response.statusCode())
+    }
+
+    @Timeout(5 * 60)
+    @Test
+    fun addFriendshipRequestAboutExistingUsersUsingJsonFields() {
+        val latch = CountDownLatch(1)
+
+        // adds users to the database to be able to add a friendship request
+        service.addUser(user1)
+        service.addUser(user2)
+
+        val friendshipRequestJson = JsonObject()
+            .put("to", user1.id.value)
+            .put("from", user2.id.value)
 
         val response = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient)
 
