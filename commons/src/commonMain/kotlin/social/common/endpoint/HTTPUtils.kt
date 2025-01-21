@@ -9,6 +9,7 @@ object Endpoint {
     private const val FRIENDSHIP_REQUESTS_PATH = "$FRIENDSHIP_FRIENDS_PATH/requests"
     private const val FRIENDSHIP_MESSAGES_PATH = "$FRIENDSHIP_FRIENDS_PATH/messages"
 
+    const val HEALTH = "/health"
     const val USER = USER_USERS_PATH
     const val FRIENDSHIP = "$FRIENDSHIP_FRIENDS_PATH/friendships"
     const val FRIENDSHIP_REQUEST = FRIENDSHIP_REQUESTS_PATH
