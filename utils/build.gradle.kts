@@ -14,6 +14,11 @@ dependencies {
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
     testImplementation(kotlin("test"))
+    implementation(libs.vertx.core)
+    implementation(libs.vertx.web)
+    implementation(libs.vertx.web.client)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.module.kotlin)
 }
 
 project.setProperty("mainClassName", "social.utils.MainKt")
