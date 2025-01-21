@@ -6,10 +6,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
-import io.vertx.ext.web.client.HttpResponse
 import io.vertx.ext.web.client.WebClient
 import io.vertx.ext.web.client.WebClientOptions
-import io.vertx.ext.web.codec.BodyCodec
 import org.apache.logging.log4j.LogManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -26,6 +24,9 @@ import social.friendship.domain.Message
 import social.friendship.domain.User
 import social.friendship.infrastructure.DockerSQLTest
 import social.friendship.infrastructure.persistence.sql.DatabaseCredentials
+import social.utils.http.TestRequestUtils.sendGetRequest
+import social.utils.http.TestRequestUtils.sendPostRequest
+import social.utils.http.TestRequestUtils.sendPutRequest
 import java.io.File
 import java.util.concurrent.CountDownLatch
 
@@ -105,29 +106,6 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         }
     }
 
-    private fun sendPostRequest(
-        send: JsonObject?,
-        latch: CountDownLatch,
-        endpoint: String
-    ): HttpResponse<String> {
-        val responseLatch = CountDownLatch(1)
-        lateinit var response: HttpResponse<String>
-        webClient.post(endpoint)
-            .putHeader("content-type", "application/json")
-            .`as`(BodyCodec.string())
-            .sendJsonObject(send) { ar ->
-                latch.countDown()
-                if (ar.succeeded()) {
-                    response = ar.result()
-                } else {
-                    throw ar.cause()
-                }
-                responseLatch.countDown()
-            }
-        responseLatch.await()
-        return response
-    }
-
     @Timeout(5 * 60)
     @Test
     fun addFriendshipWithoutUsersParam() {
@@ -138,11 +116,11 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
 
         val friendshipWithoutUserToJson = friendshipJson.copy()
         friendshipWithoutUserToJson.remove("user1")
-        val response1 = sendPostRequest(friendshipWithoutUserToJson, latch, Endpoint.FRIENDSHIP)
+        val response1 = sendPostRequest(friendshipWithoutUserToJson, latch, Endpoint.FRIENDSHIP, webClient)
 
         val friendshipWithoutUserFromJson = friendshipJson.copy()
         friendshipWithoutUserFromJson.remove("user2")
-        val response2 = sendPostRequest(friendshipWithoutUserFromJson, latch, Endpoint.FRIENDSHIP)
+        val response2 = sendPostRequest(friendshipWithoutUserFromJson, latch, Endpoint.FRIENDSHIP, webClient)
 
         latch.await()
         assertAll(
@@ -159,7 +137,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipJsonString = mapper.writeValueAsString(friendship1)
         val friendshipJson = JsonObject(friendshipJsonString)
 
-        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP)
+        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP, webClient)
 
         latch.await()
         assertEquals(StatusCode.FORBIDDEN, response.statusCode())
@@ -173,7 +151,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipJson = JsonObject(friendshipJsonString)
 
-        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND)
+        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient)
 
         latch.await()
         assertEquals(StatusCode.FORBIDDEN, response.statusCode())
@@ -187,7 +165,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val messageJsonString = mapper.writeValueAsString(message1)
         val messageJson = JsonObject(messageJsonString)
 
-        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND)
+        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND, webClient)
 
         latch.await()
         assertEquals(StatusCode.FORBIDDEN, response.statusCode())
@@ -207,7 +185,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val messageJsonString = mapper.writeValueAsString(Message.of(user2, user1, "message"))
         val messageJson = JsonObject(messageJsonString)
 
-        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND)
+        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND, webClient)
 
         latch.await()
         assertEquals(StatusCode.CREATED, response.statusCode())
@@ -226,7 +204,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipJsonString = mapper.writeValueAsString(friendship1)
         val friendshipJson = JsonObject(friendshipJsonString)
 
-        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP)
+        val response = sendPostRequest(friendshipJson, latch, Endpoint.FRIENDSHIP, webClient)
 
         latch.await()
         assertEquals(StatusCode.CREATED, response.statusCode())
@@ -244,7 +222,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
 
-        val response = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND)
+        val response = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient)
 
         latch.await()
         assertEquals(StatusCode.CREATED, response.statusCode())
@@ -264,70 +242,33 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val messageJsonString = mapper.writeValueAsString(message1)
         val messageJson = JsonObject(messageJsonString)
 
-        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND)
+        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND, webClient)
 
         latch.await()
         assertEquals(StatusCode.CREATED, response.statusCode())
     }
 
-    private fun sendGetRequest(paramName: String, paramValue: String, latch: CountDownLatch, endpoint: String): HttpResponse<String> {
-        val responseLatch = CountDownLatch(1)
-        lateinit var response: HttpResponse<String>
-        webClient.get(endpoint)
-            .addQueryParam(paramName, paramValue)
-            .putHeader("content-type", "application/json")
-            .`as`(BodyCodec.string())
-            .send { ar ->
-                latch.countDown()
-                if (ar.succeeded()) {
-                    response = ar.result()
-                } else {
-                    throw ar.cause()
-                }
-                responseLatch.countDown()
-            }
-        responseLatch.await()
-        return response
-    }
+    @Timeout(5 * 60)
+    @Test
+    fun addMessageAboutExistingFriendshipUsingJsonFields() {
+        val latch = CountDownLatch(1)
 
-    private fun sendGetRequest(paramName: String, paramValue: String, paramName2: String, paramValue2: String, latch: CountDownLatch, endpoint: String): HttpResponse<String> {
-        val responseLatch = CountDownLatch(1)
-        lateinit var response: HttpResponse<String>
-        webClient.get(endpoint)
-            .addQueryParam(paramName, paramValue)
-            .addQueryParam(paramName2, paramValue2)
-            .putHeader("content-type", "application/json")
-            .`as`(BodyCodec.string())
-            .send { ar ->
-                latch.countDown()
-                if (ar.succeeded()) {
-                    response = ar.result()
-                } else {
-                    throw ar.cause()
-                }
-                responseLatch.countDown()
-            }
-        responseLatch.await()
-        return response
-    }
+        // adds users, friendship request and friendship to the database to be able to add a message
+        service.addUser(user1)
+        service.addUser(user2)
+        service.addFriendshipRequest(friendshipRequest1)
+        service.addFriendship(friendship1)
 
-    private fun sendGetRequest(latch: CountDownLatch, endpoint: String): HttpResponse<String> {
-        val responseLatch = CountDownLatch(1)
-        lateinit var response: HttpResponse<String>
-        webClient.get(endpoint)
-            .putHeader("content-type", "application/json")
-            .`as`(BodyCodec.string())
-            .send { ar ->
-                latch.countDown()
-                if (ar.succeeded()) {
-                    response = ar.result()
-                } else {
-                    throw ar.cause()
-                }
-                responseLatch.countDown()
-            }
-        responseLatch.await()
-        return response
+        val messageJson = JsonObject()
+            .put("messageId", message1.id.value)
+            .put("sender", user1.id.value)
+            .put("receiver", user2.id.value)
+            .put("content", "message")
+
+        val response = sendPostRequest(messageJson, latch, Endpoint.MESSAGE_SEND, webClient)
+
+        latch.await()
+        assertEquals(StatusCode.CREATED, response.statusCode())
     }
 
     @Timeout(5 * 60)
@@ -335,8 +276,8 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     fun getFriendshipWithoutUsersParam() {
         val latch = CountDownLatch(2)
 
-        val response1 = sendGetRequest("to", friendship1.user1.id.value, latch, Endpoint.FRIENDSHIP)
-        val response2 = sendGetRequest("from", friendship1.user2.id.value, latch, Endpoint.FRIENDSHIP)
+        val response1 = sendGetRequest("to", friendship1.user1.id.value, latch, Endpoint.FRIENDSHIP, webClient)
+        val response2 = sendGetRequest("from", friendship1.user2.id.value, latch, Endpoint.FRIENDSHIP, webClient)
 
         latch.await()
         assertAll(
@@ -350,8 +291,8 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     fun getFriendshipRequestWithoutUsersParam() {
         val latch = CountDownLatch(1)
 
-        val response1 = sendGetRequest("to", friendshipRequest1.to.id.value, latch, Endpoint.FRIENDSHIP_REQUEST)
-        val response2 = sendGetRequest("from", friendshipRequest1.from.id.value, latch, Endpoint.FRIENDSHIP_REQUEST)
+        val response1 = sendGetRequest("to", friendshipRequest1.to.id.value, latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
+        val response2 = sendGetRequest("from", friendshipRequest1.from.id.value, latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
 
         latch.await()
         assertAll(
@@ -365,7 +306,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     fun getMessageWithWrongParamFromMessageReceiveEndpoint() {
         val latch = CountDownLatch(1)
 
-        val response = sendGetRequest("wrong_parameter", message1.sender.id.value, latch, Endpoint.MESSAGE_RECEIVE)
+        val response = sendGetRequest("wrong_parameter", message1.sender.id.value, latch, Endpoint.MESSAGE_RECEIVE, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -383,7 +324,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         service.addFriendship(friendship1)
         listOf(message1, message2, message3).forEach { service.receivedMessage(it) }
 
-        val response = sendGetRequest(latch, Endpoint.MESSAGE_RECEIVE)
+        val response = sendGetRequest(latch, Endpoint.MESSAGE_RECEIVE, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -398,7 +339,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         listOf(user1, user2, user3, user4, user5, user6).forEach { service.addUser(it) }
         listOf(friendshipRequest1, friendshipRequest2, friendshipRequest3).forEach { service.addFriendshipRequest(it) }
 
-        val response = sendGetRequest(latch, Endpoint.FRIENDSHIP_REQUEST)
+        val response = sendGetRequest(latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -414,7 +355,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         listOf(friendshipRequest1, friendshipRequest2, friendshipRequest3).forEach { service.addFriendshipRequest(it) }
         listOf(friendship1, friendship2, friendship3).forEach { service.addFriendship(it) }
 
-        val response = sendGetRequest("wrongParamName", user1.id.value, latch, Endpoint.FRIENDSHIP)
+        val response = sendGetRequest("wrongParamName", user1.id.value, latch, Endpoint.FRIENDSHIP, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -432,7 +373,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         service.addFriendship(friendship1)
         listOf(message1, message2, message3).forEach { service.receivedMessage(it) }
 
-        val response = sendGetRequest("wrongParameter", user2.id.value, latch, Endpoint.MESSAGE_CHAT)
+        val response = sendGetRequest("wrongParameter", user2.id.value, latch, Endpoint.MESSAGE_CHAT, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -450,7 +391,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         service.addFriendship(friendship1)
         listOf(message1, message2, message3).forEach { service.receivedMessage(it) }
 
-        val response = sendGetRequest(latch, Endpoint.MESSAGE_CHAT)
+        val response = sendGetRequest(latch, Endpoint.MESSAGE_CHAT, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -468,7 +409,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         service.addFriendship(friendship1)
         listOf(message1, message2, message3).forEach { service.receivedMessage(it) }
 
-        val response = sendGetRequest("id", user2.id.value, latch, Endpoint.MESSAGE_RECEIVE)
+        val response = sendGetRequest("id", user2.id.value, latch, Endpoint.MESSAGE_RECEIVE, webClient)
 
         val actual = mapper.readValue(response.body(), Array<Message>::class.java)
         val expected = arrayOf(message1, message2, message3)
@@ -489,7 +430,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         listOf(user1, user2, user3, user4, user5, user6).forEach { service.addUser(it) }
         listOf(friendshipRequest1, friendshipRequest2, friendshipRequest3).forEach { service.addFriendshipRequest(it) }
 
-        val response = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST)
+        val response = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
 
         val actual = mapper.readValue(response.body(), Array<FriendshipRequest>::class.java)
         val expected = arrayOf(friendshipRequest1)
@@ -511,7 +452,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         listOf(friendshipRequest1, friendshipRequest2, friendshipRequest3).forEach { service.addFriendshipRequest(it) }
         listOf(friendship1, friendship2, friendship3).forEach { service.addFriendship(it) }
 
-        val response = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP)
+        val response = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP, webClient)
 
         val actual = mapper.readValue(response.body(), Array<User>::class.java)
         val expected = arrayOf(friendship1)
@@ -535,7 +476,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         service.addFriendship(friendship1)
         listOf(message1, message2, message3).forEach { service.receivedMessage(it) }
 
-        val response = sendGetRequest("user1Id", user1.id.value, "user2Id", user2.id.value, latch, Endpoint.MESSAGE_CHAT)
+        val response = sendGetRequest("user1Id", user1.id.value, "user2Id", user2.id.value, latch, Endpoint.MESSAGE_CHAT, webClient)
 
         val actual = mapper.readValue(response.body(), Array<Message>::class.java)
         val expected = arrayOf(message1, message2, message3)
@@ -547,29 +488,6 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         )
     }
 
-    private fun sendPutRequest(
-        send: JsonObject?,
-        latch: CountDownLatch,
-        endpoint: String
-    ): HttpResponse<String> {
-        val responseLatch = CountDownLatch(1)
-        lateinit var response: HttpResponse<String>
-        webClient.put(endpoint)
-            .putHeader("content-type", "application/json")
-            .`as`(BodyCodec.string())
-            .sendJsonObject(send) { ar ->
-                latch.countDown()
-                if (ar.succeeded()) {
-                    response = ar.result()
-                } else {
-                    throw ar.cause()
-                }
-                responseLatch.countDown()
-            }
-        responseLatch.await()
-        return response
-    }
-
     @Timeout(5 * 60)
     @Test
     fun acceptUnexistingFriendshipRequest() {
@@ -578,7 +496,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
 
-        val response = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT)
+        val response = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -592,7 +510,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
 
-        val response = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_DECLINE)
+        val response = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_DECLINE, webClient)
 
         latch.await()
         assertEquals(StatusCode.BAD_REQUEST, response.statusCode())
@@ -611,9 +529,9 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
 
-        val getFriendshipResponseBeforeUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP)
-        val putFriendshipResponse = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT)
-        val getFriendshipResponseAfterUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP)
+        val getFriendshipResponseBeforeUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP, webClient)
+        val putFriendshipResponse = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT, webClient)
+        val getFriendshipResponseAfterUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP, webClient)
 
         val getUserFriendshipAfterUpdate = mapper.readValue(getFriendshipResponseAfterUpdate.body(), Array<User>::class.java)
         val expectedGetUserFriendshipAfterUpdate = arrayOf(user2)
@@ -642,12 +560,12 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         val friendshipRequestJsonString = mapper.writeValueAsString(friendshipRequest1)
         val friendshipRequestJson = JsonObject(friendshipRequestJsonString)
 
-        val getFriendshipRequestResponseBeforeUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST)
+        val getFriendshipRequestResponseBeforeUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
         val friendshipRequestBeforeUpdate = mapper.readValue(getFriendshipRequestResponseBeforeUpdate.body(), Array<FriendshipRequest>::class.java)
         val expectedGetFriendshipRequestBeforeUpdate = arrayOf(friendshipRequest1)
 
-        val putFriendshipRequestResponse = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_DECLINE)
-        val getFriendshipRequestResponseAfterUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST)
+        val putFriendshipRequestResponse = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_DECLINE, webClient)
+        val getFriendshipRequestResponseAfterUpdate = sendGetRequest("id", user1.id.value, latch, Endpoint.FRIENDSHIP_REQUEST, webClient)
 
         latch.await()
         assertAll(
