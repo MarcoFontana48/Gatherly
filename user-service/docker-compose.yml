@@ -30,11 +30,21 @@ services:
   user-service:
     image: user-service:latest
     container_name: user-service
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: user
+      MYSQL_USER: user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      DB_HOST: user-sql-repository
+      DB_PORT: 3306
     ports:
       - "8080:8080"
     depends_on:
       user-sql-db:
         condition: service_healthy
+    secrets:
+      - db_root_password
+      - db_password
     networks:
       - app-network
 
@@ -86,7 +96,8 @@ secrets:
     file: ./db-password.txt
 
 volumes:
-  user-sql-data: {}
+  user-sql-data:
+    driver: local
 
 networks:
   app-network:
