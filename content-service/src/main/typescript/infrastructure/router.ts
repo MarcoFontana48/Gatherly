@@ -9,6 +9,9 @@ import {UnableToDelete} from "../application/service-errors";
 export function getRouter(service: ContentService): Router {
     const router = Router();
 
+    router.get("/health", (req: Request, res: Response) => {
+        res.status(StatusCode.OK).end();
+    });
     router.get("/contents/posts/:userID", async (req: Request, res: Response) => {
         try {
             const posts = await service.getPostByAuthor(new UserID(req.params.userID));

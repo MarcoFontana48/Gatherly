@@ -73,6 +73,10 @@ class RESTFriendshipAPIVerticle(private val service: FriendshipService) : Abstra
         val router = Router.router(vertx)
         router.route().handler(BodyHandler.create())
 
+        router.get(Endpoint.HEALTH).handler { ctx ->
+            ctx.response().end("OK")
+        }
+
         router.post(Endpoint.FRIENDSHIP).handler(::addFriendship)
         router.get(Endpoint.FRIENDSHIP).handler(::getFriendship)
 

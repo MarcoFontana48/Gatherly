@@ -54,6 +54,10 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         val router = Router.router(vertx)
         router.route().handler(BodyHandler.create())
 
+        router.get(Endpoint.HEALTH).handler { ctx ->
+            ctx.response().end("OK")
+        }
+
         router.post(Endpoint.USER).handler(::addUser)
         router.get(Endpoint.USER).handler(::getUser)
         router.put(Endpoint.USER).handler(::updateUser)
