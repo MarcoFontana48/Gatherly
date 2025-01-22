@@ -52,7 +52,6 @@ export function getRouter(service: ContentService): Router {
                 }
             } else {
                 const feed = await service.getFeed(new UserID(req.params.userID));
-                console.log("retrieved feed: ", feed);
                 res.status(StatusCode.OK).json(feedToJson(feed));
             }
         } catch (error) {
