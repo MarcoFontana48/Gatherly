@@ -19,18 +19,19 @@ export class Server {
             app.use(...this.middlewares);
             app.use("/", this.router);
             this.server = http.createServer(app);
-            this.server.listen(this.port, () => {
-               onStarted();
-               resolve();
+            this.server.listen(this.port, "0.0.0.0", () => {
+                console.log(`Server is running on port ${this.port}`);
+                onStarted();
+                resolve();
             });
         });
     }
 
     async stop() {
         return new Promise<void>((resolve) => {
-            if(this.server) {
+            if (this.server) {
                 this.server.close(() => {
-                   resolve();
+                    resolve();
                 });
             } else {
                 resolve();

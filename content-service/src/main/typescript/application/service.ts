@@ -79,10 +79,14 @@ export class ContentServiceImpl implements ContentService {
 
     async getFeed(userID: UserID, keyword?: string): Promise<Feed> {
         const user = await this.userRepository.findByID(userID);
+        console.log("user retrieved: ", user);
         const feed = await this.postRepository.getFeed(user!);
+        console.log("feed retrieved: ", feed);
         if(keyword) {
+            console.log("keyword provided, filtering by keyword: ", keyword);
                 return feed.filterBy(keyword);
         }
+        console.log("no keyword provided");
         return feed;
     }
 
