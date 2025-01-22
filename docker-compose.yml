@@ -111,59 +111,59 @@ services:
     networks:
       - app-network
 
-#  content-sql-repository:
-#    image: mysql:latest
-#    container_name: content-sql-repository
-#    environment:
-#      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-#      MYSQL_DATABASE: content
-#      MYSQL_USER: user
-#      MYSQL_PASSWORD_FILE: /run/secrets/db_password
-#      DB_HOST: content-sql-repository
-#      DB_PORT: 3306
-#    ports:
-#      - "3309:3306"
-#    volumes:
-#      - content-sql-data:/var/lib/mysql
-#      - ./content-service/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    healthcheck:
-#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 5
-#    secrets:
-#      - db_root_password
-#      - db_password
-#    networks:
-#      - app-network
-#
-#  content-service:
-#    image: content-service:latest
-#    container_name: content-service
-#    ports:
-#      - "8082:8080"
-#    depends_on:
-#      content-sql-repository:
-#        condition: service_healthy
-#      kafka:
-#        condition: service_healthy
-#    environment:
-#      MYSQL_DATABASE: content
-#      MYSQL_USER: user
-#      DB_HOST: content-sql-repository
-#      DB_PORT: 3306
-#      KAFKA_HOST: kafka
-#      KAFKA_PORT: 9092
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#    secrets:
-#      - db_root_password
-#      - db_password
-#    networks:
-#      - app-network
+  content-sql-repository:
+    image: mysql:latest
+    container_name: content-sql-repository
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: content
+      MYSQL_USER: user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      DB_HOST: content-sql-repository
+      DB_PORT: 3306
+    ports:
+      - "3309:3306"
+    volumes:
+      - content-sql-data:/var/lib/mysql
+      - ./content-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    secrets:
+      - db_root_password
+      - db_password
+    networks:
+      - app-network
+
+  content-service:
+    image: content-service:latest
+    container_name: content-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      content-sql-repository:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      MYSQL_DATABASE: content
+      MYSQL_USER: user
+      DB_HOST: content-sql-repository
+      DB_PORT: 3306
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    secrets:
+      - db_root_password
+      - db_password
+    networks:
+      - app-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -203,8 +203,8 @@ services:
         condition: service_healthy
       friendship-sql-repository:
         condition: service_healthy
-#      content-sql-repository:
-#        condition: service_healthy
+      content-sql-repository:
+        condition: service_healthy
     networks:
       - app-network
     healthcheck:
@@ -224,8 +224,8 @@ volumes:
     driver: local
   friendship-sql-data:
     driver: local
-#  content-sql-data:
-#    driver: local
+  content-sql-data:
+    driver: local
   kafka-data:
     driver: local
 

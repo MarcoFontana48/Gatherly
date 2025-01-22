@@ -10,8 +10,10 @@ export function getRouter(service: ContentService): Router {
     const router = Router();
 
     router.get("/health", (req: Request, res: Response) => {
-        res.status(StatusCode.OK).end();
+        console.log("received health check request")
+        res.status(StatusCode.OK).json("OK");
     });
+
     router.get("/contents/posts/:userID", async (req: Request, res: Response) => {
         try {
             const posts = await service.getPostByAuthor(new UserID(req.params.userID));
