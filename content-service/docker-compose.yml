@@ -29,4 +29,5 @@ secrets:
     file: ./db-password.txt
 
 volumes:
-  content-sql-data: {}
+  content-sql-data:
+    driver: local
