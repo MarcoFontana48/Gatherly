@@ -28,7 +28,7 @@ export function getRouter(service: ContentService): Router {
         if(isPost(body)) {
             try {
                 await service.addPost(postFrom(body.user.name, body.user.email, body.content));
-                res.status(StatusCode.OK).end();
+                res.status(StatusCode.CREATED).end();
             } catch (error) {
                 if (error instanceof NoReferencedRowError) {
                     res.status(StatusCode.FORBIDDEN).json(error.message);
@@ -52,6 +52,7 @@ export function getRouter(service: ContentService): Router {
                 }
             } else {
                 const feed = await service.getFeed(new UserID(req.params.userID));
+                console.log("retrieved feed: ", feed);
                 res.status(StatusCode.OK).json(feedToJson(feed));
             }
         } catch (error) {
