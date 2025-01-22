@@ -27,11 +27,18 @@ export interface UserRepository extends Repository<string, ID<string>, User>, Co
 export interface FriendshipRepository extends Repository<Pair<string, string>, FriendshipID, Friendship>, Connectable {}
 
 export function getConfiguration(port: number) : ConnectionOptions {
+    let password: string
+    try {
+        password = fs.readFileSync("../../run/secrets/db_password", "utf8")
+    } catch (e: any) {
+        password = fs.readFileSync("./db-password.txt", 'utf8')
+    }
+
     return {
-        host: "127.0.0.1",
+        host: process.env.DB_HOST || "127.0.0.1",
         port: port,
         database: "content",
         user: "user",
-        password: fs.readFileSync("./db-password.txt", 'utf8'),
+        password: password
     }
 }
