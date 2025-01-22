@@ -5,6 +5,7 @@ import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.client.WebClient
 import io.vertx.ext.web.client.WebClientOptions
+import org.apache.logging.log4j.LogManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -21,6 +22,7 @@ import java.util.UUID
 import java.util.concurrent.CountDownLatch
 
 class GeneralTest : DockerTest() {
+    private val logger = LogManager.getLogger(this::class.java)
     private val userJson1 = JsonObject()
         .put("username", "test")
         .put("email", "test@gmail.com")
@@ -48,7 +50,7 @@ class GeneralTest : DockerTest() {
 
     @AfterEach
     fun tearDown() {
-        executeDockerComposeCmd(dockerComposeFile, "down", "-v")
+//        executeDockerComposeCmd(dockerComposeFile, "down", "-v")
     }
 
     @Test
@@ -210,6 +212,123 @@ class GeneralTest : DockerTest() {
             { assertEquals(messageJson2.getString("sender"), messageRetrieved2.getJsonObject("sender").getJsonObject("id").getString("value")) },
             { assertEquals(messageJson2.getString("receiver"), messageRetrieved2.getJsonObject("receiver").getJsonObject("id").getString("value")) },
             { assertEquals(messageJson2.getString("content"), messageRetrieved2.getString("content")) },
+        )
+    }
+
+    @Test
+    fun simulateContentPostCreation() {
+        val latch = CountDownLatch(10)
+
+        // Creates two users and checks if they are correctly created
+        val webClient = createTestWebClient(vertx, 8080, "localhost")
+        val postUserResponse = sendPostRequest(userJson1, latch, Endpoint.USER, webClient)
+        val postUser2Response = sendPostRequest(userJson2, latch, Endpoint.USER, webClient)
+
+        val emailParamName = "email"
+        val getUserResponse = sendGetRequest(emailParamName, userJson1.getString(emailParamName), latch, Endpoint.USER, webClient)
+        val userRetrieved = JsonObject(getUserResponse.body())
+
+        val getUser2Response = sendGetRequest(emailParamName, userJson2.getString(emailParamName), latch, Endpoint.USER, webClient)
+        val user2Retrieved = JsonObject(getUser2Response.body())
+
+        // Send friendship request.
+        val webClient2 = createTestWebClient(vertx, 8081, "localhost")
+        val friendshipRequestJson = JsonObject()
+            .put("to", userJson1.getString("email"))
+            .put("from", userJson2.getString("email"))
+
+        val postFriendshipRequest = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient2)
+        val getFriendshipRequest = sendGetRequest("id", userJson1.getString(emailParamName), latch, Endpoint.FRIENDSHIP_REQUEST, webClient2)
+        val friendshipRequestRetrieved = JsonArray(getFriendshipRequest.body()).getJsonObject(0)
+
+        // Accept friendship request
+        val putFriendshipRequestAccept = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT, webClient2)
+
+        // Check if friendship is correctly created
+        val getFriendship = sendGetRequest("id", userJson1.getString(emailParamName), latch, Endpoint.FRIENDSHIP, webClient2)
+        val friendshipRetrieved = JsonArray(getFriendship.body()).getJsonObject(0)
+
+        val webClient3 = createTestWebClient(vertx, 8082, "localhost")
+        val postJson = JsonObject()
+            .put(
+                "content", "test"
+            )
+            .put(
+                "user",
+                JsonObject()
+                    .put("name", userJson1.getString("username"))
+                    .put("email", userJson1.getString("email"))
+            )
+        val postPostRequest = sendPostRequest(postJson, latch, "/contents/posts/", webClient3)
+        val getPostRequest = sendGetRequest(latch, "/contents/posts/" + userJson1.getString(emailParamName), webClient3)
+
+        latch.await()
+        assertAll(
+            { assertEquals(StatusCode.CREATED, postPostRequest.statusCode()) },
+            { assertEquals(StatusCode.OK, getPostRequest.statusCode()) },
+            { assertEquals(postJson.getString("content"), JsonArray(getPostRequest.body()).getJsonObject(0).getString("content")) },
+            { assertEquals(postJson.getJsonObject("user").getString("name"), JsonArray(getPostRequest.body()).getJsonObject(0).getJsonObject("author").getString("name")) },
+            { assertEquals(postJson.getJsonObject("user").getString("email"), JsonArray(getPostRequest.body()).getJsonObject(0).getJsonObject("author").getString("email")) },
+        )
+    }
+
+    @Test
+    fun simulateContentFeedView() {
+        val latch = CountDownLatch(10)
+
+        // Creates two users and checks if they are correctly created
+        val webClient = createTestWebClient(vertx, 8080, "localhost")
+        val postUserResponse = sendPostRequest(userJson1, latch, Endpoint.USER, webClient)
+        val postUser2Response = sendPostRequest(userJson2, latch, Endpoint.USER, webClient)
+
+        val emailParamName = "email"
+        val getUserResponse = sendGetRequest(emailParamName, userJson1.getString(emailParamName), latch, Endpoint.USER, webClient)
+        val userRetrieved = JsonObject(getUserResponse.body())
+
+        val getUser2Response = sendGetRequest(emailParamName, userJson2.getString(emailParamName), latch, Endpoint.USER, webClient)
+        val user2Retrieved = JsonObject(getUser2Response.body())
+
+        // Send friendship request.
+        val webClient2 = createTestWebClient(vertx, 8081, "localhost")
+        val friendshipRequestJson = JsonObject()
+            .put("to", userJson1.getString("email"))
+            .put("from", userJson2.getString("email"))
+
+        val postFriendshipRequest = sendPostRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_SEND, webClient2)
+        val getFriendshipRequest = sendGetRequest("id", userJson1.getString(emailParamName), latch, Endpoint.FRIENDSHIP_REQUEST, webClient2)
+        val friendshipRequestRetrieved = JsonArray(getFriendshipRequest.body()).getJsonObject(0)
+
+        // Accept friendship request
+        val putFriendshipRequestAccept = sendPutRequest(friendshipRequestJson, latch, Endpoint.FRIENDSHIP_REQUEST_ACCEPT, webClient2)
+
+        // Check if friendship is correctly created
+        val getFriendship = sendGetRequest("id", userJson1.getString(emailParamName), latch, Endpoint.FRIENDSHIP, webClient2)
+        val friendshipRetrieved = JsonArray(getFriendship.body()).getJsonObject(0)
+
+        val webClient3 = createTestWebClient(vertx, 8082, "localhost")
+        val postJson = JsonObject()
+            .put(
+                "content", "test"
+            )
+            .put(
+                "user",
+                JsonObject()
+                    .put("name", userJson1.getString("username"))
+                    .put("email", userJson1.getString("email"))
+            )
+        val postPostRequest = sendPostRequest(postJson, latch, "/contents/posts/", webClient3)
+        val getPostRequest = sendGetRequest(latch, "/contents/posts/" + userJson1.getString(emailParamName), webClient3)
+        val getFeedRequest = sendGetRequest(latch, "/contents/posts/feed/" + userJson2.getString(emailParamName), webClient3)
+        logger.trace("getFeedRequest: {}", getFeedRequest.body())
+
+        latch.await()
+        assertAll(
+            { assertEquals(StatusCode.OK, getFeedRequest.statusCode()) },
+            { assertEquals(userJson2.getString("username"), JsonObject(getFeedRequest.body()).getJsonObject("owner").getString("name")) },
+            { assertEquals(userJson2.getString("email"), JsonObject(getFeedRequest.body()).getJsonObject("owner").getString("email")) },
+            { assertEquals(userJson1.getString("username"), JsonObject(getFeedRequest.body()).getJsonArray("posts").getJsonObject(0).getJsonObject("author").getString("name")) },
+            { assertEquals(userJson1.getString("email"), JsonObject(getFeedRequest.body()).getJsonArray("posts").getJsonObject(0).getJsonObject("author").getString("email")) },
+            { assertEquals(postJson.getString("content"), JsonObject(getFeedRequest.body()).getJsonArray("posts").getJsonObject(0).getString("content")) },
         )
     }
 }
