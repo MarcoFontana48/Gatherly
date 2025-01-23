@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.assertAll
 import social.common.endpoint.Endpoint
 import social.common.endpoint.StatusCode
@@ -50,9 +51,10 @@ class GeneralTest : DockerTest() {
 
     @AfterEach
     fun tearDown() {
-//        executeDockerComposeCmd(dockerComposeFile, "down", "-v")
+        executeDockerComposeCmd(dockerComposeFile, "down", "-v")
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateClientSendingPostUserRequest() {
         val latch = CountDownLatch(2)
@@ -73,6 +75,7 @@ class GeneralTest : DockerTest() {
         )
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateClientSendingPutUserRequest() {
         val latch = CountDownLatch(3)
@@ -96,6 +99,7 @@ class GeneralTest : DockerTest() {
         )
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateClientSendingFriendshipRequest() {
         val latch = CountDownLatch(8)
@@ -146,6 +150,7 @@ class GeneralTest : DockerTest() {
         )
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateClientSendingFriendshipRequestAndMessage() {
         val latch = CountDownLatch(10)
@@ -215,6 +220,7 @@ class GeneralTest : DockerTest() {
         )
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateContentPostCreation() {
         val latch = CountDownLatch(10)
@@ -272,6 +278,7 @@ class GeneralTest : DockerTest() {
         )
     }
 
+    @Timeout(10 * 60)
     @Test
     fun simulateContentFeedView() {
         val latch = CountDownLatch(10)
