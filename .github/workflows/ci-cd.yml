@@ -46,6 +46,7 @@ jobs:
           retries-on-failure: 3
 
   publish-docker-images:
+    needs: build-and-test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -84,4 +85,3 @@ jobs:
           tags: |
             marcofontana17/social-network-${{ matrix.service }}:latest
             marcofontana17/social-network-${{ matrix.service }}:${{ github.sha }}
-          timeout: 60
