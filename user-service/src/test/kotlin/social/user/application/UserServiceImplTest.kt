@@ -15,6 +15,7 @@ import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.domain.User
 import social.user.domain.User.UserID
+import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
 import java.lang.reflect.Field
 import java.util.concurrent.CountDownLatch

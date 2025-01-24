@@ -13,6 +13,7 @@ import social.friendship.domain.Friendship
 import social.friendship.domain.FriendshipRequest
 import social.friendship.domain.Message
 import social.friendship.domain.User
+import social.friendship.infrastructure.controller.event.KafkaFriendshipProducerVerticle
 import social.friendship.infrastructure.persistence.sql.FriendshipRequestSQLRepository
 import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository
 import social.friendship.infrastructure.persistence.sql.MessageSQLRepository
@@ -55,23 +56,23 @@ class FriendshipServiceImplTest {
         friendshipService.apply {
             this::class.java.getDeclaredField("userRepository").apply {
                 isAccessible = true
-                set(this@FriendshipServiceImplTest.friendshipService, userRepository)
+                set(friendshipService, userRepository)
             }
             this::class.java.getDeclaredField("friendshipRepository").apply {
                 isAccessible = true
-                set(this@FriendshipServiceImplTest.friendshipService, friendshipRepository)
+                set(friendshipService, friendshipRepository)
             }
             this::class.java.getDeclaredField("friendshipRequestRepository").apply {
                 isAccessible = true
-                set(this@FriendshipServiceImplTest.friendshipService, friendshipRequestRepository)
+                set(friendshipService, friendshipRequestRepository)
             }
             this::class.java.getDeclaredField("messageRepository").apply {
                 isAccessible = true
-                set(this@FriendshipServiceImplTest.friendshipService, messageRepository)
+                set(friendshipService, messageRepository)
             }
             this::class.java.getDeclaredField("kafkaProducer").apply {
                 isAccessible = true
-                set(this@FriendshipServiceImplTest.friendshipService, kafkaProducer)
+                set(friendshipService, kafkaProducer)
             }
         }
 

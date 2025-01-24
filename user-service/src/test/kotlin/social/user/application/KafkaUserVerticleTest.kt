@@ -15,6 +15,7 @@ import org.junit.jupiter.api.assertAll
 import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.domain.User
+import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
 import social.utils.docker.DockerTest
 import java.io.File
