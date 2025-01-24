@@ -31,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.2.2
 
-      # we chose this action because it already contains several CI steps we needed, like 'build' 'test' and 'test coverage'
+      # we chose this action because it already contains several CI steps we needed, like 'build' 'test'
       - name: Build using Gradle
         uses: DanySK/build-check-deploy-gradle-action@3.5.25
         with:
@@ -51,10 +51,14 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Generate coverage report
-        uses: DanySK/build-check-deploy-gradle-action@3.7.2
+        uses: DanySK/build-check-deploy-gradle-action@3.5.25
         with:
+          pre-build-command: |
+            echo -n "${{ secrets.DB_PASSWORD }}" > db-password.txt
+            echo -n "${{ secrets.DB_ROOT_PASSWORD }}" > db-root-password.txt
           should-run-codecov: false
           check-command: "./gradlew koverXmlReportAggregated --parallel"
+          retries-on-failure: 3
       - name: Push coverage report
         uses: codecov/codecov-action@v5.2.0
         with:
@@ -100,7 +104,6 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           push: true
-          progress: plain
           tags: |
             marcofontana17/social-network-${{ matrix.service }}:latest
             marcofontana17/social-network-${{ matrix.service }}:${{ github.sha }}
