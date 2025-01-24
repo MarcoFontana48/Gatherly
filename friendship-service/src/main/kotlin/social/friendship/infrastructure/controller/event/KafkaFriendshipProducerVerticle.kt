@@ -1,4 +1,4 @@
-package social.user.application
+package social.friendship.infrastructure.controller.event
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -8,10 +8,13 @@ import io.vertx.kafka.client.producer.KafkaProducer
 import io.vertx.kafka.client.producer.KafkaProducerRecord
 import org.apache.logging.log4j.LogManager
 import social.common.ddd.DomainEvent
-import social.common.events.UserCreated
-import social.common.events.UserUpdated
+import social.common.events.FriendshipRemoved
+import social.common.events.FriendshipRequestAccepted
+import social.common.events.FriendshipRequestRejected
+import social.common.events.MessageSent
+import social.friendship.application.KafkaProducerVerticle
 
-class KafkaUserProducerVerticle : AbstractVerticle() {
+class KafkaFriendshipProducerVerticle : AbstractVerticle(), KafkaProducerVerticle {
     private val logger = LogManager.getLogger(this::class)
     private val producerConfig = mapOf(
         "bootstrap.servers" to (System.getenv("KAFKA_HOST") ?: "localhost") + ":" + (System.getenv("KAFKA_PORT") ?: "9092"),
@@ -28,10 +31,12 @@ class KafkaUserProducerVerticle : AbstractVerticle() {
         producer = KafkaProducer.create(vertx, producerConfig)
     }
 
-    fun publishEvent(event: DomainEvent) {
+    override fun publishEvent(event: DomainEvent) {
         when (event) {
-            is UserCreated -> publish(UserCreated.Companion.TOPIC, mapper.writeValueAsString(event))
-            is UserUpdated -> publish(UserUpdated.Companion.TOPIC, mapper.writeValueAsString(event))
+            is FriendshipRemoved -> publish(FriendshipRemoved.Companion.TOPIC, mapper.writeValueAsString(event))
+            is FriendshipRequestRejected -> publish(FriendshipRequestRejected.Companion.TOPIC, mapper.writeValueAsString(event))
+            is FriendshipRequestAccepted -> publish(FriendshipRequestAccepted.Companion.TOPIC, mapper.writeValueAsString(event))
+            is MessageSent -> publish(MessageSent.Companion.TOPIC, mapper.writeValueAsString(event))
         }
     }
 

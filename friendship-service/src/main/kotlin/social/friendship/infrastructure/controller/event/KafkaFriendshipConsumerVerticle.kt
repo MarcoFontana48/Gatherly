@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.Verticle
 import io.vertx.kafka.client.consumer.KafkaConsumer
 import io.vertx.kafka.client.consumer.KafkaConsumerRecord
 import org.apache.logging.log4j.LogManager
@@ -12,7 +13,9 @@ import social.friendship.application.FriendshipService
 import social.friendship.domain.User
 import java.util.concurrent.Callable
 
-class KafkaFriendshipConsumerVerticle(private val service: FriendshipService) : AbstractVerticle() {
+interface KafkaConsumerVerticle : Verticle
+
+class KafkaFriendshipConsumerVerticle(private val service: FriendshipService) : AbstractVerticle(), KafkaConsumerVerticle {
     private val logger = LogManager.getLogger(this::class)
     private val consumerConfig = mapOf(
         "bootstrap.servers" to (System.getenv("KAFKA_HOST") ?: "localhost") + ":" + (System.getenv("KAFKA_PORT") ?: "9092"),

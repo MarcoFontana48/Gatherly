@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Timeout
 import social.common.endpoint.Endpoint
 import social.common.endpoint.StatusCode
 import social.user.application.UserServiceImpl
+import social.user.infrastructure.controller.rest.RESTUserAPIVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
 import social.utils.docker.DockerTest
 import java.io.File

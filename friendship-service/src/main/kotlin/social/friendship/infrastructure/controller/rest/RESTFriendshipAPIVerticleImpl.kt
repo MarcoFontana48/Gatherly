@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.Verticle
 import io.vertx.ext.web.RequestBody
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
@@ -27,7 +28,9 @@ import java.util.concurrent.Callable
 import kotlin.String
 import kotlin.reflect.KClass
 
-class RESTFriendshipAPIVerticle(private val service: FriendshipService) : AbstractVerticle() {
+interface RESTFriendshipAPIVerticle : Verticle
+
+class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : AbstractVerticle(), RESTFriendshipAPIVerticle {
     private val logger: Logger = LogManager.getLogger(this::class)
 
     companion object {

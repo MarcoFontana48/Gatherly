@@ -4,7 +4,7 @@ import io.vertx.core.Verticle
 import io.vertx.core.Vertx
 import social.user.application.KafkaUserProducerVerticle
 import social.user.application.UserServiceImpl
-import social.user.infrastructure.RESTUserAPIVerticle
+import social.user.infrastructure.controller.rest.RESTUserAPIVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
 import java.nio.file.Files
 import java.nio.file.Paths

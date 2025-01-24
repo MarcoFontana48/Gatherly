@@ -19,6 +19,7 @@ import social.friendship.domain.FriendshipRequest.FriendshipRequestID
 import social.friendship.domain.Message
 import social.friendship.domain.Message.MessageID
 import social.friendship.domain.User
+import social.friendship.infrastructure.controller.event.KafkaFriendshipProducerVerticle
 import social.friendship.infrastructure.persistence.sql.DatabaseCredentials
 import social.friendship.infrastructure.persistence.sql.FriendshipRequestSQLRepository
 import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository

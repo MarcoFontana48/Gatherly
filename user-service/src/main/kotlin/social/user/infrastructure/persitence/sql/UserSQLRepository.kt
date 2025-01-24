@@ -2,7 +2,7 @@ package social.user.infrastructure.persitence.sql
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException
 import org.apache.logging.log4j.LogManager
-import social.common.ddd.Repository
+import social.user.application.UserRepository
 import social.user.domain.User
 import social.user.domain.User.UserID
 import java.sql.Connection
@@ -10,7 +10,7 @@ import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.SQLIntegrityConstraintViolationException
 
-class UserSQLRepository : Repository<UserID, User> {
+class UserSQLRepository : UserRepository {
     private val logger = LogManager.getLogger(UserSQLRepository::class)
     private lateinit var connection: Connection
 

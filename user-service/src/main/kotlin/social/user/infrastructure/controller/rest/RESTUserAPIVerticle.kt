@@ -1,4 +1,4 @@
-package social.user.infrastructure
+package social.user.infrastructure.controller.rest
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Verticle

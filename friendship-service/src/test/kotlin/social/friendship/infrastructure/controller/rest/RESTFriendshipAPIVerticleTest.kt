@@ -50,7 +50,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     private val dockerComposePath = "/social/friendship/infrastructure/controller/rest/docker-compose.yml"
     private lateinit var webClient: WebClient
     private lateinit var dockerComposeFile: File
-    private lateinit var api: RESTFriendshipAPIVerticle
+    private lateinit var api: RESTFriendshipAPIVerticleImpl
     private lateinit var service: FriendshipServiceVerticle
     private lateinit var vertx: Vertx
     private val mapper: ObjectMapper = jacksonObjectMapper().apply {
@@ -66,7 +66,7 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         vertx = Vertx.vertx()
         service = FriendshipServiceVerticle(DatabaseCredentials(localhostIP, port, database, user, password))
         deployVerticle(vertx, service)
-        api = RESTFriendshipAPIVerticle(service)
+        api = RESTFriendshipAPIVerticleImpl(service)
         deployVerticle(vertx, api)
         createTestWebClient(vertx)
     }
