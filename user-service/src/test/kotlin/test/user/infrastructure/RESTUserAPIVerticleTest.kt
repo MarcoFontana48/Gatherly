@@ -1,4 +1,4 @@
-package social.user.infrastructure
+package test.user.infrastructure
 
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Timeout
 import social.common.endpoint.Endpoint
 import social.common.endpoint.StatusCode
 import social.user.application.UserServiceImpl
+import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
 import social.user.infrastructure.controller.rest.RESTUserAPIVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
 import social.utils.docker.DockerTest
@@ -27,7 +28,7 @@ import java.util.concurrent.CountDownLatch
 class RESTUserAPIVerticleTest : DockerTest() {
     private val logger = LogManager.getLogger(this::class)
     private val repository = UserSQLRepository()
-    private val service = UserServiceImpl(repository)
+    private val service = UserServiceImpl(repository, KafkaUserProducerVerticle())
     private val api = RESTUserAPIVerticle(service)
     private val dockerComposePath = "/social/user/infrastructure/persistence/docker-compose.yml"
     private lateinit var webClient: WebClient
@@ -115,7 +116,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
 
         val wrongEmailUserJson = JsonObject()
             .put("email", "not-a-valid-email")
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         webClient.post(Endpoint.USER)
             .putHeader("content-type", "application/json")
@@ -139,7 +140,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
         val latch = CountDownLatch(1)
 
         val missingEmailUserJson = JsonObject()
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         webClient.post(Endpoint.USER)
             .putHeader("content-type", "application/json")
@@ -239,7 +240,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
 
         val userJson = JsonObject()
             .put("email", "test@gmail.com")
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         webClient.post(Endpoint.USER)
             .putHeader("content-type", "application/json")
@@ -325,7 +326,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
 
         val userJson = JsonObject()
             .put("email", "test@gmail.com")
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         val updatedUserJson = JsonObject()
             .put("email", "test@gmail.com")
@@ -391,7 +392,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
         val secondRequestLatch = CountDownLatch(1)
 
         val userJson = JsonObject()
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         val updatedUserJson = JsonObject()
             .put("username", "updated")
@@ -431,7 +432,7 @@ class RESTUserAPIVerticleTest : DockerTest() {
 
         val userJson = JsonObject()
             .put("email", "test@gmail.com")
-            .put("username", "test")
+            .put("username", "social/user/test")
 
         val updatedUserJson = JsonObject()
             .put("email", "test@gmail.com")

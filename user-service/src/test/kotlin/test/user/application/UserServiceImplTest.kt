@@ -1,4 +1,4 @@
-package social.user.application
+package test.user.application
 
 import io.vertx.core.Vertx
 import org.apache.logging.log4j.LogManager
@@ -13,6 +13,7 @@ import org.mockito.Mockito.`when`
 import social.common.ddd.Repository
 import social.common.events.UserCreated
 import social.common.events.UserUpdated
+import social.user.application.UserServiceImpl
 import social.user.domain.User
 import social.user.domain.User.UserID
 import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
@@ -41,7 +42,7 @@ class UserServiceImplTest {
         val latch = CountDownLatch(1)
         vertx = Vertx.vertx()
 
-        service = UserServiceImpl(repository)
+        service = UserServiceImpl(repository, mockKafkaProducer)
 
         val kafkaProducerField: Field = UserServiceImpl::class.java.getDeclaredField("kafkaProducer")
         kafkaProducerField.isAccessible = true

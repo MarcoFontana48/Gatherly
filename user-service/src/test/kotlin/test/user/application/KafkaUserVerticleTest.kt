@@ -1,4 +1,4 @@
-package social.user.application
+package test.user.application
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Verticle
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.assertAll
 import social.common.events.UserCreated
 import social.common.events.UserUpdated
+import social.user.application.UserServiceImpl
 import social.user.domain.User
 import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
 import social.user.infrastructure.persitence.sql.UserSQLRepository
@@ -40,7 +41,7 @@ class KafkaUserVerticleTest : DockerTest() {
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
         userRepository.connect("127.0.0.1", "3306", "user", "test_user", "password")
-        service = UserServiceImpl(userRepository)
+        service = UserServiceImpl(userRepository, KafkaUserProducerVerticle())
         producer = KafkaUserProducerVerticle()
         consumer = KafkaUserConsumerVerticleTestClass()
         deployVerticle(vertx, producer, consumer, service)
