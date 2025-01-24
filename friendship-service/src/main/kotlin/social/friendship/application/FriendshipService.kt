@@ -19,24 +19,22 @@ import social.friendship.domain.FriendshipRequest.FriendshipRequestID
 import social.friendship.domain.Message
 import social.friendship.domain.Message.MessageID
 import social.friendship.domain.User
-import social.friendship.infrastructure.controller.event.KafkaFriendshipProducerVerticle
-import social.friendship.infrastructure.persistence.sql.DatabaseCredentials
-import social.friendship.infrastructure.persistence.sql.FriendshipRequestSQLRepository
-import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository
-import social.friendship.infrastructure.persistence.sql.MessageSQLRepository
-import social.friendship.infrastructure.persistence.sql.UserSQLRepository
+import social.friendship.social.friendship.application.DatabaseCredentials
 import java.nio.file.Files
 import java.nio.file.Paths
 
 interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service
 
-class FriendshipServiceVerticle(val credentials: DatabaseCredentials? = null, shouldConnectToDB: Boolean? = true) : FriendshipService, AbstractVerticle() {
+class FriendshipServiceVerticle(
+    private val userRepository: UserRepository,
+    private val friendshipRepository: FriendshipRepository,
+    private val friendshipRequestRepository: FriendshipRequestRepository,
+    private val messageRepository: MessageRepository,
+    private val kafkaProducer: KafkaProducerVerticle,
+    val credentials: DatabaseCredentials? = null,
+    shouldConnectToDB: Boolean? = true,
+) : FriendshipService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
-    private val userRepository = UserSQLRepository()
-    private val friendshipRepository = FriendshipSQLRepository()
-    private val friendshipRequestRepository = FriendshipRequestSQLRepository()
-    private val messageRepository = MessageSQLRepository()
-    private val kafkaProducer = KafkaFriendshipProducerVerticle()
     private val mapper: ObjectMapper = jacksonObjectMapper().apply {
         registerModule(KotlinModule.Builder().build())
     }
@@ -57,6 +55,12 @@ class FriendshipServiceVerticle(val credentials: DatabaseCredentials? = null, sh
         }
     }
 
+    private fun connectToDatabaseWith(host: String, port: String, dbName: String, username: String, password: String) {
+        listOf(userRepository, friendshipRepository, friendshipRequestRepository, messageRepository).forEach {
+            it.connect(host, port, dbName, username, password)
+        }
+    }
+
     private fun connectToDatabaseWithDefaultCredentials() {
         val host = System.getenv("DB_HOST")
         val port = System.getenv("DB_PORT")
@@ -64,7 +68,7 @@ class FriendshipServiceVerticle(val credentials: DatabaseCredentials? = null, sh
         val username = System.getenv("MYSQL_USER")
         val password = Files.readString(Paths.get("/run/secrets/db_password")).trim()
 
-        connectToDatabaseWith(DatabaseCredentials(host, port, dbName, username, password))
+        connectToDatabaseWith(host, port, dbName, username, password)
     }
 
     override fun start() {

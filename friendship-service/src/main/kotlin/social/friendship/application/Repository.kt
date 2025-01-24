@@ -10,17 +10,21 @@ import social.friendship.domain.Message.MessageID
 import social.friendship.domain.User
 import social.friendship.domain.User.UserID
 
-interface UserRepository : Repository<UserID, User>
+interface ConnectableRepository {
+    fun connect(host: String, port: String, dbName: String, username: String, password: String)
+}
 
-interface FriendshipRequestRepository : Repository<FriendshipRequestID, FriendshipRequest> {
+interface UserRepository : Repository<UserID, User>, ConnectableRepository
+
+interface FriendshipRequestRepository : Repository<FriendshipRequestID, FriendshipRequest>, ConnectableRepository {
     fun getAllFriendshipRequestsOf(userId: UserID): Iterable<FriendshipRequest>
 }
 
-interface FriendshipRepository : Repository<FriendshipID, Friendship> {
+interface FriendshipRepository : Repository<FriendshipID, Friendship>, ConnectableRepository {
     fun findAllFriendsOf(userID: UserID): Iterable<User>
 }
 
-interface MessageRepository : Repository<MessageID, Message> {
+interface MessageRepository : Repository<MessageID, Message>, ConnectableRepository {
     fun findAllMessagesReceivedBy(userID: UserID): Iterable<Message>
     fun findAllMessagesExchangedBetween(user1: UserID, user2: UserID): Iterable<Message>
 }
