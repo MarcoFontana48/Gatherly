@@ -8,7 +8,6 @@ import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.domain.User
 import social.user.domain.User.UserID
-import social.user.infrastructure.controller.event.KafkaUserProducerVerticle
 
 interface UserService : Service {
     fun addUser(user: User)
@@ -16,9 +15,8 @@ interface UserService : Service {
     fun updateUser(user: User)
 }
 
-class UserServiceImpl(private val repository: Repository<UserID, User>) : UserService, AbstractVerticle() {
+class UserServiceImpl(private val repository: Repository<UserID, User>, private val kafkaProducer: KafkaProducerVerticle) : UserService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class.java.name)
-    private val kafkaProducer: KafkaProducerVerticle = KafkaUserProducerVerticle()
 
     override fun start() {
         vertx.deployVerticle(kafkaProducer).onComplete { result ->

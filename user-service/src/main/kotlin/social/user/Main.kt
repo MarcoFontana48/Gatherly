@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
         Files.readString(Paths.get("/run/secrets/db_password")).trim(),
     )
 
-    val service = UserServiceImpl(repository)
+    val service = UserServiceImpl(repository, KafkaUserProducerVerticle())
     val api = RESTUserAPIVerticle(service)
     val producer = KafkaUserProducerVerticle()
 
