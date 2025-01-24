@@ -5,8 +5,6 @@ on:
   # Triggers the workflow on push or pull request events on specified branches
   push:
     branches: [ "main" , "dev" ]
-  pull_request:
-    branches: [ "main" , "dev" ]
 
   # Allows the run of this workflow manually from the Actions tab
   workflow_dispatch:
@@ -44,6 +42,27 @@ jobs:
           java-distribution: ${{ matrix.java-distribution }}
           should-run-codecov: false
           retries-on-failure: 3
+
+  coverage:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Generate coverage report
+        uses: DanySK/build-check-deploy-gradle-action@3.7.2
+        with:
+          should-run-codecov: false
+          check-command: "./gradlew koverXmlReportAggregated --parallel"
+      - name: Push coverage report
+        uses: codecov/codecov-action@v5.2.0
+        with:
+          files: ./build/reports/kover/reportAggregated.xml
+          verbose: true
+          slug: GiacomoRomagnoli/Social-Network
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   publish-docker-images:
     needs: build-and-test
