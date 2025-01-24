@@ -1,8 +1,8 @@
 plugins {
     kotlin("jvm")
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.shadowjar)
     application
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation(libs.kotlin.stdlib)
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
     implementation(libs.vertx.core)
@@ -19,9 +19,9 @@ dependencies {
     implementation(libs.vertx.kafka.client)
     implementation(libs.jackson.core)
     implementation(libs.jackson.module.kotlin)
+    implementation(libs.mysql.connector.java)
     implementation(project(":commons"))
     implementation(project(":utils"))
-    implementation("mysql:mysql-connector-java:8.0.33")
     testImplementation(kotlin("test"))
     testImplementation(libs.archunit)
     testImplementation(libs.mockito.core)

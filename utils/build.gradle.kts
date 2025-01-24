@@ -1,8 +1,8 @@
 plugins {
     kotlin("jvm")
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.shadowjar)
     application
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -10,15 +10,15 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation(libs.kotlin.stdlib)
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
-    testImplementation(kotlin("test"))
     implementation(libs.vertx.core)
     implementation(libs.vertx.web)
     implementation(libs.vertx.web.client)
     implementation(libs.jackson.core)
     implementation(libs.jackson.module.kotlin)
+    testImplementation(kotlin("test"))
 }
 
 project.setProperty("mainClassName", "social.utils.MainKt")
