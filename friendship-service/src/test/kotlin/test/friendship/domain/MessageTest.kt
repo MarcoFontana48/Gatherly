@@ -1,8 +1,10 @@
-package social.friendship.domain
+package test.friendship.domain
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
+import social.friendship.domain.Message
+import social.friendship.domain.User
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

@@ -1,4 +1,4 @@
-package social.friendship.infrastructure.controller.event
+package test.friendship.infrastructure.controller.event
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -18,11 +18,14 @@ import social.common.ddd.DomainEvent
 import social.common.events.UserCreated
 import social.friendship.application.FriendshipServiceVerticle
 import social.friendship.domain.User
-import social.friendship.infrastructure.DockerSQLTest
-import social.friendship.infrastructure.persistence.sql.DatabaseCredentials
+import social.friendship.infrastructure.controller.event.KafkaFriendshipConsumerVerticle
+import social.friendship.infrastructure.controller.event.KafkaFriendshipProducerVerticle
+import social.friendship.infrastructure.persistence.sql.DatabaseCredentialsImpl
 import social.friendship.infrastructure.persistence.sql.FriendshipRequestSQLRepository
 import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository
+import social.friendship.infrastructure.persistence.sql.MessageSQLRepository
 import social.friendship.infrastructure.persistence.sql.UserSQLRepository
+import test.friendship.infrastructure.DockerSQLTest
 import java.io.File
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -33,6 +36,8 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
     private val userRepository = UserSQLRepository()
     private val friendshipRepository = FriendshipSQLRepository()
     private val friendshipRequestRepository = FriendshipRequestSQLRepository()
+    private val messageRepository = MessageSQLRepository()
+    private val kafkaProducer = KafkaFriendshipProducerVerticle()
     private val dockerComposePath = "/social/friendship/infrastructure/controller/event/docker-compose.yml"
     private val vertx = Vertx.vertx()
     lateinit var dockerComposeFile: File
@@ -45,7 +50,15 @@ class KafkaFriendshipVerticleTest : DockerSQLTest() {
         dockerComposeFile = File(dockerComposeResource.toURI())
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
-        val service = FriendshipServiceVerticle(DatabaseCredentials(localhostIP, "3307", database, user, password))
+        val service = FriendshipServiceVerticle(
+            userRepository,
+            friendshipRepository,
+            friendshipRequestRepository,
+            messageRepository,
+            kafkaProducer,
+            DatabaseCredentialsImpl(localhostIP, "3307", database, user, password)
+        )
+
         producer = KafkaFriendshipProducerVerticleTestClass()
         consumer = KafkaFriendshipConsumerVerticle(service)
         deployVerticle(vertx, producer, consumer, service)

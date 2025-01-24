@@ -1,9 +1,10 @@
-package social.friendship.domain
+package test.friendship.domain
 
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import social.friendship.domain.User
 import social.friendship.domain.User.UserID
 
 class UserTest {

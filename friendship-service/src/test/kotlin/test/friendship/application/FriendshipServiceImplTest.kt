@@ -1,4 +1,4 @@
-package social.friendship.application
+package test.friendship.application
 
 import io.vertx.core.Vertx
 import org.junit.jupiter.api.AfterEach
@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import social.friendship.application.FriendshipServiceVerticle
 import social.friendship.domain.Friendship
 import social.friendship.domain.FriendshipRequest
 import social.friendship.domain.Message
@@ -21,23 +22,22 @@ import social.friendship.infrastructure.persistence.sql.UserSQLRepository
 import kotlin.test.assertEquals
 
 class FriendshipServiceImplTest {
-    private val user = User.of("id")
-    private val nonExistingUser = User.of("nonExistingUserId")
-    private val userTo = User.of("userToID")
-    private val userFrom = User.of("userFromID")
-    private val friendship = Friendship.of(userTo, userFrom)
-    private val nonExistingUserTo = User.of("nonExistingUserToID")
-    private val nonExistingUserFrom = User.of("nonExistingUserFromID")
-    private val nonExistingFriendship = Friendship.of(nonExistingUserTo, nonExistingUserFrom)
-    private val friendshipRequest = FriendshipRequest.of(userTo, userFrom)
-    private val nonExistingFriendshipRequest = FriendshipRequest.of(nonExistingUserTo, nonExistingUserFrom)
+    private val user = User.Companion.of("id")
+    private val nonExistingUser = User.Companion.of("nonExistingUserId")
+    private val userTo = User.Companion.of("userToID")
+    private val userFrom = User.Companion.of("userFromID")
+    private val friendship = Friendship.Companion.of(userTo, userFrom)
+    private val nonExistingUserTo = User.Companion.of("nonExistingUserToID")
+    private val nonExistingUserFrom = User.Companion.of("nonExistingUserFromID")
+    private val nonExistingFriendship = Friendship.Companion.of(nonExistingUserTo, nonExistingUserFrom)
+    private val friendshipRequest = FriendshipRequest.Companion.of(userTo, userFrom)
+    private val nonExistingFriendshipRequest = FriendshipRequest.Companion.of(nonExistingUserTo, nonExistingUserFrom)
     private val sender = userTo
     private val receiver = userFrom
     private val nonExistingSender = nonExistingUserTo
     private val nonExistingReceiver = nonExistingUserFrom
-    private val message = Message.of(sender, receiver, "content")
-    private val nonExistingMessage = Message.of(nonExistingSender, nonExistingReceiver, "content")
-    private val friendshipService = FriendshipServiceVerticle(shouldConnectToDB = false)
+    private val message = Message.Companion.of(sender, receiver, "content")
+    private val nonExistingMessage = Message.Companion.of(nonExistingSender, nonExistingReceiver, "content")
     private lateinit var closeable: AutoCloseable
     @Mock
     private val userRepository = UserSQLRepository()
@@ -49,6 +49,14 @@ class FriendshipServiceImplTest {
     private val messageRepository = MessageSQLRepository()
     @Mock
     private val kafkaProducer = KafkaFriendshipProducerVerticle()
+    private val friendshipService = FriendshipServiceVerticle(
+        userRepository,
+        friendshipRepository,
+        friendshipRequestRepository,
+        messageRepository,
+        kafkaProducer,
+        shouldConnectToDB = false,
+    )
 
     @BeforeEach
     fun setUp() {
@@ -76,19 +84,19 @@ class FriendshipServiceImplTest {
             }
         }
 
-        `when`(friendshipRepository.findById(friendship.id)).thenReturn(friendship)
-        `when`(friendshipRepository.deleteById(friendship.id)).thenReturn(friendship)
-        `when`(friendshipRepository.findAllFriendsOf(user.id)).thenReturn(listOf(user))
+        Mockito.`when`(friendshipRepository.findById(friendship.id)).thenReturn(friendship)
+        Mockito.`when`(friendshipRepository.deleteById(friendship.id)).thenReturn(friendship)
+        Mockito.`when`(friendshipRepository.findAllFriendsOf(user.id)).thenReturn(listOf(user))
 
-        `when`(friendshipRequestRepository.findById(friendshipRequest.id)).thenReturn(friendshipRequest)
-        `when`(friendshipRequestRepository.deleteById(friendshipRequest.id)).thenReturn(friendshipRequest)
-        `when`(friendshipRequestRepository.getAllFriendshipRequestsOf(user.id)).thenReturn(listOf(friendshipRequest))
+        Mockito.`when`(friendshipRequestRepository.findById(friendshipRequest.id)).thenReturn(friendshipRequest)
+        Mockito.`when`(friendshipRequestRepository.deleteById(friendshipRequest.id)).thenReturn(friendshipRequest)
+        Mockito.`when`(friendshipRequestRepository.getAllFriendshipRequestsOf(user.id)).thenReturn(listOf(friendshipRequest))
 
-        `when`(messageRepository.findById(message.id)).thenReturn(message)
-        `when`(messageRepository.findAllMessagesReceivedBy(receiver.id)).thenReturn(listOf(message))
-        `when`(messageRepository.findAllMessagesExchangedBetween(sender.id, receiver.id)).thenReturn(listOf(message))
+        Mockito.`when`(messageRepository.findById(message.id)).thenReturn(message)
+        Mockito.`when`(messageRepository.findAllMessagesReceivedBy(receiver.id)).thenReturn(listOf(message))
+        Mockito.`when`(messageRepository.findAllMessagesExchangedBetween(sender.id, receiver.id)).thenReturn(listOf(message))
 
-        `when`(userRepository.findById(user.id)).thenReturn(user)
+        Mockito.`when`(userRepository.findById(user.id)).thenReturn(user)
 
         val vertx = Vertx.vertx()
         vertx.deployVerticle(friendshipService)

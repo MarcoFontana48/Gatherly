@@ -1,4 +1,4 @@
-package social.friendship.infrastructure.persistence.sql
+package test.friendship.infrastructure.persistence.sql
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import social.friendship.domain.User
-import social.friendship.infrastructure.DockerSQLTest
+import social.friendship.infrastructure.persistence.sql.UserSQLRepository
+import test.friendship.infrastructure.DockerSQLTest
 import java.io.File
 import java.sql.SQLIntegrityConstraintViolationException
 

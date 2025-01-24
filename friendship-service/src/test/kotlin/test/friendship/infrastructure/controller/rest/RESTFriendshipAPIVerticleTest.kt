@@ -1,4 +1,4 @@
-package social.friendship.infrastructure.controller.rest
+package test.friendship.infrastructure.controller.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -22,11 +22,17 @@ import social.friendship.domain.Friendship
 import social.friendship.domain.FriendshipRequest
 import social.friendship.domain.Message
 import social.friendship.domain.User
-import social.friendship.infrastructure.DockerSQLTest
-import social.friendship.infrastructure.persistence.sql.DatabaseCredentials
+import social.friendship.infrastructure.controller.event.KafkaFriendshipProducerVerticle
+import social.friendship.infrastructure.controller.rest.RESTFriendshipAPIVerticleImpl
+import social.friendship.infrastructure.persistence.sql.DatabaseCredentialsImpl
+import social.friendship.infrastructure.persistence.sql.FriendshipRequestSQLRepository
+import social.friendship.infrastructure.persistence.sql.FriendshipSQLRepository
+import social.friendship.infrastructure.persistence.sql.MessageSQLRepository
+import social.friendship.infrastructure.persistence.sql.UserSQLRepository
 import social.utils.http.TestRequestUtils.sendGetRequest
 import social.utils.http.TestRequestUtils.sendPostRequest
 import social.utils.http.TestRequestUtils.sendPutRequest
+import test.friendship.infrastructure.DockerSQLTest
 import java.io.File
 import java.util.concurrent.CountDownLatch
 
@@ -48,6 +54,11 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
     private val message2 = Message.of(user1, user2, "message2")
     private val message3 = Message.of(user1, user2, "message3")
     private val dockerComposePath = "/social/friendship/infrastructure/controller/rest/docker-compose.yml"
+    private val userRepository = UserSQLRepository()
+    private val friendshipRepository = FriendshipSQLRepository()
+    private val friendshipRequestRepository = FriendshipRequestSQLRepository()
+    private val messageRepository = MessageSQLRepository()
+    private val kafkaProducer = KafkaFriendshipProducerVerticle()
     private lateinit var webClient: WebClient
     private lateinit var dockerComposeFile: File
     private lateinit var api: RESTFriendshipAPIVerticleImpl
@@ -64,7 +75,14 @@ class RESTFriendshipAPIVerticleTest : DockerSQLTest() {
         executeDockerComposeCmd(dockerComposeFile, "up", "--wait")
 
         vertx = Vertx.vertx()
-        service = FriendshipServiceVerticle(DatabaseCredentials(localhostIP, port, database, user, password))
+        service = FriendshipServiceVerticle(
+            userRepository,
+            friendshipRepository,
+            friendshipRequestRepository,
+            messageRepository,
+            kafkaProducer,
+            DatabaseCredentialsImpl(localhostIP, port, database, user, password),
+        )
         deployVerticle(vertx, service)
         api = RESTFriendshipAPIVerticleImpl(service)
         deployVerticle(vertx, api)

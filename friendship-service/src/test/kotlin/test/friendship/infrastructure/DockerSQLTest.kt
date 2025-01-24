@@ -1,4 +1,4 @@
-package social.friendship.infrastructure
+package test.friendship.infrastructure
 
 import social.utils.docker.DockerTest
 

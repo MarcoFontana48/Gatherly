@@ -1,10 +1,13 @@
-package social.friendship.domain
+package test.friendship.domain
 
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import social.friendship.domain.Friendship
+import social.friendship.domain.FriendshipRequest
+import social.friendship.domain.User
 
 class FriendshipTest {
     private val user1 = User.of("user1")
