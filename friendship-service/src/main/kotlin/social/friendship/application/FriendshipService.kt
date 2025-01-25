@@ -31,7 +31,7 @@ class FriendshipServiceVerticle(
     private val friendshipRequestRepository: FriendshipRequestRepository,
     private val messageRepository: MessageRepository,
     private val kafkaProducer: KafkaProducerVerticle,
-    val credentials: DatabaseCredentials? = null,
+    private val credentials: DatabaseCredentials? = null,
     shouldConnectToDB: Boolean? = true,
 ) : FriendshipService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
