@@ -164,7 +164,7 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
 
         /**
          * Deserialize a message from JSON fields.
-         * @param requestBody the request body
+         * @param body the request body
          * @return the message or null if the fields are not present
          */
         private fun deserializeMessageFromJsonFields(body: RequestBody): Message? =
