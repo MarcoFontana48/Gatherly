@@ -273,8 +273,9 @@ class FriendshipServiceVerticle(
     override fun getAllMessagesReceivedByUserId(userID: User.UserID): Iterable<Message> = messageRepository.findAllMessagesReceivedBy(userID)
 
     /**
-     * Retrieves all messages received by a user.
-     * @param userID The ID of the user who received the messages.
+     * Retrieves all messages exchanged between 2 users.
+     * @param user1Id The ID of the first user.
+     * @param user2Id The ID of the second user.
      * @return An iterable containing all the messages received by the user.
      */
     override fun getAllMessagesExchangedBetween(user1Id: User.UserID, user2Id: User.UserID): Iterable<Message> = messageRepository.findAllMessagesExchangedBetween(user1Id, user2Id)
