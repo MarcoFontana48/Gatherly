@@ -2,6 +2,9 @@ package social.common.endpoint
 
 import kotlin.js.JsExport
 
+/**
+ * Object to represent the endpoints of the application.
+ */
 @JsExport
 object Endpoint {
     private const val USER_USERS_PATH = "/users"
@@ -21,6 +24,9 @@ object Endpoint {
     const val MESSAGE_CHAT = "$FRIENDSHIP_MESSAGES_PATH/chat"
 }
 
+/**
+ * Object to represent the status codes used to respond to requests.
+ */
 @JsExport
 object StatusCode {
     const val OK = 200
@@ -31,6 +37,9 @@ object StatusCode {
     const val INTERNAL_SERVER_ERROR = 500
 }
 
+/**
+ * Object to represent the ports used by the application.
+ */
 @JsExport
 object Port {
     const val HTTP = 8080
