@@ -6,7 +6,15 @@ import social.friendship.domain.Friendship.FriendshipID
 import social.friendship.domain.User
 import java.sql.PreparedStatement
 
+/**
+ * SQL implementation of the FriendshipRepository.
+ */
 class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
+    /**
+     * Find a friendship by its ID.
+     * @param id the ID of the friendship
+     * @return the friendship if found, null otherwise
+     */
     override fun findById(id: FriendshipID): Friendship? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -22,6 +30,10 @@ class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
         }
     }
 
+    /**
+     * Save a friendship.
+     * @param entity the friendship to save
+     */
     override fun save(entity: Friendship) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -32,6 +44,11 @@ class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
         ps.executeUpdate()
     }
 
+    /**
+     * Delete a friendship by its ID.
+     * @param id the ID of the friendship
+     * @return the deleted friendship if found, null otherwise
+     */
     override fun deleteById(id: FriendshipID): Friendship? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -47,6 +64,10 @@ class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
         }
     }
 
+    /**
+     * Find all friendships.
+     * @return all friendships
+     */
     override fun findAll(): Array<Friendship> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -60,6 +81,11 @@ class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
         return friendships.toTypedArray()
     }
 
+    /**
+     * Find all friendships of a user.
+     * @param userID the ID of the user
+     * @return all friendships of the user
+     */
     override fun findAllFriendsOf(userID: User.UserID): Iterable<User> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -80,6 +106,10 @@ class FriendshipSQLRepository : FriendshipRepository, AbstractSQLRepository() {
         return friends.toList()
     }
 
+    /**
+     * Update a friendship.
+     * @param entity the friendship to update
+     */
     override fun update(entity: Friendship) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,

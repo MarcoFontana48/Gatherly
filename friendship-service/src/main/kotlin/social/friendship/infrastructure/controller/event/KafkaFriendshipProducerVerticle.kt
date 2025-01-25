@@ -14,6 +14,9 @@ import social.common.events.FriendshipRequestRejected
 import social.common.events.MessageSent
 import social.friendship.application.KafkaProducerVerticle
 
+/**
+ * Verticle that produces events to Kafka
+ */
 class KafkaFriendshipProducerVerticle : AbstractVerticle(), KafkaProducerVerticle {
     private val logger = LogManager.getLogger(this::class)
     private val producerConfig = mapOf(
@@ -27,10 +30,21 @@ class KafkaFriendshipProducerVerticle : AbstractVerticle(), KafkaProducerVerticl
     }
     private lateinit var producer: KafkaProducer<String, String>
 
+    /**
+     * Start the producer
+     */
     override fun start() {
         producer = KafkaProducer.create(vertx, producerConfig)
     }
 
+    /**
+     * Publish an event to Kafka.
+     * @param event the event to publish. Possible events are:
+     * - FriendshipRemoved
+     * - FriendshipRequestRejected
+     * - FriendshipRequestAccepted
+     * - MessageSent
+     */
     override fun publishEvent(event: DomainEvent) {
         when (event) {
             is FriendshipRemoved -> publish(FriendshipRemoved.Companion.TOPIC, mapper.writeValueAsString(event))
@@ -40,6 +54,12 @@ class KafkaFriendshipProducerVerticle : AbstractVerticle(), KafkaProducerVerticl
         }
     }
 
+    /**
+     * Publish an event to Kafka
+     * @param topic the topic to publish the event to
+     * @param value the event to publish
+     * @param key the key of the event
+     */
     private fun publish(topic: String, value: String, key: String? = null) {
         val record = KafkaProducerRecord.create<String, String>(
             topic,

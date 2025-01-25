@@ -9,8 +9,16 @@ import java.sql.SQLException
 import java.sql.SQLIntegrityConstraintViolationException
 import java.util.UUID
 
+/**
+ * SQL implementation of the MessageRepository.
+ */
 class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
 
+    /**
+     * Find a message by its ID.
+     * @param id the ID of the message
+     * @return the message if found, null otherwise
+     */
     override fun findById(id: MessageID): Message? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -30,6 +38,10 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         }
     }
 
+    /**
+     * Save a message.
+     * @param entity the message to save
+     */
     override fun save(entity: Message) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -42,6 +54,11 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         ps.executeUpdate()
     }
 
+    /**
+     * Delete a message by its ID.
+     * @param id the ID of the message
+     * @return the deleted message if found, null otherwise
+     */
     override fun deleteById(id: MessageID): Message? {
         connection.autoCommit = false
         try {
@@ -73,6 +90,10 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         }
     }
 
+    /**
+     * Find all messages.
+     * @return all messages
+     */
     override fun findAll(): Array<Message> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -93,6 +114,11 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         return messages.toTypedArray()
     }
 
+    /**
+     * Find all messages received by a user.
+     * @param userID the ID of the user
+     * @return all messages received by the user
+     */
     override fun findAllMessagesReceivedBy(userID: User.UserID): Iterable<Message> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -114,6 +140,12 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         return messages
     }
 
+    /**
+     * Find all messages exchanged between two users.
+     * @param user1 the ID of the first user
+     * @param user2 the ID of the second user
+     * @return all messages exchanged between the two users
+     */
     override fun findAllMessagesExchangedBetween(
         user1: User.UserID,
         user2: User.UserID
@@ -141,6 +173,10 @@ class MessageSQLRepository : MessageRepository, AbstractSQLRepository() {
         return messages
     }
 
+    /**
+     * Update a message.
+     * @param entity the message to update
+     */
     override fun update(entity: Message) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,

@@ -7,9 +7,17 @@ import social.friendship.domain.FriendshipRequest.FriendshipRequestID
 import social.friendship.domain.User
 import java.sql.PreparedStatement
 
+/**
+ * SQL repository for friendship requests.
+ */
 class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLRepository() {
     val logger = LogManager.getLogger(this::class)
 
+    /**
+     * Find a friendship request by its ID.
+     * @param id the ID of the friendship request
+     * @return the friendship request if found, null otherwise
+     */
     override fun findById(id: FriendshipRequestID): FriendshipRequest? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -25,6 +33,10 @@ class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLR
         }
     }
 
+    /**
+     * Save a friendship request.
+     * @param entity the friendship request to save
+     */
     override fun save(entity: FriendshipRequest) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -35,6 +47,11 @@ class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLR
         ps.executeUpdate()
     }
 
+    /**
+     * Delete a friendship request by its ID.
+     * @param id the ID of the friendship request
+     * @return the deleted friendship request if found, null otherwise
+     */
     override fun deleteById(id: FriendshipRequestID): FriendshipRequest? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -50,6 +67,10 @@ class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLR
         }
     }
 
+    /**
+     * Find all friendship requests.
+     * @return all friendship requests
+     */
     override fun findAll(): Array<FriendshipRequest> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -63,6 +84,11 @@ class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLR
         return friendshipRequests.toTypedArray()
     }
 
+    /**
+     * Get all friendship requests of a user.
+     * @param userId the ID of the user
+     * @return all friendship requests of the user
+     */
     override fun getAllFriendshipRequestsOf(userId: User.UserID): Iterable<FriendshipRequest> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -81,6 +107,10 @@ class FriendshipRequestSQLRepository : FriendshipRequestRepository, AbstractSQLR
         return friendshipRequests.toList()
     }
 
+    /**
+     * Update a friendship request.
+     * @param entity the friendship request to update
+     */
     override fun update(entity: FriendshipRequest) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,

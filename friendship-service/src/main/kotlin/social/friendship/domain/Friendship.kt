@@ -8,6 +8,9 @@ import social.common.ddd.ID
 import social.friendship.domain.Friendship.FriendshipID
 import social.friendship.domain.User.UserID
 
+/**
+ * Class to represent a friendship between two users.
+ */
 class Friendship private constructor(
     @JsonProperty("user1") val user1: User,
     @JsonProperty("user2") val user2: User
@@ -21,15 +24,35 @@ class Friendship private constructor(
         @JsonProperty("user2") val user2: UserID
     ) : ID<Pair<UserID, UserID>>(Pair(user1, user2))
 
+    /**
+     * Factory companion object to create a friendship.
+     */
     companion object : Factory<Friendship> {
+        /**
+         * Creates a friendship between two users.
+         *
+         * @param user1 the first user.
+         * @param user2 the second user.
+         * @return the friendship.
+         */
         fun of(user1: User, user2: User): Friendship {
             return createFriendship(user1, user2)
         }
 
+        /**
+         * Creates a friendship from a friendship request.
+         *
+         * @param request the friendship request.
+         * @return the friendship.
+         */
         fun of(request: FriendshipRequest): Friendship {
             return createFriendship(request.to, request.from)
         }
 
+        /**
+         * Creates a friendship between two users based on their IDs, checking if the friendship is valid and then
+         * creating it generating the ID based on the users' IDs, in ascending order.
+         */
         private fun createFriendship(user1: User, user2: User): Friendship {
             checkValidFriendship(user1, user2)
             return if (user1.id.value < user2.id.value) {
@@ -39,7 +62,9 @@ class Friendship private constructor(
             }
         }
 
-        private fun checkArguments(
+        /**
+         * Checks if the friendship is valid.
+         */
         private fun checkValidFriendship(
             user1: User,
             user2: User

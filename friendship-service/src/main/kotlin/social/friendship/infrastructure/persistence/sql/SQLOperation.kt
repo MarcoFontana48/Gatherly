@@ -1,6 +1,12 @@
 package social.friendship.infrastructure.persistence.sql
 
+/**
+ * Object to store all the SQL operations.
+ */
 object SQLOperation {
+    /**
+     * Object to store all the SQL queries.
+     */
     object Query {
         const val SELECT_FRIENDSHIP_BY_ID =
             """
@@ -60,6 +66,9 @@ object SQLOperation {
             """
     }
 
+    /**
+     * Object to store all the SQL updates.
+     */
     object Update {
         const val INSERT_FRIENDSHIP =
             """
