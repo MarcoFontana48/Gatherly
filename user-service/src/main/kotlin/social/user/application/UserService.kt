@@ -2,20 +2,26 @@ package social.user.application
 
 import io.vertx.core.AbstractVerticle
 import org.apache.logging.log4j.LogManager
-import social.common.ddd.Repository
 import social.common.ddd.Service
 import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.domain.User
 import social.user.domain.User.UserID
 
+/**
+ * Interface to represent a service that manages users.
+ */
 interface UserService : Service {
     fun addUser(user: User)
     fun getUser(userID: UserID): User?
     fun updateUser(user: User)
 }
 
-class UserServiceImpl(private val repository: Repository<UserID, User>, private val kafkaProducer: KafkaProducerVerticle) : UserService, AbstractVerticle() {
+/**
+ * Class to represent a user service.
+ * @param repository the repository to manage users
+ * @param kafkaProducer the Kafka producer verticle
+ */
 class UserServiceImpl(private val repository: UserRepository, private val kafkaProducer: KafkaProducerVerticle) : UserService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class.java.name)
 

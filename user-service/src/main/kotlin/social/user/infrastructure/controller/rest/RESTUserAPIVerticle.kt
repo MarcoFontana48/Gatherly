@@ -17,14 +17,29 @@ import java.sql.SQLException
 import java.sql.SQLIntegrityConstraintViolationException
 import java.util.concurrent.Callable
 
+/**
+ * Interface for a verticle that exposes a REST API for users
+ */
 interface UserAPIVerticle : Verticle
 
+/**
+ * Verticle that exposes a REST API for users
+ * @param service the user service
+ */
 class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle(), UserAPIVerticle {
     private val logger: Logger = LogManager.getLogger(this::class)
 
+    /**
+     * Companion object to hold utility methods
+     */
     companion object {
         private val logger: Logger = LogManager.getLogger(this::class)
 
+        /**
+         * Send a response with a status code
+         * @param ctx the routing context
+         * @param statusCode the status code
+         */
         private fun sendResponse(ctx: RoutingContext, statusCode: Int) {
             logger.trace("Sending response with status code: {}", statusCode)
             ctx.response()
@@ -32,6 +47,12 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
                 .end()
         }
 
+        /**
+         * Send a response with a status code and a message
+         * @param ctx the routing context
+         * @param statusCode the status code
+         * @param message the message
+         */
         private fun sendResponse(ctx: RoutingContext, statusCode: Int, message: String?) {
             logger.trace("Sending response with status code: {} and message: {}", statusCode, message)
             ctx.response()
@@ -39,6 +60,11 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
                 .end(message)
         }
 
+        /**
+         * Send an error response
+         * @param ctx the routing context
+         * @param error the error
+         */
         private fun sendErrorResponse(ctx: RoutingContext, error: Throwable) {
             when (error) {
                 is IllegalArgumentException -> sendResponse(ctx, StatusCode.BAD_REQUEST, error.message)
@@ -50,6 +76,9 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         }
     }
 
+    /**
+     * Start the verticle and expose the REST API.
+     */
     override fun start() {
         val router = Router.router(vertx)
         router.route().handler(BodyHandler.create())
@@ -65,6 +94,10 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         this.vertx.createHttpServer().requestHandler(router).listen(Port.HTTP)
     }
 
+    /**
+     * Handler to add a user
+     * @param ctx the routing context
+     */
     private fun addUser(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
@@ -88,6 +121,10 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         }
     }
 
+    /**
+     * Handler to retrieve a user
+     * @param ctx the routing context
+     */
     private fun getUser(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
@@ -113,6 +150,10 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         }
     }
 
+    /**
+     * Handler to update a user
+     * @param ctx the routing context
+     */
     private fun updateUser(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {

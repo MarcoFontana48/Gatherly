@@ -10,10 +10,21 @@ import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.SQLIntegrityConstraintViolationException
 
+/**
+ * SQL repository for users.
+ */
 class UserSQLRepository : UserRepository {
     private val logger = LogManager.getLogger(UserSQLRepository::class)
     private lateinit var connection: Connection
 
+    /**
+     * Connect to a database.
+     * @param host the host of the database
+     * @param port the port of the database
+     * @param database the name of the database
+     * @param username the username to connect to the database
+     * @param password the password to connect to the database
+     */
     fun connect(host: String, port: String, database: String, username: String, password: String) {
         logger.trace(
             "Connecting to database with credentials:\n" +
@@ -26,6 +37,9 @@ class UserSQLRepository : UserRepository {
         connection = SQLUtils.mySQLConnection(host, port, database, username, password)
     }
 
+    /**
+     * Find a user by ID.
+     */
     override fun findById(id: UserID): User? {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -40,6 +54,9 @@ class UserSQLRepository : UserRepository {
         }
     }
 
+    /**
+     * Save a user into the database.
+     */
     override fun save(entity: User) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -50,6 +67,9 @@ class UserSQLRepository : UserRepository {
         ps.executeUpdate()
     }
 
+    /**
+     * Delete a user by ID.
+     */
     override fun deleteById(id: UserID): User? {
         val userToDelete = findById(id) ?: return null
         val ps: PreparedStatement = SQLUtils.prepareStatement(
@@ -65,6 +85,9 @@ class UserSQLRepository : UserRepository {
         }
     }
 
+    /**
+     * Find all users.
+     */
     override fun findAll(): Array<User> {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -78,6 +101,9 @@ class UserSQLRepository : UserRepository {
         return users.toTypedArray()
     }
 
+    /**
+     * Update a user.
+     */
     override fun update(entity: User) {
         val ps: PreparedStatement = SQLUtils.prepareStatement(
             connection,
@@ -91,9 +117,15 @@ class UserSQLRepository : UserRepository {
     }
 }
 
+/**
+ * SQL utilities.
+ */
 object SQLUtils {
     private val logger = LogManager.getLogger(SQLUtils::class)
 
+    /**
+     * Prepare a statement with parameters.
+     */
     fun prepareStatement(connection: Connection, sqlStatement: String, vararg params: Any): PreparedStatement {
         val ps = connection.prepareStatement(sqlStatement)
         params.forEachIndexed { index, param ->
@@ -102,6 +134,9 @@ object SQLUtils {
         return ps
     }
 
+    /**
+     * Connect to a MySQL database.
+     */
     fun mySQLConnection(
         host: String,
         port: String,

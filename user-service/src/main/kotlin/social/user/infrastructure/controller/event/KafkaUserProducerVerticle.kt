@@ -12,6 +12,9 @@ import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.application.KafkaProducerVerticle
 
+/**
+ * Verticle that produces events to Kafka
+ */
 class KafkaUserProducerVerticle : KafkaProducerVerticle, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
     private val producerConfig = mapOf(
@@ -25,10 +28,19 @@ class KafkaUserProducerVerticle : KafkaProducerVerticle, AbstractVerticle() {
     }
     private lateinit var producer: KafkaProducer<String, String>
 
+    /**
+     * Start the producer
+     */
     override fun start() {
         producer = KafkaProducer.create(vertx, producerConfig)
     }
 
+    /**
+     * Publish an event to Kafka.
+     * @param event the event to publish. Possible events are:
+     * - UserCreated
+     * - UserUpdated
+     */
     override fun publishEvent(event: DomainEvent) {
         when (event) {
             is UserCreated -> publish(UserCreated.Companion.TOPIC, mapper.writeValueAsString(event))
@@ -36,6 +48,11 @@ class KafkaUserProducerVerticle : KafkaProducerVerticle, AbstractVerticle() {
         }
     }
 
+    /**
+     * Publish an event to Kafka
+     * @param topic the topic to publish the event to
+     * @param value the event to publish
+     */
     private fun publish(topic: String, value: String, key: String? = null) {
         val record = KafkaProducerRecord.create<String, String>(
             topic,

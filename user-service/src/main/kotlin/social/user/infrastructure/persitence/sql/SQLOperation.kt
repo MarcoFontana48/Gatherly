@@ -1,5 +1,8 @@
 package social.user.infrastructure.persitence.sql
 
+/**
+ * Object to store the SQL operations.
+ */
 object SQLOperation {
     const val INSERT_USER =
         """
