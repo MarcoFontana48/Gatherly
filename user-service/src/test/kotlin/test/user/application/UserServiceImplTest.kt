@@ -10,9 +10,9 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import social.common.ddd.Repository
 import social.common.events.UserCreated
 import social.common.events.UserUpdated
+import social.user.application.UserRepository
 import social.user.application.UserServiceImpl
 import social.user.domain.User
 import social.user.domain.User.UserID
@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch
 class UserServiceImplTest {
     private val logger = LogManager.getLogger(this::class.java)
     private lateinit var vertx: Vertx
-    private val repository: Repository<UserID, User> = mock<UserSQLRepository>()
+    private val repository: UserRepository = mock<UserSQLRepository>()
     private val mockKafkaProducer: KafkaUserProducerVerticle = mock()
     private lateinit var service: UserServiceImpl
     private val user = User.of("test.email76@gmail.com", "username")
