@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.gitSemVer)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kover)
+    alias(libs.plugins.task.tree)
 }
 
 buildscript {
