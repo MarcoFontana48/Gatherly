@@ -31,7 +31,7 @@ class Friendship private constructor(
         }
 
         private fun createFriendship(user1: User, user2: User): Friendship {
-            checkArguments(user1, user2)
+            checkValidFriendship(user1, user2)
             return if (user1.id.value < user2.id.value) {
                 Friendship(user1, user2)
             } else {
@@ -40,6 +40,7 @@ class Friendship private constructor(
         }
 
         private fun checkArguments(
+        private fun checkValidFriendship(
             user1: User,
             user2: User
         ) {

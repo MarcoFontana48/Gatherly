@@ -32,11 +32,12 @@ class Message private constructor(
         }
 
         private fun createMessage(messageId: UUID, sender: User, receiver: User, content: String): Message {
-            checkArguments(sender, receiver, content)
+            checkValidMessage(sender, receiver, content)
             return Message(messageId, sender, receiver, content)
         }
 
         private fun checkArguments(
+        private fun checkValidMessage(
             sender: User,
             receiver: User,
             content: String

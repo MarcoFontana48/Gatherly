@@ -16,6 +16,7 @@ interface UserService : Service {
 }
 
 class UserServiceImpl(private val repository: Repository<UserID, User>, private val kafkaProducer: KafkaProducerVerticle) : UserService, AbstractVerticle() {
+class UserServiceImpl(private val repository: UserRepository, private val kafkaProducer: KafkaProducerVerticle) : UserService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class.java.name)
 
     override fun start() {
