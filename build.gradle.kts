@@ -38,8 +38,10 @@ dependencies {
 }
 
 kotlin {
+    // sets tools to build, run and test the software to version 21
     jvmToolchain(21)
 
+    // sets all warnings as errors
     compilerOptions {
         allWarningsAsErrors = true
     }
@@ -63,7 +65,6 @@ kover {
         kotlinProjects.forEach {
             projects(":$it")
         }
-//        projects(":friendship-service", ":user-service")
 
         // Create an aggregated variant for the main services
         createVariant("aggregated") {
@@ -76,17 +77,9 @@ kover {
         kotlinProjects.forEach {
             copyVariant(it, "aggregated")
         }
-//        copyVariant("friendship-service", "aggregated")
-//        copyVariant("user-service", "aggregated")
     }
 
     reports {
-//        variant("friendship-service") {
-//            filters.includes.projects.add(":friendship-service")
-//        }
-//        variant("user-service") {
-//            filters.includes.projects.add(":user-service")
-//        }
         kotlinProjects.forEach {
             variant(it) {
                 filters.includes.projects.add(":$it")
