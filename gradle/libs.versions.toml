@@ -37,7 +37,7 @@ kotlin-testing = [ "kotest-junit5-jvm", "kotest-assertions-core-jvm", "mockito-c
 [plugins]
 dokka = "org.jetbrains.dokka:1.9.20"
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.7" }
+gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.10" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 typescript-gradle-plugin = { id = "io.github.zucchero-sintattico.typescript-gradle-plugin", version.ref = "typescript-gradle-plugin-version" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
