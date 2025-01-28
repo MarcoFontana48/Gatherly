@@ -1,7 +1,35 @@
-# Knowledge Crunching
-[« Back to Index](../docs.md)\
-This section contains domain-specific knowledge useful for understanding
-the terminology and requirements of this project.
+[« Back to Index](../docs.md)
+# Requirements
+
+## Overview
+
+1. **Registration** and **Authentication**:
+   - Ability to register to the system.
+   - Ability to login into the system.
+
+
+2. **Friendship**:
+    - Ability to send friend requests to other users.
+    - Possibility of accepting or rejecting friend requests.
+    - Notification system for receiving new friend requests.
+
+
+3. **Messaging**:
+    - Messaging management among friends.
+    - Notification system for the arrival of new messages.
+
+
+4. **Contents**:
+    - Publish posts.
+    - Visualize posts published by friends.
+    - Possibility to filter friends' posts by a keyword.
+
+
+5. **Administration**:
+    - Ability to block users.
+    - Ability to unblock users.
+    - Metrics on system requests.
+
 
 ## User Stories
 
@@ -76,19 +104,13 @@ in this case, the future community and system administrators.
 
 ### Administration
 
-1. **Dashboard**\
-   As an **administrator**,\
-   I want to see a dashboard,\
-   so that I can monitor the total number of users.
-
-
-2. **Block and Unblock Users**\
+1. **Block and Unblock Users**\
    As an **administrator**,\
    I want to block and unblock users,\
    so that I can maintain the social network a safe place for all the users.
 
 
-3. **Emergency Management**\
+2. **Emergency Management**\
    As an **administrator**,\
    I want to receive a notification when something critical happens in the system,\
    so that I can prevent the system crash when users publish too much posts.
