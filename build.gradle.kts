@@ -86,4 +86,8 @@ kover {
             }
         }
     }
+
+    tasks.dokkaHtmlMultiModule {
+        outputDirectory.set(layout.projectDirectory.dir("resurces/dokka"))
+    }
 }

@@ -107,3 +107,28 @@ jobs:
           tags: |
             marcofontana17/social-network-${{ matrix.service }}:latest
             marcofontana17/social-network-${{ matrix.service }}:${{ github.sha }}
+
+  release:
+    name: Release
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm install
+      - name: Release
+        env:
+          GIT_CREDENTIALS: ${{ secrets.GIT_CREDENTIALS }}
+        run: npx semantic-release

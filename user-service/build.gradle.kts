@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.shadowjar)
     application
+    alias(libs.plugins.dokka)
 }
 
 repositories {
