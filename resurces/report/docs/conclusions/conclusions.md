@@ -24,3 +24,5 @@ Finally, we explored microservices architecture, which today represents a well-e
 The modern approach used in the development of this project allowed us to draw personal conclusions about the method itself. 
 It is undeniable that a significant overhead must be paid to introduce automation and best practices, especially when lacking experience.
 However, the final results justify the effort, which transforms into the certainty that each process will succeed.
+
+[« Back to Index](../docs.md) | [« Previous](../deployment/deployment.md)

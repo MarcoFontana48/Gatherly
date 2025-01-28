@@ -69,3 +69,5 @@ $ echo -n <root-password> > db-root-password.txt
 ```bash
 $ docker compose up
 ```
+Note: Some microservices include docker-compose files to demonstrate how to deploy a single microservice. 
+The steps to execute are similar to those described above, except for the directory in which you need to navigate.

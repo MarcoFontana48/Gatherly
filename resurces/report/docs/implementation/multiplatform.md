@@ -44,3 +44,5 @@ This annotation allows to export classes and interfaces to javascript without sp
 - generateTypeScriptDefinitions(): 
 This function generates a .d.ts file with the type definitions of the exported classes and interfaces, 
 allowing to use them in typescript code.
+
+[« Back to Index](../docs.md) | [« Previous](./testing.md) | [Next »](../devops/build-system.md)

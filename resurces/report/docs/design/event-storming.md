@@ -54,3 +54,5 @@ The identified bounded contexts are:
 `Friendships`: everything related to the friendships between users and their messages.\
 `Users`: everything related to the users, authentication and access to app features.\
 `Contents`: everything related to posts.
+
+[« Back to Index](../docs.md) | [« Previous](../analysis/requirements.md) | [Next »](./bounded-context.md)

@@ -81,3 +81,6 @@ The team mostly uses a rebase strategy for merging branches, allowing to keep th
 Given the small size of the development team, a pull request-based approach was deemed unnecessary. 
 Instead, the coordination achieved during development was sufficient to stay updated on the repository's status 
 and organize code reviews effectively.
+
+
+[« Back to Index](../docs.md) | [« Previous](./build-system.md) | [Next »](./ci.md)

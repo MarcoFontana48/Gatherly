@@ -20,4 +20,6 @@ each linked to a version of the software and a release.
 Thanks to the use of practices such as semantic versioning and semantic release, 
 software updates will be clear and distinguishable. 
 Further technical details on the topic are available in section
-[Continues Integration](./devops/ci.md).
+[Continues Integration](../devops/ci.md).
+
+[« Back to Index](../docs.md) | [« Previous](../design/bounded-context.md) | [Next »](./ddd.md)

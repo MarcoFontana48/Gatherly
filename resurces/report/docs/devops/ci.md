@@ -165,3 +165,5 @@ that aggregates all coverage reports generated in a single file.
 To keep the project updated over time, the GitHub Pages mechanism was utilized to distribute all documentation produced 
 during development. This GitHub feature allows developers to host a web server that serves their documentation, 
 automatically updating the hosted documents with each push that modifies them.
+
+[« Back to Index](../docs.md) | [« Previous](./version-control.md) | [Next »](../deployment/deployment.md)

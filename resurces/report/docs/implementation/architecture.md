@@ -38,3 +38,5 @@ A similar approach has been applied to event producers, whose interface is also 
 ### Infrastructure
 This layer is solely responsible for external communication.
 It includes the implementations of repositories and event producers, as well as REST APIs and event consumers.
+
+[« Back to Index](../docs.md) | [« Previous](./ddd.md) | [Next »](./testing.md)

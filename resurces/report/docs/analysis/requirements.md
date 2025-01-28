@@ -1,4 +1,3 @@
-[« Back to Index](../docs.md)
 # Requirements
 
 ## Overview
@@ -114,3 +113,5 @@ in this case, the future community and system administrators.
    As an **administrator**,\
    I want to receive a notification when something critical happens in the system,\
    so that I can prevent the system crash when users publish too much posts.
+
+[« Back to Index](../docs.md) | [Next »](../design/event-storming.md)

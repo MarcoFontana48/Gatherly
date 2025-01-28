@@ -48,3 +48,5 @@ we used the `Shadow Jar` plugin, which allows the build process to correctly inc
 During each `build`, the `shadowJar` task is executed as a dependency.
 This can be verified using the [gradle-task-tree](https://github.com/dorongold/gradle-task-tree) 
 plugin by executing the taskTree task.
+
+[« Back to Index](../docs.md) | [« Previous](../implementation/multiplatform.md) | [Next »](./version-control.md)
