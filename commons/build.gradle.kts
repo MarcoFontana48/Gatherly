@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 plugins {
     id("kotlin-multiplatform")
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.dokka)
 }
 
 // what repositories to use for resolving dependencies
