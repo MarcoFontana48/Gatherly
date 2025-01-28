@@ -1,6 +1,7 @@
 [![codecov](https://codecov.io/github/GiacomoRomagnoli/Social-Network/branch/dev/graph/badge.svg?token=FAYRLMA91C)](https://codecov.io/github/GiacomoRomagnoli/Social-Network)
 # Social Network
-[Explore the report »](./resurces/report/docs/docs.md)
+[Explore the report »](./resurces/report/docs/docs.md)\
+[Documentation »](./resurces/dokka/index.html)
 
 ## Table of Contents
 - [About the Project](#about-the-project)
