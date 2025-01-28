@@ -1,0 +1,400 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>FriendshipService</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            Social-Network
+                    </a>            </div>
+            <div class="library-version">0.1.0-archeo+557080b
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":friendship-service:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="friendship-service::social.friendship.application/FriendshipService///PointingToDeclaration//1925086534">
+  <div class="breadcrumbs"><a href="../../index.html">friendship-service</a><span class="delimiter">/</span><a href="../index.html">social.friendship.application</a><span class="delimiter">/</span><span class="current">FriendshipService</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Friendship</span><wbr><span><span>Service</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">FriendshipService</a> : <a href="../-friendship-processor/index.html">FriendshipProcessor</a>, <a href="../-friendship-request-processor/index.html">FriendshipRequestProcessor</a>, <a href="../-message-processor/index.html">MessageProcessor</a>, <a href="../-user-processor/index.html">UserProcessor</a>, <span data-unresolved-link="social.common.ddd/Service///PointingToDeclaration/">Service</span></div><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-friendship-service-verticle/index.html">FriendshipServiceVerticle</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="2079246162%2FFunctions%2F1925086534" anchor-label="acceptFriendshipRequest" id="2079246162%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/accept-friendship-request.html"><span>accept</span><wbr><span>Friendship</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2079246162%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/accept-friendship-request.html"><span class="token function">acceptFriendshipRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">request<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-160195034%2FFunctions%2F1925086534" anchor-label="addFriendship" id="-160195034%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-processor/add-friendship.html"><span>add</span><wbr><span><span>Friendship</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-160195034%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-processor/add-friendship.html"><span class="token function">addFriendship</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendship<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship/index.html">Friendship</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1930540779%2FFunctions%2F1925086534" anchor-label="addFriendshipRequest" id="1930540779%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/add-friendship-request.html"><span>add</span><wbr><span>Friendship</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1930540779%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/add-friendship-request.html"><span class="token function">addFriendshipRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendshipRequest<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1522141035%2FFunctions%2F1925086534" anchor-label="addMessage" id="-1522141035%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/add-message.html"><span>add</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1522141035%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/add-message.html"><span class="token function">addMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="../../social.friendship.domain/-message/index.html">Message</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2037361419%2FFunctions%2F1925086534" anchor-label="addUser" id="-2037361419%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-user-processor/add-user.html"><span>add</span><wbr><span><span>User</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2037361419%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-user-processor/add-user.html"><span class="token function">addUser</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">user<span class="token operator">: </span><a href="../../social.friendship.domain/-user/index.html">User</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1823408573%2FFunctions%2F1925086534" anchor-label="deleteFriendship" id="1823408573%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-processor/delete-friendship.html"><span>delete</span><wbr><span><span>Friendship</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1823408573%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-processor/delete-friendship.html"><span class="token function">deleteFriendship</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendshipID<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship/-friendship-i-d/index.html">Friendship.FriendshipID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-friendship/index.html">Friendship</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1563838063%2FFunctions%2F1925086534" anchor-label="deleteMessage" id="1563838063%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/delete-message.html"><span>delete</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1563838063%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/delete-message.html"><span class="token function">deleteMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">messageID<span class="token operator">: </span><a href="../../social.friendship.domain/-message/-message-i-d/index.html">Message.MessageID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-message/index.html">Message</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-328329107%2FFunctions%2F1925086534" anchor-label="getAllFriendsByUserId" id="-328329107%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-processor/get-all-friends-by-user-id.html"><span>get</span><wbr><span>All</span><wbr><span>Friends</span><wbr><span>By</span><wbr><span>User</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-328329107%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-processor/get-all-friends-by-user-id.html"><span class="token function">getAllFriendsByUserId</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userID<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-user/index.html">User</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-776923244%2FFunctions%2F1925086534" anchor-label="getAllFriendshipRequests" id="-776923244%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/get-all-friendship-requests.html"><span>get</span><wbr><span>All</span><wbr><span>Friendship</span><wbr><span><span>Requests</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-776923244%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/get-all-friendship-requests.html"><span class="token function">getAllFriendshipRequests</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1076472571%2FFunctions%2F1925086534" anchor-label="getAllFriendshipRequestsByUserId" id="-1076472571%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/get-all-friendship-requests-by-user-id.html"><span>get</span><wbr><span>All</span><wbr><span>Friendship</span><wbr><span>Requests</span><wbr><span>By</span><wbr><span>User</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1076472571%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/get-all-friendship-requests-by-user-id.html"><span class="token function">getAllFriendshipRequestsByUserId</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userID<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1674257720%2FFunctions%2F1925086534" anchor-label="getAllFriendships" id="1674257720%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-processor/get-all-friendships.html"><span>get</span><wbr><span>All</span><wbr><span><span>Friendships</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1674257720%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-processor/get-all-friendships.html"><span class="token function">getAllFriendships</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-friendship/index.html">Friendship</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-291421164%2FFunctions%2F1925086534" anchor-label="getAllMessages" id="-291421164%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/get-all-messages.html"><span>get</span><wbr><span>All</span><wbr><span><span>Messages</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-291421164%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/get-all-messages.html"><span class="token function">getAllMessages</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-message/index.html">Message</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1479622478%2FFunctions%2F1925086534" anchor-label="getAllMessagesExchangedBetween" id="-1479622478%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/get-all-messages-exchanged-between.html"><span>get</span><wbr><span>All</span><wbr><span>Messages</span><wbr><span>Exchanged</span><wbr><span><span>Between</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1479622478%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/get-all-messages-exchanged-between.html"><span class="token function">getAllMessagesExchangedBetween</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">user1Id<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a><span class="token punctuation">, </span></span><span class="parameter ">user2Id<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-message/index.html">Message</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1078932188%2FFunctions%2F1925086534" anchor-label="getAllMessagesReceivedByUserId" id="-1078932188%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/get-all-messages-received-by-user-id.html"><span>get</span><wbr><span>All</span><wbr><span>Messages</span><wbr><span>Received</span><wbr><span>By</span><wbr><span>User</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1078932188%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/get-all-messages-received-by-user-id.html"><span class="token function">getAllMessagesReceivedByUserId</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userID<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../social.friendship.domain/-message/index.html">Message</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1958908964%2FFunctions%2F1925086534" anchor-label="getFriendship" id="1958908964%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-processor/get-friendship.html"><span>get</span><wbr><span><span>Friendship</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1958908964%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-processor/get-friendship.html"><span class="token function">getFriendship</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendshipID<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship/-friendship-i-d/index.html">Friendship.FriendshipID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-friendship/index.html">Friendship</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1851360574%2FFunctions%2F1925086534" anchor-label="getFriendshipRequest" id="1851360574%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/get-friendship-request.html"><span>get</span><wbr><span>Friendship</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1851360574%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/get-friendship-request.html"><span class="token function">getFriendshipRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendshipRequestID<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/-friendship-request-i-d/index.html">FriendshipRequest.FriendshipRequestID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1063981386%2FFunctions%2F1925086534" anchor-label="getMessage" id="-1063981386%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/get-message.html"><span>get</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1063981386%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/get-message.html"><span class="token function">getMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">messageID<span class="token operator">: </span><a href="../../social.friendship.domain/-message/-message-i-d/index.html">Message.MessageID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-message/index.html">Message</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-894007260%2FFunctions%2F1925086534" anchor-label="getUser" id="-894007260%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-user-processor/get-user.html"><span>get</span><wbr><span><span>User</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-894007260%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-user-processor/get-user.html"><span class="token function">getUser</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userID<span class="token operator">: </span><a href="../../social.friendship.domain/-user/-user-i-d/index.html">User.UserID</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-user/index.html">User</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="85860857%2FFunctions%2F1925086534" anchor-label="receivedMessage" id="85860857%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/received-message.html"><span>received</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="85860857%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/received-message.html"><span class="token function">receivedMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="../../social.friendship.domain/-message/index.html">Message</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="743054441%2FFunctions%2F1925086534" anchor-label="rejectFriendshipRequest" id="743054441%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-friendship-request-processor/reject-friendship-request.html"><span>reject</span><wbr><span>Friendship</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="743054441%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-friendship-request-processor/reject-friendship-request.html"><span class="token function">rejectFriendshipRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">friendshipRequest<span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../social.friendship.domain/-friendship-request/index.html">FriendshipRequest</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1106061136%2FFunctions%2F1925086534" anchor-label="sentMessage" id="-1106061136%2FFunctions%2F1925086534" data-filterable-set=":friendship-service:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":friendship-service:dokkaHtmlPartial/main" data-filterable-set=":friendship-service:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-message-processor/sent-message.html"><span>sent</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1106061136%2FFunctions%2F1925086534"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":friendship-service:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-message-processor/sent-message.html"><span class="token function">sentMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="../../social.friendship.domain/-message/index.html">Message</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2025 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":friendship-service:dokkaHtmlPartial/main":[],":user-service:dokkaHtmlPartial/main":[]}'
