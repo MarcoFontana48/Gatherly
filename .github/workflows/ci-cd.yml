@@ -130,5 +130,5 @@ jobs:
         run: npm install
       - name: Release
         env:
-          GIT_CREDENTIALS: ${{ secrets.GIT_CREDENTIALS }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
