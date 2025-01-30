@@ -22,6 +22,23 @@ services:
     secrets:
       - db_root_password
       - db_password
+
+  content-mongo-repository:
+    image: mongo:latest
+    container_name: content-mongo-repository
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MONGO_INITDB_DATABASE: content
+    ports:
+      - "27017:27017"
+    volumes:
+      - content-mongo-data:/data/db
+      - ./init.js:/docker-entrypoint-initdb.d/init.js
+    secrets:
+      - db_root_password
+      - db_password
+
 secrets:
   db_root_password:
     file: ./db-root-password.txt
@@ -30,4 +47,6 @@ secrets:
 
 volumes:
   content-sql-data:
+    driver: local
+  content-mongo-data:
     driver: local

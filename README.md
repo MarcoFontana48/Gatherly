@@ -11,7 +11,6 @@
 
 # About the Project
 The project is developed and maintained by:
-- Giacomo Romagnoli - giacomo.romagnoli4@studio.unibo.it
 - Marco Fontana - marco.fontana17@studio.unibo.it
 
 ## Abstract

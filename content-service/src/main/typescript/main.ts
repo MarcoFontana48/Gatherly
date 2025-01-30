@@ -1,16 +1,22 @@
 import {Server, DefaultMiddlewares} from "./infrastructure/api"
 import {getRouter} from "./infrastructure/router"
 import {ContentServiceImpl} from "./application/service";
-import {SqlFriendshipRepository, SqlPostRepository, SqlUserRepository} from "./infrastructure/persistence/sql/sql-repository";
 import {FriendshipRepository, PostRepository, UserRepository} from "./application/repository";
 import {KafkaConsumer} from "./infrastructure/kafka";
 import {Kafka} from "kafkajs";
+import {
+    MongoFriendshipRepository,
+    MongoPostRepository,
+    MongoUserRepository
+} from "./infrastructure/persistence/mongo/mongo-repository";
 
-const userRepository: UserRepository = new SqlUserRepository();
-const postRepository: PostRepository = new SqlPostRepository();
-const friendshipRepository: FriendshipRepository = new SqlFriendshipRepository();
+const userRepository: UserRepository = new MongoUserRepository();
+const postRepository: PostRepository = new MongoPostRepository();
+const friendshipRepository: FriendshipRepository = new MongoFriendshipRepository();
+
 const service = new ContentServiceImpl(friendshipRepository, postRepository,userRepository);
-service.init(3306).then(() => {
+
+service.init(27017).then(() => {
     const kafka = new Kafka({
         clientId: "content-service",
         brokers: [`${process.env.KAFKA_HOST || 'localhost'}:${process.env.KAFKA_PORT || '9092'}`],
