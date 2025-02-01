@@ -1,10 +1,10 @@
 import {ConsumerConfig, ConsumerSubscribeTopics, Kafka} from "kafkajs";
 import {EventEmitter} from "events";
-import {social} from "../commons-lib";
+import {social} from "../../../commons-lib";
 import UserCreated = social.common.events.UserCreated;
 import FriendshipRequestAccepted = social.common.events.FriendshipRequestAccepted;
-import {ContentService} from "../application/service";
-import {friendshipOf, userOf} from "../domain/domain";
+import {ContentService} from "../../../application/service";
+import {friendshipOf, userOf} from "../../../domain/domain";
 
 type Handler = (topic: string, json: any, service: ContentService) => Promise<void>;
 

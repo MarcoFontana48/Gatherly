@@ -3,7 +3,7 @@ import {Kafka, Producer} from "kafkajs";
 import {social} from "../../../main/typescript/commons-lib";
 import UserCreated = social.common.events.UserCreated;
 import FriendshipRequestAccepted = social.common.events.FriendshipRequestAccepted;
-import {KafkaConsumer} from "../../../main/typescript/infrastructure/kafka";
+import {KafkaConsumer} from "../../../main/typescript/infrastructure/api/kafka/kafka";
 import {ContentService, ContentServiceImpl} from "../../../main/typescript/application/service";
 import {
     SqlFriendshipRepository,

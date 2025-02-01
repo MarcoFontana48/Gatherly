@@ -1,8 +1,8 @@
-import {Server, DefaultMiddlewares} from "./infrastructure/api"
-import {getRouter} from "./infrastructure/router"
+import {Server, DefaultMiddlewares} from "./infrastructure/api/api"
+import {getRouter} from "./infrastructure/api/rest/router"
 import {ContentServiceImpl} from "./application/service";
 import {FriendshipRepository, PostRepository, UserRepository} from "./application/repository";
-import {KafkaConsumer} from "./infrastructure/kafka";
+import {KafkaConsumer} from "./infrastructure/api/kafka/kafka";
 import {Kafka} from "kafkajs";
 import {
     MongoFriendshipRepository,

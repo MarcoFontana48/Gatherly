@@ -5,8 +5,8 @@ import {
     SqlUserRepository
 } from "../../../main/typescript/infrastructure/persistence/sql/sql-repository";
 import {ContentService, ContentServiceImpl} from "../../../main/typescript/application/service";
-import {DefaultMiddlewares, Server} from "../../../main/typescript/infrastructure/api";
-import {getRouter} from "../../../main/typescript/infrastructure/router";
+import {DefaultMiddlewares, Server} from "../../../main/typescript/infrastructure/api/api";
+import {getRouter} from "../../../main/typescript/infrastructure/api/rest/router";
 import {friendshipOf, postOf, UserID, userOf} from "../../../main/typescript/domain/domain";
 import {social} from "../../../main/typescript/commons-lib";
 import StatusCode = social.common.endpoint.StatusCode;
