@@ -17,8 +17,6 @@ import ID = social.common.ddd.ID;
 import {ConnectionOptions} from "mysql2/promise";
 import fs from 'fs/promises';
 
-// WIP: this file will be completed in the future for ASW exam, this is not to be considered for SPE exam evaluation
-
 const userSchema = new mongoose.Schema({
     _id: { type: String, required: true }, // email as _id
     userName: { type: String, required: true },
