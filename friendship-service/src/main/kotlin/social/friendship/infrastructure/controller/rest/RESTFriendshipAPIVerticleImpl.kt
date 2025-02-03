@@ -228,7 +228,6 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
         ).onComplete {
             if (it.succeeded()) {
                 logger.trace("connection with client established successfully")
-                sendResponse(ctx, StatusCode.OK)
             } else {
                 logger.warn("failed to establish connection with client:", it.cause())
                 sendErrorResponse(ctx, it.cause())

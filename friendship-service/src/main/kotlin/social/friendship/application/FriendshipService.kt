@@ -326,6 +326,9 @@ class FriendshipServiceVerticle(
         response.putHeader("Content-Type", "text/event-stream")
         response.putHeader("Cache-Control", "no-cache")
         response.putHeader("Connection", "keep-alive")
+        response.putHeader("Access-Control-Allow-Origin", "*")
+        response.putHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
+        response.putHeader("Access-Control-Allow-Headers", "Content-Type")
 
         logger.trace("SSE channel generated")
 
