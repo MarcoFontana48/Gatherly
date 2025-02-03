@@ -11,13 +11,13 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-gitHooks {
-    preCommit {
-        tasks("ktlintCheck")
-    }
-    commitMsg { conventionalCommits() }
-    createHooks()
-}
+// gitHooks {
+//    preCommit {
+//        tasks("ktlintCheck")
+//    }
+//    commitMsg { conventionalCommits() }
+//    createHooks()
+// }
 
 rootProject.name = "Social-Network"
 
