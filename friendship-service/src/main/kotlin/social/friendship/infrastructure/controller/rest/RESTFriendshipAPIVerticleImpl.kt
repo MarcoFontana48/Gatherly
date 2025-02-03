@@ -221,6 +221,8 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
     private fun sseHandler(ctx: RoutingContext) {
         vertx.executeBlocking(
             Callable {
+                logger.trace("received notification request")
+
                 val response = ctx.response()
                 response.putHeader("Content-Type", "text/event-stream")
                 response.putHeader("Cache-Control", "no-cache")

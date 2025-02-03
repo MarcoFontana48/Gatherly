@@ -326,6 +326,7 @@ class FriendshipServiceVerticle(
         response.putHeader("Cache-Control", "no-cache")
         response.putHeader("Connection", "keep-alive")
 
+        logger.trace("SSE channel generated")
         response.write("OK")
 
         prepareToSendSseEventsToClient(response)
@@ -333,6 +334,7 @@ class FriendshipServiceVerticle(
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
         friendshipEvents.forEach { topic ->
+            logger.trace("subscribing to vertx topic: {}", topic)
             vertx.eventBus().consumer<String>(topic) { message ->
                 response.write(message.body())
             }
