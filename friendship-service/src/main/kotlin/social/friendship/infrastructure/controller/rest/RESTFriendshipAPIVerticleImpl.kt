@@ -196,6 +196,8 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
             ctx.response().end("OK")
         }
 
+        router.get(Endpoint.NOTIFICATIONS).handler(::sseHandler)
+
         router.post(Endpoint.FRIENDSHIP).handler(::addFriendship)
         router.get(Endpoint.FRIENDSHIP).handler(::getFriendship)
 
@@ -210,7 +212,31 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
 
         this.vertx.createHttpServer()
             .requestHandler(router)
+            .webSocketHandler {
+                service.addWebSocket(it)
+            }
             .listen(Port.HTTP)
+    }
+
+    private fun sseHandler(ctx: RoutingContext) {
+        vertx.executeBlocking(
+            Callable {
+                val response = ctx.response()
+                response.putHeader("Content-Type", "text/event-stream")
+                response.putHeader("Cache-Control", "no-cache")
+                response.putHeader("Connection", "keep-alive")
+
+                this.service.generateSseChannel(ctx.response())
+            }
+        ).onComplete {
+            if (it.succeeded()) {
+                logger.trace("connection with client established successfully")
+                sendResponse(ctx, StatusCode.OK)
+            } else {
+                logger.warn("failed to establish connection with client:", it.cause())
+                sendErrorResponse(ctx, it.cause())
+            }
+        }
     }
 
     /**

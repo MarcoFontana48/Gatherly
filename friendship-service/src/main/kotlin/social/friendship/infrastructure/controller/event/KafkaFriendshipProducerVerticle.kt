@@ -12,12 +12,12 @@ import social.common.events.FriendshipRemoved
 import social.common.events.FriendshipRequestAccepted
 import social.common.events.FriendshipRequestRejected
 import social.common.events.MessageSent
-import social.friendship.application.KafkaProducerVerticle
+import social.friendship.application.EventBrokerProducerVerticle
 
 /**
  * Verticle that produces events to Kafka
  */
-class KafkaFriendshipProducerVerticle : AbstractVerticle(), KafkaProducerVerticle {
+class KafkaFriendshipProducerVerticle : AbstractVerticle(), EventBrokerProducerVerticle {
     private val logger = LogManager.getLogger(this::class)
     private val producerConfig = mapOf(
         "bootstrap.servers" to (System.getenv("KAFKA_HOST") ?: "localhost") + ":" + (System.getenv("KAFKA_PORT") ?: "9092"),
