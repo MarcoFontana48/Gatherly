@@ -322,12 +322,14 @@ class FriendshipServiceVerticle(
     override fun getUser(userID: User.UserID): User? = userRepository.findById(userID)
 
     override fun generateSseChannel(response: HttpServerResponse) {
+        response.isChunked = true
         response.putHeader("Content-Type", "text/event-stream")
         response.putHeader("Cache-Control", "no-cache")
         response.putHeader("Connection", "keep-alive")
 
         logger.trace("SSE channel generated")
-        response.write("OK")
+
+        response.write(":ok\n\n")
 
         prepareToSendSseEventsToClient(response)
     }
