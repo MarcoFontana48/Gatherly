@@ -6,11 +6,13 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.http.HttpServerResponse
 import io.vertx.core.http.ServerWebSocket
+import io.vertx.core.json.JsonObject
 import org.apache.logging.log4j.LogManager
 import social.common.ddd.Service
 import social.common.events.FriendshipRemoved
 import social.common.events.FriendshipRequestAccepted
 import social.common.events.FriendshipRequestRejected
+import social.common.events.FriendshipRequestSent
 import social.common.events.MessageReceived
 import social.common.events.MessageSent
 import social.common.events.UserCreated
@@ -26,7 +28,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service {
-    fun generateSseChannel(response: HttpServerResponse)
+    fun generateSseChannel(response: HttpServerResponse, userId: String)
     fun addWebSocket(webSocket: ServerWebSocket)
 
     val friendshipEvents: List<String>
@@ -61,6 +63,7 @@ class FriendshipServiceVerticle(
 ) : FriendshipService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
     private val clients = mutableSetOf<ServerWebSocket>()
+    private val responses = mutableMapOf<String, HttpServerResponse>()
     private val mapper: ObjectMapper = jacksonObjectMapper().apply {
         registerModule(KotlinModule.Builder().build())
     }
@@ -321,7 +324,7 @@ class FriendshipServiceVerticle(
      */
     override fun getUser(userID: User.UserID): User? = userRepository.findById(userID)
 
-    override fun generateSseChannel(response: HttpServerResponse) {
+    override fun generateSseChannel(response: HttpServerResponse, userId: String) {
         response.isChunked = true
         response.putHeader("Content-Type", "text/event-stream")
         response.putHeader("Cache-Control", "no-cache")
@@ -330,25 +333,35 @@ class FriendshipServiceVerticle(
         response.putHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
         response.putHeader("Access-Control-Allow-Headers", "Content-Type")
 
+        responses[userId] = response
+
         logger.trace("SSE channel generated")
-        prepareToSendSseEventsToClient(response)
+        prepareToSendSseEventsToClient(responses[userId], userId)
 
         Thread.sleep(10_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestAccepted("im sender", "im receiver")))
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender", "test")))
     }
 
-    private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
+    private fun prepareToSendSseEventsToClient(response: HttpServerResponse?, userId: String) {
         friendshipEvents.forEach { topic ->
             logger.trace("Subscribing to Vert.x topic: {}", topic)
 
             vertx.eventBus().consumer<String>(topic) { message ->
-                val formattedMessage = "data: ${message.body()}\n\n"
-                response.write(formattedMessage).onComplete {
-                    if (it.succeeded()) {
-                        logger.trace("SSE Event sent: {}", formattedMessage)
-                    } else {
-                        logger.error("Failed to send SSE event", it.cause())
-                    }
+                val eventJson = JsonObject(message.body())
+
+                eventJson.filter {
+                    it.value == userId
+                }.forEach {
+                    val eventValue = eventJson.put("topic", topic).toString()
+                    val formattedMessage = "data: $eventValue\n\n"
+
+                    response?.write(formattedMessage)?.onComplete {
+                        if (it.succeeded()) {
+                            logger.trace("SSE Event sent to user {}: {}", userId, formattedMessage)
+                        } else {
+                            logger.error("Failed to send SSE event to user {}", userId, it.cause())
+                        }
+                    } ?: logger.error("Response is null")
                 }
             }
         }

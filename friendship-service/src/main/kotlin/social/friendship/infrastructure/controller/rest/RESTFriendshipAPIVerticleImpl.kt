@@ -223,7 +223,9 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
             Callable {
                 logger.trace("received notification request")
 
-                this.service.generateSseChannel(ctx.response())
+                val userId = ctx.request().getParam("id") ?: throw IllegalArgumentException("user 'id' is required")
+
+                this.service.generateSseChannel(ctx.response(), userId)
             }
         ).onComplete {
             if (it.succeeded()) {
