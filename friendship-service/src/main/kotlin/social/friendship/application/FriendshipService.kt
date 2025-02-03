@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.http.HttpServerResponse
+import io.vertx.core.http.ServerWebSocket
 import org.apache.logging.log4j.LogManager
 import social.common.ddd.Service
 import social.common.events.FriendshipRemoved
@@ -23,7 +25,19 @@ import social.friendship.social.friendship.application.DatabaseCredentials
 import java.nio.file.Files
 import java.nio.file.Paths
 
-interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service
+interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service {
+    fun generateSseChannel(response: HttpServerResponse)
+    fun addWebSocket(webSocket: ServerWebSocket)
+
+    val friendshipEvents: List<String>
+        get() = listOf(
+            FriendshipRequestAccepted.TOPIC,
+            FriendshipRequestRejected.TOPIC,
+            FriendshipRemoved.TOPIC,
+            MessageReceived.TOPIC,
+            MessageSent.TOPIC,
+        )
+}
 
 /**
  * FriendshipServiceVerticle is the main entry point for the Friendship Service.
@@ -41,11 +55,12 @@ class FriendshipServiceVerticle(
     private val friendshipRepository: FriendshipRepository,
     private val friendshipRequestRepository: FriendshipRequestRepository,
     private val messageRepository: MessageRepository,
-    private val kafkaProducer: KafkaProducerVerticle,
+    private val kafkaProducer: EventBrokerProducerVerticle,
     private val credentials: DatabaseCredentials? = null,
     shouldConnectToDB: Boolean? = true,
 ) : FriendshipService, AbstractVerticle() {
     private val logger = LogManager.getLogger(this::class)
+    private val clients = mutableSetOf<ServerWebSocket>()
     private val mapper: ObjectMapper = jacksonObjectMapper().apply {
         registerModule(KotlinModule.Builder().build())
     }
@@ -227,6 +242,11 @@ class FriendshipServiceVerticle(
         )
         kafkaProducer.publishEvent(event)
         vertx.eventBus().publish(MessageReceived.TOPIC, mapper.writeValueAsString(message))
+        clients.filter {
+            it.query().split("id=")[1] == message.sender.id.value.toString()
+        }.forEach {
+            it.writeTextMessage(mapper.writeValueAsString(message))
+        }
     }
 
     /**
@@ -243,6 +263,11 @@ class FriendshipServiceVerticle(
         )
         kafkaProducer.publishEvent(event)
         vertx.eventBus().publish(MessageSent.TOPIC, mapper.writeValueAsString(message))
+        clients.filter {
+            it.query().split("id=")[1] == message.receiver.id.value.toString()
+        }.forEach {
+            it.writeTextMessage(mapper.writeValueAsString(message))
+        }
     }
 
     /**
@@ -295,4 +320,29 @@ class FriendshipServiceVerticle(
      * @return The user with the given ID, or null if it does not exist.
      */
     override fun getUser(userID: User.UserID): User? = userRepository.findById(userID)
+
+    override fun generateSseChannel(response: HttpServerResponse) {
+        response.putHeader("Content-Type", "text/event-stream")
+        response.putHeader("Cache-Control", "no-cache")
+        response.putHeader("Connection", "keep-alive")
+
+        response.write("OK")
+
+        prepareToSendSseEventsToClient(response)
+    }
+
+    private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
+        friendshipEvents.forEach { topic ->
+            vertx.eventBus().consumer<String>(topic) { message ->
+                response.write(message.body())
+            }
+        }
+    }
+
+    override fun addWebSocket(webSocket: ServerWebSocket) {
+        clients.add(webSocket)
+        webSocket.closeHandler {
+            clients.remove(webSocket)
+        }
+    }
 }
