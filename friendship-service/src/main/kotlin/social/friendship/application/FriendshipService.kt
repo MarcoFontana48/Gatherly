@@ -334,7 +334,7 @@ class FriendshipServiceVerticle(
         prepareToSendSseEventsToClient(response)
 
         Thread.sleep(10_000)
-        vertx.eventBus().publish(friendshipEvents[0], "test")
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestAccepted("im sender", "im receiver")))
     }
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
