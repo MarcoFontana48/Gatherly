@@ -223,11 +223,6 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
             Callable {
                 logger.trace("received notification request")
 
-                val response = ctx.response()
-                response.putHeader("Content-Type", "text/event-stream")
-                response.putHeader("Cache-Control", "no-cache")
-                response.putHeader("Connection", "keep-alive")
-
                 this.service.generateSseChannel(ctx.response())
             }
         ).onComplete {
