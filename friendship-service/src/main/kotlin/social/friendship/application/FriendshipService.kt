@@ -335,6 +335,10 @@ class FriendshipServiceVerticle(
         response.write(":ok\n\n")
 
         prepareToSendSseEventsToClient(response)
+
+        Thread.sleep(10_000)
+
+        vertx.eventBus().publish(friendshipEvents[0], "test")
     }
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
