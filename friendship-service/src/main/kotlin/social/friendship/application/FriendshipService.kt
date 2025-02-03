@@ -345,7 +345,13 @@ class FriendshipServiceVerticle(
         friendshipEvents.forEach { topic ->
             logger.trace("subscribing to vertx topic: {}", topic)
             vertx.eventBus().consumer<String>(topic) { message ->
-                response.write(message.body())
+                response.write(message.body().toString()).onComplete {
+                    if (it.succeeded()) {
+                        logger.trace("Event '{}' sent to client", message.body())
+                    } else {
+                        logger.error("Failed to write to response", it.cause())
+                    }
+                }
             }
         }
     }
