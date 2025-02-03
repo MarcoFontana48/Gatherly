@@ -331,25 +331,23 @@ class FriendshipServiceVerticle(
         response.putHeader("Access-Control-Allow-Headers", "Content-Type")
 
         logger.trace("SSE channel generated")
-
-        response.write(":ok\n\n")
-
         prepareToSendSseEventsToClient(response)
 
         Thread.sleep(10_000)
-
         vertx.eventBus().publish(friendshipEvents[0], "test")
     }
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse) {
         friendshipEvents.forEach { topic ->
-            logger.trace("subscribing to vertx topic: {}", topic)
+            logger.trace("Subscribing to Vert.x topic: {}", topic)
+
             vertx.eventBus().consumer<String>(topic) { message ->
-                response.write(message.body().toString()).onComplete {
+                val formattedMessage = "data: ${message.body()}\n\n"
+                response.write(formattedMessage).onComplete {
                     if (it.succeeded()) {
-                        logger.trace("Event '{}' sent to client", message.body())
+                        logger.trace("SSE Event sent: {}", formattedMessage)
                     } else {
-                        logger.error("Failed to write to response", it.cause())
+                        logger.error("Failed to send SSE event", it.cause())
                     }
                 }
             }
