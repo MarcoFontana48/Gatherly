@@ -339,7 +339,17 @@ class FriendshipServiceVerticle(
         prepareToSendSseEventsToClient(responses[userId], userId)
 
         Thread.sleep(10_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender", "test")))
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender1", "test")))
+        Thread.sleep(2_000)
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender2", "test")))
+        Thread.sleep(2_000)
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender3", "test")))
+        Thread.sleep(2_000)
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender4", "test")))
+        Thread.sleep(2_000)
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender5", "test")))
+        Thread.sleep(2_000)
+        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender6", "test")))
     }
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse?, userId: String) {
@@ -352,6 +362,8 @@ class FriendshipServiceVerticle(
                 eventJson.filter {
                     it.value == userId
                 }.forEach {
+                    logger.trace("Sending SSE Event '{}' to user '{}'", eventJson, userId)
+
                     val eventValue = eventJson.put("topic", topic).toString()
                     val formattedMessage = "data: $eventValue\n\n"
 
