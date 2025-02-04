@@ -42,7 +42,7 @@ import RouterLinkButton from "@/components/buttons/PagesButton.vue";
 
 .left-column {
   @include default-column-style(flex-start);
-  @include center-content;
+  @include align-to(flex-start);
 }
 
 .center-column {
@@ -51,6 +51,6 @@ import RouterLinkButton from "@/components/buttons/PagesButton.vue";
 
 .right-column {
   @include default-column-style(flex-end);
-  @include center-content;
+  @include align-to(center);
 }
 </style>
