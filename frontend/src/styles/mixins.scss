@@ -17,12 +17,25 @@
   height: 100%;
 }
 
-@mixin button-styles($padding, $font-size, $min-width, $border-radius, $min-size, $max-size, $border-color) {
+@mixin default-button-style {
+  $padding: 2vw;
+  $font-size-base: 1vw;
+  $font-size-min: 1rem;
+  $font-size-max: 2.5rem;
+  $min-button-width: 6vw;
+  $border-radius: 0.2vw;
+  $button-width: 100%;
+
+  @include button-styles($padding, $font-size-base, $min-button-width, $border-radius, $font-size-min, $font-size-max, black, $button-width);
+}
+
+@mixin button-styles($padding, $font-size, $min-width, $border-radius, $min-size, $max-size, $border-color, $button-width) {
   padding: $padding;
   border: $border-radius solid $border-color;
   font-size: clamp($min-size, $font-size, $max-size);
   min-width: clamp($min-width, 6vw, $min-size);
   border-radius: $border-radius;
+  width: $button-width;
 }
 
 @mixin default-link-styles($bg-color) {
@@ -33,11 +46,31 @@
   transition: background-color 0.3s ease;
 }
 
+@mixin adapt-border-color-based-on-bg($color, $amount, $bg-color) {
+  border-color: mix($color, $bg-color, $amount);
+}
+
+@mixin default-dialog-style($bg-color) {
+  $friendship-request-window-bg-color: invert($bg-color);
+
+  $padding: 2vw;
+  $min-friendship-request-window-width: 10vw;
+  $max-friendship-request-window-width: 20vw;
+  $border-radius: 0.2vw;
+
+  padding: $padding;
+  background-color: $friendship-request-window-bg-color;
+  min-width: $min-friendship-request-window-width;
+  max-width: $max-friendship-request-window-width;
+  text-align: center;
+  border-radius: $border-radius;
+}
+
 @mixin default-text-styles($bg-color) {
   @include black-or-white-based-on-bg-lightness($bg-color);
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1;
   font-family: Arial, sans-serif;
   text-rendering: optimizeLegibility;
 }
@@ -48,7 +81,7 @@
 
 @mixin default-column-style($align-items) {
   width: 20%;
-  padding: 10px;
+  padding: 2.5vw;
   overflow-y: auto;
   flex: 1;
   display: flex;

@@ -1,12 +1,12 @@
 <template>
   <div class="friend-request" v-if="showRequest">
     <p class="request-text">
-      <UserIdText :text="senderId" />
+      <UserIdText :text="senderId"></UserIdText>
       wants to add you as a friend
     </p>
     <div class="buttons">
-      <button @click="acceptRequest" class="accept">Accept</button>
-      <button @click="denyRequest" class="deny">Deny</button>
+      <AcceptButton @click="acceptRequest">{{ acceptButtonLabel }}</AcceptButton>
+      <DeclineButton @click="denyRequest">{{ denyButtonLabel }}</DeclineButton>
     </div>
   </div>
 </template>
@@ -14,21 +14,25 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import UserIdText from "./UserIdText.vue";
+import AcceptButton from "@/components/buttons/AcceptButton.vue";
+import DeclineButton from "@/components/buttons/DeclineButton.vue";
 
 const senderId = ref("<sender-id>");
+const acceptButtonLabel = ref("Accept");
+const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
 
 const acceptRequest = () => {
-  console.log(`${senderId.value} accepted`);
+  console.log(`friendship from ${senderId.value} accepted`);
 };
 
 const denyRequest = () => {
-  console.log(`${senderId.value} denied`);
+  console.log(`friendship from ${senderId.value} denied`);
 };
 
-// Listen for SSE events
 onMounted(() => {
-  console.log("mounted")
+  console.log("mounted");
+  showRequest.value = true;
   const eventSource = new EventSource('http://localhost:8081/notifications?id=test');
 
   eventSource.onmessage = (event) => {
@@ -38,7 +42,6 @@ onMounted(() => {
     senderId.value = data.sender;
     showRequest.value = true;
 
-    // Hide the request after 10 seconds
     setTimeout(() => {
       showRequest.value = false;
     }, 10_000);
@@ -48,73 +51,24 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
-$friendship-request-window-bg-color: #f9f9f9;
-$border-color: #1a1a1a;
-$accept-color: #5cb85c;
-$deny-color: #d9534f;
+@import "@/styles/global.scss";
 
-$padding: 2vw;
-$font-size-base: 1vw;
-$font-size-min: 1rem;
-$font-size-max: 2.5rem;
-$min-button-width: 6vw;
-$min-friendship-request-window-width: 10vw;
-$max-friendship-request-window-width: 20vw;
-$button-padding: 1vw;
-$border-radius: 0.2vw;
 $gap: 1vw;
 
 .friend-request {
-  @include default-text-styles;
-
-  padding: $padding;
-  border: $border-radius solid $border-color;
-  background-color: $friendship-request-window-bg-color;
-  min-width: $min-friendship-request-window-width;
-  max-width: $max-friendship-request-window-width;
-  text-align: center;
+  @include default-text-styles($bg-color);
+  @include default-dialog-style($bg-color);
 
   .request-text {
-    @include black-or-white-based-on-bg-lightness($friendship-request-window-bg-color);
-    font-size: clamp($font-size-min, $font-size-base, $font-size-max);
+    @include default-text-styles(invert($bg-color));
   }
 
   .buttons {
     margin-top: $gap;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: $gap;
-  }
-
-  button {
-    @include center-content;
-    @include button-styles($button-padding, $font-size-base, $min-button-width, $border-radius, $font-size-min, $font-size-max, $border-color);
-
-    &.accept {
-      background-color: $accept-color;
-      @include black-or-white-based-on-bg-lightness($accept-color);
-
-      &:hover {
-        @include adapt-color-based-on-bg($accept-color, 30%);
-      }
-
-      &:active {
-        @include adapt-color-based-on-bg($accept-color, 90%);
-      }
-    }
-
-    &.deny {
-      background-color: $deny-color;
-      @include black-or-white-based-on-bg-lightness($deny-color);
-
-      &:hover {
-        @include adapt-color-based-on-bg($deny-color, 30%);
-      }
-
-      &:active {
-        @include adapt-color-based-on-bg($deny-color, 90%);
-      }
-    }
+    width: 100%;
   }
 }
 </style>

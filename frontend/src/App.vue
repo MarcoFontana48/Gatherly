@@ -2,14 +2,25 @@
 import { RouterLink, RouterView } from 'vue-router';
 import Feed from "@/components/Feed.vue";
 import Friendship from "@/components/Friendship.vue";
+import BaseButton from "@/components/buttons/BaseButton.vue";
+import RouterLinkButton from "@/components/buttons/PagesButton.vue";
 </script>
 
 <template>
   <div class="app-container">
     <div class="left-column">
-      <RouterLink to="/home" class="link-button">Home</RouterLink>
-      <RouterLink to="/profile" class="link-button">Profile</RouterLink>
-      <RouterLink to="/settings" class="link-button">Settings</RouterLink>
+      <RouterLink to="/home" class="link-button">
+        <RouterLinkButton>Home</RouterLinkButton>
+      </RouterLink>
+
+      <RouterLink to="/profile" class="link-button">
+        <RouterLinkButton>Profile</RouterLinkButton>
+      </RouterLink>
+
+      <RouterLink to="/settings" class="link-button">
+        <RouterLinkButton>Settings</RouterLinkButton>
+      </RouterLink>
+
       <RouterView /> <!-- routes render only in the left column, leaving the center and right columns untouched -->
     </div>
     <div class="center-column">
@@ -24,9 +35,6 @@ import Friendship from "@/components/Friendship.vue";
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
 @import "@/styles/global.scss";
-
-$hover-darken-amount: 40%;
-$active-darken-amount: 60%;
 
 .app-container {
   @include default-app-style($bg-color);
@@ -44,26 +52,5 @@ $active-darken-amount: 60%;
 .right-column {
   @include default-column-style(flex-end);
   @include center-content;
-}
-
-.link-button {
-  $padding: 10px;
-  $font-size: 1.6rem;
-  $min-width: 100px;
-  $border-radius: 5px;
-  $min-size: 1.6rem;
-  $max-size: 2rem;
-  $border-color: invert($bg-color);
-  @include button-styles($padding, $font-size, $min-width, $border-radius, $min-size, $max-size, $border-color);
-  @include default-link-styles($bg-color);
-  @include center-content;
-
-  &:hover {
-    @include adapt-color-based-on-bg($bg-color, $hover-darken-amount, $bg-color);
-  }
-
-  &:active {
-    @include adapt-color-based-on-bg($bg-color, $active-darken-amount, $bg-color);
-  }
 }
 </style>
