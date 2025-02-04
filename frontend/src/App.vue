@@ -23,8 +23,8 @@ import Friendship from "@/components/Friendship.vue";
 
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
 
-$bg-color: white;
 $hover-darken-amount: 40%;
 $active-darken-amount: 60%;
 
@@ -43,6 +43,7 @@ $active-darken-amount: 60%;
 
 .right-column {
   @include default-column-style(flex-end);
+  @include center-content;
 }
 
 .link-button {
@@ -54,7 +55,7 @@ $active-darken-amount: 60%;
   $max-size: 2rem;
   $border-color: invert($bg-color);
   @include button-styles($padding, $font-size, $min-width, $border-radius, $min-size, $max-size, $border-color);
-  @include default-link-styles;
+  @include default-link-styles($bg-color);
   @include center-content;
 
   &:hover {

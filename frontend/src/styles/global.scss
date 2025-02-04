@@ -1,0 +1,11 @@
+// defines the background color globally
+// chose the color you want and the whole app will adapt to it
+$bg-color: black;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: $bg-color; // uses the variable globally
+  height: 100%;
+  width: 100%;
+}

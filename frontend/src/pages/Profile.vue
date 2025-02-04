@@ -3,7 +3,7 @@
 
 <template>
   <div class="profile-container">
-    Profile page
+    <p>Profile page</p>
   </div>
 </template>
 
