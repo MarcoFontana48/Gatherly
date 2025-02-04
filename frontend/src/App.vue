@@ -1,30 +1,37 @@
 <script setup lang="ts">
-import HelloWorld from './components/FriendshipRequestWindow.vue'
+import Feed from "@/components/Feed.vue";
+import Friendship from "@/components/Friendship.vue";
+import {RouterView} from "vue-router";
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app-container">
+    <div class="left-column">
+      <RouterLink to="/settings">Settings</RouterLink>
+      <RouterLink to="/profile">Profile</RouterLink>
+      <RouterLink to="/home">Home</RouterLink>
+      <RouterView /> <!-- routes render only in the left column, leaving the center and right columns untouched -->
+    </div>
+    <div class="center-column">
+      <Feed />
+    </div>
+    <div class="right-column">
+      <Friendship />
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style lang="scss" scoped>
+@import "@/styles/mixins.scss";
+
+.app-container {
+  @include default-app-style;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.left-column,
+.center-column,
+.right-column {
+  @include default-app-style;
+  @include default-column-style;
 }
 </style>

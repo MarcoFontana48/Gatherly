@@ -1,11 +1,5 @@
 <template>
-  <span>
-    (
-    <span class="user-id-text">
-      {{ text }}
-    </span>
-    )
-  </span>
+  <span class="username-text">{{ text }}</span>
 </template>
 
 <script setup>
@@ -17,8 +11,10 @@ defineProps({
 });
 </script>
 
-<style scoped>
-.user-id-text {
-  font-style: italic;
+<style lang="scss" scoped>
+@import "@/styles/mixins.scss";
+
+.username-text {
+  font-weight: bold;
 }
 </style>

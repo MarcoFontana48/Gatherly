@@ -1,8 +1,7 @@
 <template>
   <div class="friend-request" v-if="showRequest">
     <p class="request-text">
-      <UsernameText :text="receiverUsername" />
-      <UserIdText :text="receiverId" />
+      <UserIdText :text="senderId" />
       wants to add you as a friend
     </p>
     <div class="buttons">
@@ -14,29 +13,29 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import UsernameText from "./UsernameText.vue";
 import UserIdText from "./UserIdText.vue";
 
-const receiverId = ref("<user-id>");
-const receiverUsername = ref("<username>");
+const senderId = ref("<sender-id>");
 const showRequest = ref(false);
 
 const acceptRequest = () => {
-  console.log(`${receiverId.value} accepted`);
+  console.log(`${senderId.value} accepted`);
 };
 
 const denyRequest = () => {
-  console.log(`${receiverId.value} denied`);
+  console.log(`${senderId.value} denied`);
 };
 
 // Listen for SSE events
 onMounted(() => {
-  const eventSource = new EventSource('http://localhost:8082/notifications');
+  console.log("mounted")
+  const eventSource = new EventSource('http://localhost:8081/notifications?id=test');
 
   eventSource.onmessage = (event) => {
+    console.log('Received event:', event.data);
+
     const data = JSON.parse(event.data);
-    receiverId.value = data.receiverId;
-    receiverUsername.value = data.receiverUsername;
+    senderId.value = data.sender;
     showRequest.value = true;
 
     // Hide the request after 10 seconds
@@ -48,6 +47,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
 $friendship-request-window-bg-color: #f9f9f9;
 $border-color: #1a1a1a;
 $accept-color: #5cb85c;
@@ -64,26 +64,9 @@ $button-padding: 1vw;
 $border-radius: 0.2vw;
 $gap: 1vw;
 
-@mixin dynamic-color($bg-color) {
-  color: if(lightness($bg-color) > 60%, black, white);
-}
-
-@mixin lighten-color($color, $amount) {
-  color: lighten($color, $amount);
-}
-
-@mixin darken-color($color, $amount) {
-  color: darken($color, $amount);
-}
-
-@mixin center-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
 .friend-request {
+  @include default-text-styles;
+
   padding: $padding;
   border: $border-radius solid $border-color;
   background-color: $friendship-request-window-bg-color;
@@ -101,13 +84,6 @@ $gap: 1vw;
     display: flex;
     justify-content: center;
     gap: $gap;
-  }
-
-  @mixin button-styles($padding, $font-size, $min-width, $border-radius, $min-size, $max-size, $border-color) {
-    padding: $padding;
-    border: $border-radius solid $border-color;
-    font-size: clamp($min-size, $font-size, $max-size);
-    min-width: clamp($min-width, 6vw, $min-size);
   }
 
   button {
