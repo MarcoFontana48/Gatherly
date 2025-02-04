@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import FriendshipRequestDialog from "@/components/section/friendship-request/FriendshipRequestDialog.vue";
 </script>
 
 <template>
-<!-- nothing has to be shown in the home page -->
-<!--  <div class="home-container">-->
-<!--  </div>-->
+  <div class="home-container">
+    <p>Feed page</p>
+  </div>
+
+  <FriendshipRequestDialog></FriendshipRequestDialog>
 </template>
 
 <style lang="scss" scoped>

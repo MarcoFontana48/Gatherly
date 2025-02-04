@@ -99,3 +99,18 @@
   @include default-background-styles($bg-color);
   @include default-content-display-styles;
 }
+
+@mixin default-icon-size {
+  width: 5vh;
+  height: 5vh;
+}
+
+@mixin default-icon-margin {
+  margin-right: 15%;
+  margin-left: 15%;
+}
+
+@mixin display-vertically {
+  display: flex;
+  flex-direction: column;
+}

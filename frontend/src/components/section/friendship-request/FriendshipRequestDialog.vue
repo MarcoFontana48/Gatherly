@@ -1,21 +1,9 @@
-<template>
-  <div class="friend-request" v-if="showRequest">
-    <p class="request-text">
-      <UserIdText :text="senderId"></UserIdText>
-      wants to add you as a friend
-    </p>
-    <div class="buttons">
-      <AcceptButton @click="acceptRequest">{{ acceptButtonLabel }}</AcceptButton>
-      <DeclineButton @click="denyRequest">{{ denyButtonLabel }}</DeclineButton>
-    </div>
-  </div>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import UserIdText from "./UserIdText.vue";
+import UserIdText from "../../user/UserIdText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
+import Dialog from "@/components/Dialog.vue";
 
 const senderId = ref("<sender-id>");
 const acceptButtonLabel = ref("Accept");
@@ -23,11 +11,11 @@ const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
 
 const acceptRequest = () => {
-  console.log(`friendship from ${senderId.value} accepted`);
+  console.log(`Friendship request from ${senderId.value} accepted`);
 };
 
 const denyRequest = () => {
-  console.log(`friendship from ${senderId.value} denied`);
+  console.log(`Friendship request from ${senderId.value} denied`);
 };
 
 onMounted(() => {
@@ -49,9 +37,31 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <Dialog :showModal="showRequest" @update:showModal="showRequest = $event">
+    <template #header>
+      <h3>Friend Request</h3>
+    </template>
+
+    <template #body>
+      <p class="request-text">
+        <UserIdText :text="senderId"></UserIdText>
+        wants to add you as a friend.
+      </p>
+    </template>
+
+    <template #footer>
+      <div class="buttons">
+        <AcceptButton @click="acceptRequest">{{ acceptButtonLabel }}</AcceptButton>
+        <DeclineButton @click="denyRequest">{{ denyButtonLabel }}</DeclineButton>
+      </div>
+    </template>
+  </Dialog>
+</template>
+
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@import "@/styles/mixins";
+@import "@/styles/global";
 
 $gap: 1vw;
 

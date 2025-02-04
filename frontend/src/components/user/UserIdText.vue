@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
+@import "@/styles/mixins";
 
 .username-text {
   font-weight: bold;

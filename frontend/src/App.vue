@@ -1,34 +1,44 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import Feed from "@/components/Feed.vue";
-import Friendship from "@/components/Friendship.vue";
-import BaseButton from "@/components/buttons/BaseButton.vue";
-import RouterLinkButton from "@/components/buttons/PagesButton.vue";
+import { ref } from 'vue';
+import MenuNav from "@/components/MenuNav.vue";
+import Friendship from "@/components/section/FriendshipSection.vue";
+import { RouterView } from "vue-router";
+import SettingsDialog from "@/components/SettingsDialog.vue";
+
+import houseIcon from "@/assets/house-solid.svg";
+import userIcon from "@/assets/user-solid.svg";
+import cogIcon from "@/assets/cog-solid.svg";
+
+// Define menu items
+const menuItems = [
+  { path: "/home", label: "Home", icon: houseIcon },
+  { path: "/profile", label: "Profile", icon: userIcon },
+  { path: "/settings", label: "Settings", icon: cogIcon },
+];
+
+// State to control modal visibility
+const showModal = ref(false);
+
+// Method to toggle modal visibility
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <template>
   <div class="app-container">
     <div class="left-column">
-      <RouterLink to="/home" class="link-button">
-        <RouterLinkButton>Home</RouterLinkButton>
-      </RouterLink>
-
-      <RouterLink to="/profile" class="link-button">
-        <RouterLinkButton>Profile</RouterLinkButton>
-      </RouterLink>
-
-      <RouterLink to="/settings" class="link-button">
-        <RouterLinkButton>Settings</RouterLinkButton>
-      </RouterLink>
-
-      <RouterView /> <!-- routes render only in the left column, leaving the center and right columns untouched -->
+      <MenuNav :menuItems="menuItems" @openModal="toggleModal"/>
     </div>
     <div class="center-column">
-      <Feed />
+      <RouterView/>
     </div>
     <div class="right-column">
-      <Friendship />
+      <Friendship/>
     </div>
+
+    <!-- SettingsDialog Component -->
+    <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />
   </div>
 </template>
 
@@ -51,6 +61,6 @@ import RouterLinkButton from "@/components/buttons/PagesButton.vue";
 
 .right-column {
   @include default-column-style(flex-end);
-  @include align-to(center);
+  @include align-to(flex-end);
 }
 </style>

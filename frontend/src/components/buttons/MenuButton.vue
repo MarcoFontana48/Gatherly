@@ -1,7 +1,8 @@
-<!-- AcceptButton.vue -->
 <template>
   <BaseButton class="pages-button">
-    <slot></slot>
+    <div class="button-content">
+      <slot></slot>
+    </div>
   </BaseButton>
 </template>
 
@@ -27,5 +28,9 @@ import BaseButton from './BaseButton.vue';
   &:active {
     @include adapt-color-based-on-bg($button-bg-color, $active-darken-amount, $button-bg-color);
   }
+}
+
+.button-content {
+  @include align-to(center);
 }
 </style>
