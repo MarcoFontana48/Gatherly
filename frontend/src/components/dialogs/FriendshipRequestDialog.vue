@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import UserIdText from "../../user/UserIdText.vue";
+import UserIdText from "../user/UserIdText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
-import Dialog from "@/components/Dialog.vue";
+import Dialog from "@/components/dialogs/Dialog.vue";
 
 const senderId = ref("<sender-id>");
 const acceptButtonLabel = ref("Accept");
@@ -60,8 +60,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "@/styles/global";
+@import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
 
 $gap: 1vw;
 

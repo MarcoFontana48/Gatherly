@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import MenuNav from "@/components/MenuNav.vue";
 import Friendship from "@/components/section/FriendshipSection.vue";
 import { RouterView } from "vue-router";
-import SettingsDialog from "@/components/SettingsDialog.vue";
+import SettingsDialog from "@/components/dialogs/SettingsDialog.vue";
 
 import houseIcon from "@/assets/house-solid.svg";
 import userIcon from "@/assets/user-solid.svg";

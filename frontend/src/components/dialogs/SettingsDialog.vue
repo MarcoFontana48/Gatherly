@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 import OverlayDialog from './OverlayDialog.vue';
-import DeclineButton from './buttons/DeclineButton.vue';
+import DeclineButton from '../buttons/DeclineButton.vue';
 
 const props = defineProps<{
   showModal: boolean;
