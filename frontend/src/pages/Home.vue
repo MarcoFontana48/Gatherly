@@ -2,9 +2,9 @@
 </script>
 
 <template>
-  <div class="home-container">
-    Home page
-  </div>
+<!-- nothing has to be shown in the home page -->
+<!--  <div class="home-container">-->
+<!--  </div>-->
 </template>
 
 <style lang="scss" scoped>

@@ -1,13 +1,13 @@
-@mixin dynamic-color($bg-color) {
+@mixin black-or-white-based-on-bg-lightness($bg-color) {
   color: if(lightness($bg-color) > 60%, black, white);
 }
 
-@mixin lighten-color($color, $amount) {
-  color: lighten($color, $amount);
-}
-
-@mixin darken-color($color, $amount) {
-  color: darken($color, $amount);
+@mixin adapt-color-based-on-bg($color, $amount, $bg-color) {
+  @if lightness($bg-color) > 60% {
+    color: darken($color, $amount);
+  } @else {
+    color: lighten($color, $amount);
+  }
 }
 
 @mixin center-content {
@@ -22,9 +22,18 @@
   border: $border-radius solid $border-color;
   font-size: clamp($min-size, $font-size, $max-size);
   min-width: clamp($min-width, 6vw, $min-size);
+  border-radius: $border-radius;
 }
 
-@mixin default-text-styles {
+@mixin default-link-styles {
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+@mixin default-text-styles($bg-color) {
+  @include black-or-white-based-on-bg-lightness($bg-color);
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 1.5;
@@ -32,11 +41,11 @@
   text-rendering: optimizeLegibility;
 }
 
-@mixin default-background-styles {
-  background: white;
+@mixin default-background-styles($bg-color) {
+  background: $bg-color;
 }
 
-@mixin default-column-style {
+@mixin default-column-style($align-items) {
   width: 20%;
   padding: 10px;
   overflow-y: auto;
@@ -44,15 +53,15 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: flex-start;
+  align-items: $align-items;
 }
 
 @mixin default-content-display-styles {
   display: flex;
 }
 
-@mixin default-app-style {
-  @include default-text-styles;
-  @include default-background-styles;
+@mixin default-app-style($bg-color) {
+  @include default-text-styles($bg-color);
+  @include default-background-styles($bg-color);
   @include default-content-display-styles;
 }

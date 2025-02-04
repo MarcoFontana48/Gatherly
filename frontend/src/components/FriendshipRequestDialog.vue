@@ -75,7 +75,7 @@ $gap: 1vw;
   text-align: center;
 
   .request-text {
-    @include dynamic-color($friendship-request-window-bg-color);
+    @include black-or-white-based-on-bg-lightness($friendship-request-window-bg-color);
     font-size: clamp($font-size-min, $font-size-base, $font-size-max);
   }
 
@@ -92,27 +92,27 @@ $gap: 1vw;
 
     &.accept {
       background-color: $accept-color;
-      @include dynamic-color($accept-color);
+      @include black-or-white-based-on-bg-lightness($accept-color);
 
       &:hover {
-        @include lighten-color($accept-color, 30%);
+        @include adapt-color-based-on-bg($accept-color, 30%);
       }
 
       &:active {
-        @include darken-color($accept-color, 90%);
+        @include adapt-color-based-on-bg($accept-color, 90%);
       }
     }
 
     &.deny {
       background-color: $deny-color;
-      @include dynamic-color($deny-color);
+      @include black-or-white-based-on-bg-lightness($deny-color);
 
       &:hover {
-        @include lighten-color($deny-color, 30%);
+        @include adapt-color-based-on-bg($deny-color, 30%);
       }
 
       &:active {
-        @include darken-color($deny-color, 90%);
+        @include adapt-color-based-on-bg($deny-color, 90%);
       }
     }
   }
