@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import MenuButton from "@/components/buttons/MenuButton.vue";
 import Icon from "@/components/images/Icon.vue";
-import SlidingMenu from "@/components/SlidingMenu.vue";
+import FriendshipMenu from "@/components/FriendshipMenu.vue";
 import friendsIcon from "@/assets/friends-solid.svg";
 
 const showDropdown = ref(false);
@@ -20,7 +20,7 @@ const toggleDropdown = () => {
     </MenuButton>
   </div>
 
-  <SlidingMenu :show="showDropdown" @close="showDropdown = false" />
+  <FriendshipMenu :show="showDropdown" @close="showDropdown = false" />
 </template>
 
 <style lang="scss" scoped>
