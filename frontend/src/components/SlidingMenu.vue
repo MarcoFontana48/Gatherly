@@ -22,63 +22,31 @@ const emit = defineEmits(["close"]);
 </template>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
+
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  @include overlay-background;
+  @include default-text-styles($bg-color);
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  z-index: 1000;
 }
 
 .side-panel {
-  width: 30vw;
-  height: 100vh;
-  background: white;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  transform: translateX(100%);
-  animation: slide-in 0.3s forwards;
+  @include side-panel($bg-color);
 }
 
 .panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  @include panel-header-styles;
 }
 
-.panel-header h3 {
-  margin: 0;
+.side-panel {
+  @include side-panel-list-styles;
 }
 
 .close-btn {
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.side-panel ul {
-  list-style: none;
-  padding: 0;
-}
-
-.side-panel li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.side-panel li:hover {
-  background: #f0f0f0;
+  @include default-close-btn-style;
 }
 
 @keyframes slide-in {

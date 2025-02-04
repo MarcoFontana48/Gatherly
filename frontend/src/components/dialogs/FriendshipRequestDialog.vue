@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Dialog :showModal="showRequest" @update:showModal="showRequest = $event">
+  <Dialog class="friend-request" :showModal="showRequest" @update:showModal="showRequest = $event">
     <template #header>
       <h3>Friend Request</h3>
     </template>
@@ -66,12 +66,8 @@ onMounted(() => {
 $gap: 1vw;
 
 .friend-request {
-  @include default-text-styles($bg-color);
+  @include default-text-styles(invert($bg-color));
   @include default-dialog-style($bg-color);
-
-  .request-text {
-    @include default-text-styles(invert($bg-color));
-  }
 
   .buttons {
     margin-top: $gap;

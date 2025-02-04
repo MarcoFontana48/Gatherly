@@ -23,11 +23,10 @@ const closeModal = () => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/styles/global.scss";
+@import "@/styles/mixins.scss";
+
 .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  text-align: center;
+  @include default-dialog-style($bg-color);
 }
 </style>

@@ -33,5 +33,5 @@ const closeModal = () => {
 </template>
 
 <style lang="scss" scoped>
-/* Add your styling here */
+
 </style>
