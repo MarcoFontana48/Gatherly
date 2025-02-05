@@ -37,7 +37,7 @@ const validateEmail = (email: string): boolean => {
 </script>
 
 <template>
-  <OverlayDialog :showModal="props.showModal" @update:showModal="emit('update:showModal', $event)">
+  <OverlayDialog :showModal="props.showModal" @update:showModal="emit('update:showModal', $event)" class="overlay-dialog">
     <template #header>
       <h3>Social-Network</h3>
     </template>
