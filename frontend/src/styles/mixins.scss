@@ -23,7 +23,7 @@
   $font-size-min: 1rem;
   $font-size-max: 2.5rem;
   $min-button-width: 6vw;
-  $border-radius: 0.2vw;
+  $border-radius: 1vh;
   $button-width: 100%;
 
   @include button-styles($padding, $font-size-base, $min-button-width, $border-radius, $font-size-min, $font-size-max, black, $button-width);
@@ -51,7 +51,7 @@
 }
 
 @mixin default-dialog-style($bg-color) {
-  $friendship-request-window-bg-color: invert($bg-color);
+  $friendship-request-window-bg-color: $bg-color;
 
   $padding: 2vw;
   $min-friendship-request-window-width: 10vw;
@@ -64,6 +64,7 @@
   max-width: $max-friendship-request-window-width;
   text-align: center;
   border-radius: $border-radius;
+  border: 0.5vh solid mix($bg-color, invert($bg-color), 0%);
 }
 
 @mixin default-text-styles($bg-color) {

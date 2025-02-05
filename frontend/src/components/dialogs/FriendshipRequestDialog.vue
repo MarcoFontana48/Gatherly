@@ -4,23 +4,51 @@ import UserIdText from "../user/UserIdText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Dialog from "@/components/dialogs/Dialog.vue";
+import axios from 'axios';
 
-const senderId = ref("<sender-id>");
+// const senderId = ref("<sender-id>");
+const senderId = ref("test3@gmail.com");  //FIXME: tmp for testing purposes (delete this row after test is completed)
 const acceptButtonLabel = ref("Accept");
 const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
 
-const acceptRequest = () => {
-  console.log(`Friendship request from ${senderId.value} accepted`);
+const acceptRequest = async () => {
+  try {
+    const payload = {
+      from: senderId.value,
+      to: "test@gmail.com" // TODO: replace with the actual receiver's email (the user using the app)
+    };
+
+    const response = await axios.put('http://localhost:8081/friends/requests/accept', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Friendship request declined:', response.data);
+  } catch (error) {
+    console.error('Error declining friendship request:', error);
+  }
 };
 
-const denyRequest = () => {
-  console.log(`Friendship request from ${senderId.value} denied`);
+const denyRequest = async () => {
+  try {
+    const payload = {
+      from: senderId.value,
+      to: "test@gmail.com" // TODO: replace with the actual receiver's email (the user using the app)
+    };
+
+    const response = await axios.put('http://localhost:8081/friends/requests/decline', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Friendship request accepted:', response.data);
+  } catch (error) {
+    console.error('Error accepting friendship request:', error);
+  }
 };
 
 onMounted(() => {
   console.log("mounted");
-  showRequest.value = true;
+  showRequest.value = true; //FIXME: tmp, for testing purposes (delete this row after test is completed)
   const eventSource = new EventSource('http://localhost:8081/notifications?id=test');
 
   eventSource.onmessage = (event) => {
@@ -66,7 +94,7 @@ onMounted(() => {
 $gap: 1vw;
 
 .friend-request {
-  @include default-text-styles(invert($bg-color));
+  @include default-text-styles($bg-color);
   @include default-dialog-style($bg-color);
 
   .buttons {

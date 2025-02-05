@@ -31,7 +31,7 @@ const emit = defineEmits(['update:showModal']);
 }
 
 .modal-content {
-  @include default-text-styles(invert($bg-color));
+  @include default-text-styles($bg-color);
   @include default-dialog-style($bg-color);
 }
 </style>
