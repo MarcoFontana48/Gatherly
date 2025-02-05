@@ -180,7 +180,7 @@ class FriendshipServiceVerticle(
         friendshipRequestRepository.save(friendshipRequest).let {
             val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
             kafkaProducer.publishEvent(event)
-            vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(it))
+            vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
         }
     }
 
@@ -351,6 +351,7 @@ class FriendshipServiceVerticle(
             logger.trace("Subscribing to Vert.x topic: {}", topic)
 
             vertx.eventBus().consumer<String>(topic) { message ->
+                logger.trace("Received event from topic '{}': {}", topic, message.body())
                 val eventJson = JsonObject(message.body())
 
                 when (topic) {
@@ -380,7 +381,9 @@ class FriendshipServiceVerticle(
         response: HttpServerResponse?,
         topic: String
     ) {
+        logger.trace("Friendship request sent handler called with arguments: {}, {}, {}, {}", eventJson, userId, response, topic)
         if (eventJson.getString("receiver") == userId) {
+            logger.trace("receiver is equal to userId")
             sendSseEvent(response, userId, topic, eventJson)
         }
     }
