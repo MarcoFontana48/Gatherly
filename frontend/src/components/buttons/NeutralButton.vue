@@ -1,5 +1,5 @@
 <template>
-  <BaseButton class="accept-button">
+  <BaseButton class="neutral-button">
     <slot></slot>
   </BaseButton>
 </template>
@@ -12,10 +12,10 @@ import BaseButton from './BaseButton.vue';
 @import "@/styles/mixins";
 @import "@/styles/global";
 
-.accept-button {
-  $button-bg-color: green;
+.neutral-button {
+  $button-bg-color: $bg-color;
 
-  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, $button-bg-color);
+  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, invert($button-bg-color));
   @include default-text-styles($button-bg-color);
   @include default-background-styles($button-bg-color);
 

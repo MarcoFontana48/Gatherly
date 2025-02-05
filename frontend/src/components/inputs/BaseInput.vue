@@ -6,7 +6,6 @@ const emit = defineEmits(['update:modelValue']);
 
 const inputValue = ref(props.modelValue);
 
-// Watch for changes and emit updates
 watch(inputValue, (newValue) => {
   emit('update:modelValue', newValue);
 });
@@ -14,12 +13,7 @@ watch(inputValue, (newValue) => {
 
 <template>
   <div class="input-container">
-    <input
-        v-model="inputValue"
-        :type="type || 'text'"
-        :placeholder="placeholder"
-        class="custom-input"
-    />
+    <input v-model="inputValue" :type="type || 'text'" :placeholder="placeholder" class="custom-input" />
   </div>
 </template>
 
@@ -27,9 +21,16 @@ watch(inputValue, (newValue) => {
 @import "@/styles/mixins.scss";
 @import "@/styles/global.scss";
 
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .custom-input {
   @include default-text-styles($bg-color);
   @include default-input-form-styles($bg-color);
   margin-bottom: 1vh;
+  margin-top: 1vh;
 }
 </style>

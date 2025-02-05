@@ -23,7 +23,7 @@
   $font-size-min: 1rem;
   $font-size-max: 2.5rem;
   $min-button-width: 6vw;
-  $border-radius: 1vh;
+  $border-radius: 0.4vh;
   $button-width: 100%;
 
   @include button-styles($padding, $font-size-base, $min-button-width, $border-radius, $font-size-min, $font-size-max, black, $button-width);

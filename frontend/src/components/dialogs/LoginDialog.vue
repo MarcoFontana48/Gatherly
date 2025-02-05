@@ -15,7 +15,9 @@ const errorMessage = ref("");
 const router = useRouter();
 const authStore = useAuthStore(); // Use Pinia store
 
-const login = () => {
+import axios from "axios"; // Import axios
+
+const login = async () => {
   console.log("login function called");
 
   if (!validateEmail(email.value)) {
@@ -25,10 +27,35 @@ const login = () => {
   }
 
   errorMessage.value = "";
-  authStore.setAuthToken(email.value); // Store token in Pinia
-  emit("update:showModal", false); // Close modal
-  router.push("/home"); // Navigate to home
+
+  try {
+    // checks if user exists
+    const response = await axios.get(`http://localhost:8080/users`, {
+      params: { email: email.value },
+    });
+
+    if (response.status === 200 && response.data) {
+      authStore.setAuthToken(email.value);
+      emit("update:showModal", false);
+      await router.push("/home");
+    } else {
+      errorMessage.value = "No matching email found. Please try again.";
+    }
+  } catch (error: any) {
+    switch (error.response?.status) {
+      case 404:
+        errorMessage.value = "No matching email found. Please try again.";
+        break;
+      case 400:
+        errorMessage.value = "The email you have inserted is not formatted properly.\nA valid email should be in the format:\nemail@something.domain";
+        break;
+      default:
+        errorMessage.value = "An error occurred. Please try again later.";
+    }
+    console.error("Error during login request:", error);
+  }
 };
+
 
 const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

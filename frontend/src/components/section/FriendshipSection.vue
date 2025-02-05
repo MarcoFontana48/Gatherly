@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import MenuButton from "@/components/buttons/MenuButton.vue";
+import MenuButton from "@/components/buttons/NavButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import FriendshipMenu from "@/components/FriendshipMenu.vue";
 import friendsIcon from "@/assets/friends-solid.svg";

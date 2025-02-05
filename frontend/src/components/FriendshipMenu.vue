@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import {ref, watch, onMounted, onBeforeUnmount, computed} from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { useAuthStore } from "@/auth.ts";
+import BaseInput from "@/components/inputs/BaseInput.vue";
+import FriendshipMenuSection from "@/components/FriendshipMenuSection.vue";
+import FriendshipMenuSeparator from "@/components/FriendshipMenuSeparator.vue";
+import NeutralButton from "@/components/buttons/NeutralButton.vue";
+import AcceptButton from "@/components/buttons/AcceptButton.vue";
+import DeclineButton from "@/components/buttons/DeclineButton.vue";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
 const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
+const friendEmail = ref("");
 
 const props = defineProps<{ show: boolean }>();
 const emit = defineEmits<{ (event: "close"): void }>();
@@ -41,6 +48,21 @@ const fetchFriendshipRequests = async () => {
   }
 };
 
+// Function to send a friendship request
+const sendFriendshipRequest = async () => {
+  if (!friendEmail.value) return;
+
+  try {
+    const response = await axios.post("http://localhost:8081/friends/requests/send", {
+      from: email.value,
+      to: friendEmail.value,
+    });
+    console.log("Friendship request sent:", response.data);
+  } catch (error) {
+    console.error("Failed to send friendship request:", error);
+  }
+};
+
 // Watch for changes in 'show' prop and user authentication
 watch(
     () => [props.show, email],
@@ -56,6 +78,44 @@ watch(
 // Close the menu when clicking outside
 const closeMenu = () => {
   emit("close");
+};
+
+const acceptRequest = async (from: string) => {
+  try {
+    const payload = {
+      from: from,
+      to: email.value,
+    };
+
+    const response = await axios.put('http://localhost:8081/friends/requests/accept', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Friendship request accepted:', response.data);
+
+    // refresh friendship requests and friendships
+    await fetchFriendshipRequests();
+    await fetchFriendships();
+  } catch (error) {
+    console.error('Error accepting friendship request:', error);
+  }
+};
+
+const declineRequest = async (from: string) => {
+  try {
+    const payload = {
+      from: from,
+      to: email.value,
+    };
+
+    const response = await axios.put('http://localhost:8081/friends/requests/decline', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Friendship request declined:', response.data);
+  } catch (error) {
+    console.error('Error declining friendship request:', error);
+  }
 };
 
 onMounted(() => {
@@ -77,28 +137,31 @@ onBeforeUnmount(() => {
         <button class="close-btn" @click="closeMenu">&times;</button>
       </div>
 
-      <!-- Upper part: Friendship Requests -->
-      <div class="upper-section">
-        <b>Pending received friendship requests:</b>
-        <ul>
-          <li v-for="request in friendshipRequests" :key="request.id">
-            {{ request.from.id.value }}
-          </li>
-        </ul>
-      </div>
+      <FriendshipMenuSection title="Send a friendship request" />
+      <BaseInput v-model="friendEmail" type="email" placeholder="Your friend's email" />
+      <NeutralButton @click="sendFriendshipRequest" class="menu-button">Send Request</NeutralButton>
 
-      <!-- Separator line -->
-      <hr class="separator" />
+      <FriendshipMenuSeparator />
+
+      <!-- Upper part: Friendship Requests -->
+      <FriendshipMenuSection title="Pending received friendship requests" />
+      <ul>
+        <li v-for="request in friendshipRequests" :key="request.id" class="request-item">
+          {{ request.from.id.value }}
+          <AcceptButton @click="acceptRequest(request.from.id.value)">Accept</AcceptButton>
+          <DeclineButton @click="declineRequest(request.from.id.value)">Decline</DeclineButton>
+        </li>
+      </ul>
+
+      <FriendshipMenuSeparator />
 
       <!-- Lower part: Friendships -->
-      <div class="lower-section">
-        <b>Your friends:</b>
-        <ul>
-          <li v-for="friendship in friendships" :key="friendship.id">
-            {{ friendship.id.value }}
-          </li>
-        </ul>
-      </div>
+      <FriendshipMenuSection title="Your friends" />
+      <ul>
+        <li v-for="friendship in friendships" :key="friendship.id">
+          {{ friendship.id.value }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -128,24 +191,14 @@ onBeforeUnmount(() => {
   @include panel-header-styles;
 }
 
-.upper-section,
-.lower-section {
-  margin-top: 5vh;
-}
-
 ul {
   list-style-type: none;
   padding: 0;
 }
 
 li {
-  margin: 5px 0;
-}
-
-.separator {
-  margin: 20px 0;
-  border: none;
-  border-top: 1px solid #ccc; /* Light gray line */
+  @include align-to(center);
+  margin: 1vh;
 }
 
 .close-btn {
