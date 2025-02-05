@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted } from 'vue';
 import UserIdText from "../text/UsernameText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
@@ -11,12 +11,13 @@ const senderId = ref("test3@gmail.com");  //FIXME: tmp for testing purposes (del
 const acceptButtonLabel = ref("Accept");
 const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
+const email = sessionStorage.getItem('authToken');
 
 const acceptRequest = async () => {
   try {
     const payload = {
       from: senderId.value,
-      to: "test@gmail.com" // TODO: replace with the actual receiver's email (the user using the app)
+      to: email,
     };
 
     const response = await axios.put('http://localhost:8081/friends/requests/accept', payload, {
@@ -33,7 +34,7 @@ const denyRequest = async () => {
   try {
     const payload = {
       from: senderId.value,
-      to: "test@gmail.com" // TODO: replace with the actual receiver's email (the user using the app)
+      to: email,
     };
 
     const response = await axios.put('http://localhost:8081/friends/requests/decline', payload, {
@@ -49,7 +50,7 @@ const denyRequest = async () => {
 onMounted(() => {
   console.log("mounted");
   showRequest.value = true; //FIXME: tmp, for testing purposes (delete this row after test is completed)
-  const eventSource = new EventSource('http://localhost:8081/notifications?id=test');
+  const eventSource = new EventSource('http://localhost:8081/notifications?id=' + email);
 
   eventSource.onmessage = (event) => {
     console.log('Received event:', event.data);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, defineSlots } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps<{
   showModal: boolean;

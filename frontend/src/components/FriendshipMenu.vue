@@ -1,27 +1,23 @@
 <script setup lang="ts">
-import {ref, watch, onMounted, onBeforeUnmount, inject} from "vue";
+import {ref, watch, onMounted, onBeforeUnmount, computed} from "vue";
 import axios from "axios";
+import { useAuthStore } from "@/auth.ts";
 
-// Define the 'show' prop using defineProps
-const props = defineProps<{
-  show: boolean;
-}>();
-
-// Define emits to allow emitting events from this component
-const emit = defineEmits<{
-  (event: 'close'): void;
-}>();
-
-// Define a ref to store the friendships and friendship requests
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
-const userId = inject('userId') as string;
+const authStore = useAuthStore();
+const email = computed(() => authStore.authToken);
+
+const props = defineProps<{ show: boolean }>();
+const emit = defineEmits<{ (event: "close"): void }>();
 
 // Function to retrieve friendships
 const fetchFriendships = async () => {
+  if (!email.value) return;
+
   try {
-    console.log("Fetching friendships of userId: " + userId);
-    const response = await axios.get("http://localhost:8081/friends/friendships", { params: { id: userId } });
+    console.log("Fetching friendships of userId: " + email.value);
+    const response = await axios.get("http://localhost:8081/friends/friendships", { params: { id: email.value } });
     console.log("Friendships fetched:", response.data);
     friendships.value = response.data; //! assuming the response contains an array of friendships
     console.log("Friendships:", friendships.value);
@@ -32,8 +28,11 @@ const fetchFriendships = async () => {
 
 // Function to retrieve friendship requests
 const fetchFriendshipRequests = async () => {
+  if (!email.value) return;
+
   try {
-    const response = await axios.get("http://localhost:8081/friends/requests", { params: { id: "test@gmail.com" } });
+    console.log("Fetching friendships of userId: " + email.value);
+    const response = await axios.get("http://localhost:8081/friends/requests", { params: { id: email.value } });
     console.log("Friendship requests fetched:", response.data);
     friendshipRequests.value = response.data; //! assuming the response contains an array of requests
     console.log("Friendship Requests:", friendshipRequests.value);
@@ -42,32 +41,31 @@ const fetchFriendshipRequests = async () => {
   }
 };
 
-// Watch for changes in the 'show' prop
+// Watch for changes in 'show' prop and user authentication
 watch(
-    () => props.show,
-    (newValue) => {
-      if (newValue) {
-        // Fetch friendships and requests when the menu is opened
+    () => [props.show, email],
+    ([newShow, newEmail]) => {
+      if (newShow && newEmail) {
         fetchFriendships();
         fetchFriendshipRequests();
       }
     },
-    { immediate: true } // Ensures fetching occurs on mount if 'show' is initially true
+    { immediate: true }
 );
 
 // Close the menu when clicking outside
 const closeMenu = () => {
-  emit('close');
+  emit("close");
 };
 
 onMounted(() => {
   if (props.show) {
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
   }
 });
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', closeMenu);
+  document.removeEventListener("click", closeMenu);
 });
 </script>
 
@@ -83,26 +81,27 @@ onBeforeUnmount(() => {
       <div class="upper-section">
         <b>Pending received friendship requests:</b>
         <ul>
-          <li v-for="request in friendshipRequests" :key="request.id">{{ request.from.id.value }}</li>
+          <li v-for="request in friendshipRequests" :key="request.id">
+            {{ request.from.id.value }}
+          </li>
         </ul>
       </div>
 
       <!-- Separator line -->
-      <hr class="separator"/>
+      <hr class="separator" />
 
       <!-- Lower part: Friendships -->
       <div class="lower-section">
         <b>Your friends:</b>
         <ul>
-          <li v-for="friendship in friendships" :key="friendship.id">{{ friendship.id.value }}</li>
+          <li v-for="friendship in friendships" :key="friendship.id">
+            {{ friendship.id.value }}
+          </li>
         </ul>
       </div>
-
     </div>
   </div>
 </template>
-
-
 
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
@@ -129,7 +128,8 @@ onBeforeUnmount(() => {
   @include panel-header-styles;
 }
 
-.upper-section, .lower-section {
+.upper-section,
+.lower-section {
   margin-top: 5vh;
 }
 

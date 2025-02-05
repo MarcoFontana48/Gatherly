@@ -9,17 +9,13 @@ import houseIcon from "@/assets/house-solid.svg";
 import userIcon from "@/assets/user-solid.svg";
 import cogIcon from "@/assets/cog-solid.svg";
 
-// Define menu items
 const menuItems = [
   { path: "/home", label: "Home", icon: houseIcon },
   { path: "/profile", label: "Profile", icon: userIcon },
   { path: "/settings", label: "Settings", icon: cogIcon },
 ];
 
-// State to control modal visibility
 const showModal = ref(false);
-
-// Method to toggle modal visibility
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
@@ -28,16 +24,15 @@ const toggleModal = () => {
 <template>
   <div class="app-container">
     <div class="left-column">
-      <MenuNav :menuItems="menuItems" @openModal="toggleModal"/>
+      <MenuNav :menuItems="menuItems" @openModal="toggleModal" />
     </div>
     <div class="center-column">
-      <RouterView/>
+      <RouterView />
     </div>
     <div class="right-column">
-      <Friendship/>
+      <Friendship />
     </div>
 
-    <!-- SettingsDialog Component -->
     <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />
   </div>
 </template>

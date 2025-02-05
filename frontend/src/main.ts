@@ -6,6 +6,7 @@ import App from "./App.vue";
 import Home from "./pages/Home.vue";
 import "@/styles/global.scss";
 import Login from "./pages/Login.vue";
+import {createPinia} from "pinia";
 
 // Define routes
 const routes = [
@@ -22,7 +23,7 @@ const router = createRouter({
 });
 
 function isAuthenticated() {
-    return localStorage.getItem('authToken') !== null;
+    return sessionStorage.getItem('authToken') !== null;
 }
 
 router.beforeEach((to, _, next) => {
@@ -44,34 +45,35 @@ function shouldRedirectToLogin(routeName: string | undefined): boolean {
 }
 
 function handleAuthenticatedNavigation(routeName: string | undefined, next: Function) {
-    console.log("user is authenticated, allowing navigation: (auth token:" + localStorage.getItem('authToken') + ")");
-    next();
+    console.log("user is authenticated, allowing navigation: (auth token:" + sessionStorage.getItem('authToken') + ")");
 
-    trackLastVisitedRoute(routeName);
-    handleSettingsRedirection(routeName, next);
-}
-
-function trackLastVisitedRoute(routeName: string | undefined) {
-    if (routeName === 'Home') {
-        localStorage.setItem('lastRoute', 'home');
-    } else if (routeName === 'Profile') {
-        localStorage.setItem('lastRoute', 'profile');
+    if (routeName === 'Settings') {
+        handleSettingsRedirection(next);
+    } else {
+        trackLastVisitedRoute(routeName);
+        next();
     }
 }
 
-function handleSettingsRedirection(routeName: string | undefined, next: Function) {
-    if (routeName === 'Settings') {
-        const lastRoute = localStorage.getItem('lastRoute');
-        if (lastRoute === 'home') {
-            next({ name: 'Home' });
-        } else if (lastRoute === 'profile') {
-            next({ name: 'Profile' });
-        } else {
-            next();
-        }
+function trackLastVisitedRoute(routeName: string | undefined) {
+    if (routeName === 'Home' || routeName === 'Profile') {
+        sessionStorage.setItem('lastRoute', routeName.toLowerCase());
+    }
+}
+
+function handleSettingsRedirection(next: Function) {
+    const lastRoute = sessionStorage.getItem('lastRoute');
+    if (lastRoute === 'home') {
+        next({ name: 'Home' });
+    } else if (lastRoute === 'profile') {
+        next({ name: 'Profile' });
     } else {
         next();
     }
 }
 
-createApp(App).use(router).mount('#app');
+const app = createApp(App)
+app.use(router)
+app.use(createPinia());
+app.use(router);
+app.mount("#app");

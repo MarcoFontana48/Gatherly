@@ -1,36 +1,33 @@
 <script setup lang="ts">
-import {ref, defineProps, defineEmits, provide} from 'vue';
-import { useRouter } from 'vue-router';
-import OverlayDialog from '@/components/dialogs/OverlayDialog.vue';
-import AcceptButton from '@/components/buttons/AcceptButton.vue';
-import BaseInput from '@/components/inputs/BaseInput.vue';
-import ErrorText from '@/components/text/ErrorText.vue';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/auth.ts"; // Import Pinia store
+import OverlayDialog from "@/components/dialogs/OverlayDialog.vue";
+import AcceptButton from "@/components/buttons/AcceptButton.vue";
+import BaseInput from "@/components/inputs/BaseInput.vue";
+import ErrorText from "@/components/text/ErrorText.vue";
 
 const props = defineProps<{ showModal: boolean }>();
-const emit = defineEmits(['update:showModal', 'login']);
+const emit = defineEmits(["update:showModal"]);
 
 const email = ref("");
 const errorMessage = ref("");
-
 const router = useRouter();
+const authStore = useAuthStore(); // Use Pinia store
 
 const login = () => {
+  console.log("login function called");
+
   if (!validateEmail(email.value)) {
-    errorMessage.value = "The email you have inserted is not formatted properly.\nA valid email should be in the format:\nemail@something.domain";
+    errorMessage.value =
+        "The email you have inserted is not formatted properly.\nA valid email should be in the format:\nemail@something.domain";
     return;
   }
 
   errorMessage.value = "";
-  emit('login', email.value);
-  emit('update:showModal', false);
-
-  // since this is a simple app prototype, we can store the email as a token, in a real app we would use a more secure
-  // token, like a JWT token.
-  localStorage.setItem('authToken', email.value);
-
-  provide('userId', email.value);
-
-  router.push('/home');
+  authStore.setAuthToken(email.value); // Store token in Pinia
+  emit("update:showModal", false); // Close modal
+  router.push("/home"); // Navigate to home
 };
 
 const validateEmail = (email: string): boolean => {
@@ -40,19 +37,17 @@ const validateEmail = (email: string): boolean => {
 </script>
 
 <template>
-  <OverlayDialog v-model:showModal="props.showModal" class="overlay-dialog">
+  <OverlayDialog :showModal="props.showModal" @update:showModal="emit('update:showModal', $event)">
     <template #header>
       <h3>Social-Network</h3>
     </template>
-
     <template #body>
       <p>Enter your credentials below to login</p>
       <BaseInput v-model="email" type="email" placeholder="Enter your email" />
       <p>
-        <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message"/>
+        <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
       </p>
     </template>
-
     <template #footer>
       <AcceptButton @click="login">Login</AcceptButton>
     </template>
