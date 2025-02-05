@@ -382,9 +382,12 @@ class FriendshipServiceVerticle(
         topic: String
     ) {
         logger.trace("Friendship request sent handler called with arguments: {}, {}, {}, {}", eventJson, userId, response, topic)
-        if (eventJson.getString("receiver") == userId) {
+        val receiver = eventJson.getJsonObject("to").getJsonObject("userId").getString("value")
+        if (receiver == userId) {
             logger.trace("receiver is equal to userId")
             sendSseEvent(response, userId, topic, eventJson)
+        } else {
+            logger.trace("receiver '{}' is not equal to userId '{}'", receiver, userId)
         }
     }
 
