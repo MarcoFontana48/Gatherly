@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+import {ref, watch, onMounted, onBeforeUnmount, inject} from "vue";
 import axios from "axios";
 
 // Define the 'show' prop using defineProps
@@ -15,11 +15,13 @@ const emit = defineEmits<{
 // Define a ref to store the friendships and friendship requests
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
+const userId = inject('userId') as string;
 
 // Function to retrieve friendships
 const fetchFriendships = async () => {
   try {
-    const response = await axios.get("http://localhost:8081/friends/friendships", { params: { id: "test@gmail.com" } });
+    console.log("Fetching friendships of userId: " + userId);
+    const response = await axios.get("http://localhost:8081/friends/friendships", { params: { id: userId } });
     console.log("Friendships fetched:", response.data);
     friendships.value = response.data; //! assuming the response contains an array of friendships
     console.log("Friendships:", friendships.value);

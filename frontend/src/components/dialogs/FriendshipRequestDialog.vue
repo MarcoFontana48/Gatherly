@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import UserIdText from "../user/UserIdText.vue";
+import UserIdText from "../text/UsernameText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Dialog from "@/components/dialogs/Dialog.vue";
@@ -98,11 +98,7 @@ $gap: 1vw;
   @include default-dialog-style($bg-color);
 
   .buttons {
-    margin-top: $gap;
-    display: flex;
-    justify-content: space-between;
-    gap: $gap;
-    width: 100%;
+    @include default-align-buttons($gap);
   }
 }
 </style>

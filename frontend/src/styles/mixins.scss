@@ -172,3 +172,23 @@
     }
   }
 }
+
+@mixin default-align-buttons($gap) {
+  margin-top: $gap;
+  display: flex;
+  justify-content: space-between;
+  gap: $gap;
+  width: 100%;
+}
+
+@mixin default-input-form-styles($bg-color) {
+  padding: 2vh;
+  border: 0.2vh solid mix($bg-color, invert($bg-color), 50%);
+  border-radius: 0.2vh;
+  outline: none;
+  transition: border 0.3s;
+
+  &:focus {
+    border-color: invert($bg-color);
+  }
+}

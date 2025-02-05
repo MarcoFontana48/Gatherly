@@ -26,7 +26,6 @@ const closeModal = () => {
     </template>
 
     <template #footer>
-      <!-- Use DeclineButton to close the modal -->
       <DeclineButton @click="closeModal">Close</DeclineButton>
     </template>
   </OverlayDialog>
