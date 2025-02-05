@@ -193,3 +193,9 @@
     border-color: invert($bg-color);
   }
 }
+
+@mixin align-horizonally-to($align) {
+  display: flex;
+  justify-content: $align;
+  align-items: $align;
+}

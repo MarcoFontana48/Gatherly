@@ -18,6 +18,7 @@ import BaseButton from './BaseButton.vue';
   @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, invert($button-bg-color));
   @include default-text-styles($button-bg-color);
   @include default-background-styles($button-bg-color);
+  @include align-horizonally-to(center);
 
   &:hover {
     @include adapt-color-based-on-bg($button-bg-color, $hover-darken-amount, $button-bg-color);

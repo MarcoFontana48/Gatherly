@@ -8,6 +8,8 @@ import FriendshipMenuSeparator from "@/components/FriendshipMenuSeparator.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
+import Icon from "@/components/images/Icon.vue";
+import chatIcon from "@/assets/pen-solid.svg";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
@@ -146,10 +148,10 @@ onBeforeUnmount(() => {
       <!-- Upper part: Friendship Requests -->
       <FriendshipMenuSection title="Pending received friendship requests" />
       <ul>
-        <li v-for="request in friendshipRequests" :key="request.id" class="request-item">
+        <li v-for="request in friendshipRequests" :key="request.id">
           {{ request.from.id.value }}
-          <AcceptButton @click="acceptRequest(request.from.id.value)">Accept</AcceptButton>
-          <DeclineButton @click="declineRequest(request.from.id.value)">Decline</DeclineButton>
+            <AcceptButton @click="acceptRequest(request.from.id.value)" class="chat-button">Accept</AcceptButton>
+            <DeclineButton @click="declineRequest(request.from.id.value)">Decline</DeclineButton>
         </li>
       </ul>
 
@@ -160,6 +162,10 @@ onBeforeUnmount(() => {
       <ul>
         <li v-for="friendship in friendships" :key="friendship.id">
           {{ friendship.id.value }}
+          <NeutralButton @click="openChatWith(friendship.id.value)" class="chat-button">
+            <Icon :src="chatIcon" :alt="chatIcon" />
+            Open chat
+          </NeutralButton>
         </li>
       </ul>
     </div>
@@ -197,12 +203,16 @@ ul {
 }
 
 li {
-  @include align-to(center);
+  @include align-horizonally-to(center);
   margin: 1vh;
 }
 
 .close-btn {
   @include default-close-btn-style;
+}
+
+.chat-button {
+  margin-left: 20%;
 }
 
 @keyframes slide-in {

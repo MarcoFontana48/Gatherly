@@ -22,9 +22,7 @@ watch(inputValue, (newValue) => {
 @import "@/styles/global.scss";
 
 .input-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include align-horizonally-to(center);
 }
 
 .custom-input {
