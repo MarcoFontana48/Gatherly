@@ -12,6 +12,7 @@ import social.common.ddd.Service
 import social.common.events.FriendshipRemoved
 import social.common.events.FriendshipRequestAccepted
 import social.common.events.FriendshipRequestRejected
+import social.common.events.FriendshipRequestSent
 import social.common.events.MessageReceived
 import social.common.events.MessageSent
 import social.common.events.UserCreated
@@ -34,6 +35,7 @@ interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, M
         get() = listOf(
             FriendshipRequestAccepted.TOPIC,
             FriendshipRequestRejected.TOPIC,
+            FriendshipRequestSent.TOPIC,
             FriendshipRemoved.TOPIC,
             MessageReceived.TOPIC,
             MessageSent.TOPIC,
@@ -174,7 +176,13 @@ class FriendshipServiceVerticle(
      * Adds a friendship request.
      * @param friendshipRequest The friendship request to add.
      */
-    override fun addFriendshipRequest(friendshipRequest: FriendshipRequest) = friendshipRequestRepository.save(friendshipRequest)
+    override fun addFriendshipRequest(friendshipRequest: FriendshipRequest) {
+        friendshipRequestRepository.save(friendshipRequest).let {
+            val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
+            kafkaProducer.publishEvent(event)
+            vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(it))
+        }
+    }
 
     /**
      * Retrieves a friendship request by its ID.
@@ -345,24 +353,73 @@ class FriendshipServiceVerticle(
             vertx.eventBus().consumer<String>(topic) { message ->
                 val eventJson = JsonObject(message.body())
 
-                eventJson.filter {
-                    it.value == userId
-                }.forEach {
-                    logger.trace("Sending SSE Event '{}' to user '{}'", eventJson, userId)
-
-                    val eventValue = eventJson.put("topic", topic).toString()
-                    val formattedMessage = "data: $eventValue\n\n"
-
-                    response?.write(formattedMessage)?.onComplete {
-                        if (it.succeeded()) {
-                            logger.trace("SSE Event sent to user {}: {}", userId, formattedMessage)
-                        } else {
-                            logger.error("Failed to send SSE event to user {}", userId, it.cause())
-                        }
-                    } ?: logger.error("Response is null")
+                when (topic) {
+                    FriendshipRequestAccepted.TOPIC -> friendshipRequestAcceptedHandler(eventJson, userId, response, topic)
+                    FriendshipRequestRejected.TOPIC -> friendshipRequestRejectedHandler(eventJson, userId, response, topic)
+                    FriendshipRequestSent.TOPIC -> friendshipRequestSentHandler(eventJson, userId, response, topic)
+                    MessageSent.TOPIC -> messageSentHandler(eventJson, userId, response, topic)
                 }
             }
         }
+    }
+
+    private fun messageSentHandler(
+        eventJson: JsonObject,
+        userId: String,
+        response: HttpServerResponse?,
+        topic: String
+    ) {
+        if (eventJson.getString("receiver") == userId) {
+            sendSseEvent(response, userId, topic, eventJson)
+        }
+    }
+
+    private fun friendshipRequestSentHandler(
+        eventJson: JsonObject,
+        userId: String,
+        response: HttpServerResponse?,
+        topic: String
+    ) {
+        if (eventJson.getString("receiver") == userId) {
+            sendSseEvent(response, userId, topic, eventJson)
+        }
+    }
+
+    private fun friendshipRequestRejectedHandler(
+        eventJson: JsonObject,
+        userId: String,
+        response: HttpServerResponse?,
+        topic: String
+    ) {
+        if (eventJson.getString("sender") == userId) {
+            sendSseEvent(response, userId, topic, eventJson)
+        }
+    }
+
+    private fun friendshipRequestAcceptedHandler(
+        eventJson: JsonObject,
+        userId: String,
+        response: HttpServerResponse?,
+        topic: String
+    ) {
+        if (eventJson.getString("sender") == userId) {
+            sendSseEvent(response, userId, topic, eventJson)
+        }
+    }
+
+    private fun sendSseEvent(response: HttpServerResponse?, userId: String, topic: String, eventJson: JsonObject) {
+        logger.trace("Sending SSE Event '{}' to user '{}'", eventJson, userId)
+
+        val eventValue = eventJson.put("topic", topic).toString()
+        val formattedMessage = "data: $eventValue\n\n"
+
+        response?.write(formattedMessage)?.onComplete {
+            if (it.succeeded()) {
+                logger.trace("SSE Event sent to user {}: {}", userId, formattedMessage)
+            } else {
+                logger.error("Failed to send SSE event to user {}", userId, it.cause())
+            }
+        } ?: logger.error("Response is null")
     }
 
     override fun addWebSocket(webSocket: ServerWebSocket) {
