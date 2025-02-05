@@ -7,7 +7,7 @@ import Dialog from "@/components/dialogs/Dialog.vue";
 import axios from 'axios';
 
 // const senderId = ref("<sender-id>");
-const senderId = ref("test3@gmail.com");  //FIXME: tmp for testing purposes (delete this row after test is completed)
+const senderId = ref("");
 const acceptButtonLabel = ref("Accept");
 const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
@@ -24,9 +24,10 @@ const acceptRequest = async () => {
       headers: { 'Content-Type': 'application/json' }
     });
 
-    console.log('Friendship request declined:', response.data);
+    console.log('Friendship request accepted:', response.data);
+    showRequest.value = false;
   } catch (error) {
-    console.error('Error declining friendship request:', error);
+    console.error('Error accepting friendship request:', error);
   }
 };
 
@@ -41,15 +42,16 @@ const denyRequest = async () => {
       headers: { 'Content-Type': 'application/json' }
     });
 
-    console.log('Friendship request accepted:', response.data);
+    console.log('Friendship request declined:', response.data);
+    showRequest.value = false;
   } catch (error) {
-    console.error('Error accepting friendship request:', error);
+    console.error('Error declining friendship request:', error);
   }
 };
 
+//TODO: check if this is correct because the id may not be ready by the time the component is mounted
 onMounted(() => {
-  console.log("mounted");
-  showRequest.value = true; //FIXME: tmp, for testing purposes (delete this row after test is completed)
+  console.log("mounted with email:", email);
   const eventSource = new EventSource('http://localhost:8081/notifications?id=' + email);
 
   eventSource.onmessage = (event) => {

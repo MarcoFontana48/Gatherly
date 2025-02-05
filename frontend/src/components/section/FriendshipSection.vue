@@ -4,6 +4,7 @@ import MenuButton from "@/components/buttons/NavButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import FriendshipMenu from "@/components/FriendshipMenu.vue";
 import friendsIcon from "@/assets/friends-solid.svg";
+import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 
 const showDropdown = ref(false);
 
@@ -19,6 +20,8 @@ const toggleDropdown = () => {
       <Icon :src="friendsIcon" alt="Friends Icon" />
     </MenuButton>
   </div>
+
+  <FriendshipRequestDialog></FriendshipRequestDialog>
 
   <FriendshipMenu :show="showDropdown" @close="showDropdown = false" />
 </template>

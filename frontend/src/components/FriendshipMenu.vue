@@ -115,6 +115,7 @@ const declineRequest = async (from: string) => {
     });
 
     console.log('Friendship request declined:', response.data);
+    await fetchFriendshipRequests();
   } catch (error) {
     console.error('Error declining friendship request:', error);
   }

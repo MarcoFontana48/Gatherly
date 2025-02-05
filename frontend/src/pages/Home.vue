@@ -6,8 +6,6 @@ import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialo
   <div class="home-container">
     <p>Feed page</p>
   </div>
-
-  <FriendshipRequestDialog></FriendshipRequestDialog>
 </template>
 
 <style lang="scss" scoped>
