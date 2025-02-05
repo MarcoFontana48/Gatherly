@@ -12,7 +12,6 @@ import social.common.ddd.Service
 import social.common.events.FriendshipRemoved
 import social.common.events.FriendshipRequestAccepted
 import social.common.events.FriendshipRequestRejected
-import social.common.events.FriendshipRequestSent
 import social.common.events.MessageReceived
 import social.common.events.MessageSent
 import social.common.events.UserCreated
@@ -337,19 +336,6 @@ class FriendshipServiceVerticle(
 
         logger.trace("SSE channel generated")
         prepareToSendSseEventsToClient(responses[userId], userId)
-
-        Thread.sleep(10_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender1", "test")))
-        Thread.sleep(2_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender2", "test")))
-        Thread.sleep(2_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender3", "test")))
-        Thread.sleep(2_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender4", "test")))
-        Thread.sleep(2_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender5", "test")))
-        Thread.sleep(2_000)
-        vertx.eventBus().publish(friendshipEvents[0], mapper.writeValueAsString(FriendshipRequestSent("sender6", "test")))
     }
 
     private fun prepareToSendSseEventsToClient(response: HttpServerResponse?, userId: String) {
