@@ -43,6 +43,9 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         private fun sendResponse(ctx: RoutingContext, statusCode: Int) {
             logger.trace("Sending response with status code: {}", statusCode)
             ctx.response()
+                .putHeader("Access-Control-Allow-Origin", "*")
+                .putHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .putHeader("Access-Control-Allow-Headers", "Content-Type")
                 .setStatusCode(statusCode)
                 .end()
         }
