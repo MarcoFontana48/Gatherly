@@ -6,10 +6,12 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Verticle
+import io.vertx.core.http.HttpMethod
 import io.vertx.ext.web.RequestBody
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
+import io.vertx.ext.web.handler.CorsHandler
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import social.common.endpoint.Endpoint
@@ -196,6 +198,13 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
      */
     private fun createHttpServer() {
         val router = Router.router(vertx)
+
+        router.route().handler(
+            CorsHandler.create()
+                .addOrigin("http://localhost:5173") // Frontend port (Vue.js)
+                .allowedMethods(setOf(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS))
+                .allowedHeaders(setOf("Content-Type", "Authorization"))
+        )
         router.route().handler(BodyHandler.create())
 
         router.get(Endpoint.HEALTH).handler { ctx ->
