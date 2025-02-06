@@ -50,7 +50,7 @@
   border-color: mix($color, $bg-color, $amount);
 }
 
-@mixin default-dialog-style($bg-color) {
+@mixin default-dialog-style($bg-color, $border-color: invert($bg-color)) {
   $friendship-request-window-bg-color: $bg-color;
 
   $padding: 2vw;
@@ -64,7 +64,7 @@
   max-width: $max-friendship-request-window-width;
   text-align: center;
   border-radius: $border-radius;
-  border: 0.5vh solid mix($bg-color, invert($bg-color), 0%);
+  border: 0.5vh solid mix($bg-color, $border-color, 0%);
 }
 
 @mixin default-text-styles($bg-color) {

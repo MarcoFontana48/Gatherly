@@ -13,7 +13,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div v-if="props.showModal" class="modal-content">
+  <div v-if="props.showModal">
     <slot name="header"></slot>
     <slot name="body"></slot>
     <slot name="footer">
@@ -23,10 +23,5 @@ const closeModal = () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/global.scss";
-@import "@/styles/mixins.scss";
 
-.modal-content {
-  @include default-dialog-style($bg-color);
-}
 </style>

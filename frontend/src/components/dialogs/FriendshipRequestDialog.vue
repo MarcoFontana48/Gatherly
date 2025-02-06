@@ -40,7 +40,7 @@ $gap: 1vw;
 
 .friend-request {
   @include default-text-styles($bg-color);
-  @include default-dialog-style($bg-color);
+  @include default-dialog-style($bg-color, red);
 
   .buttons {
     @include default-align-buttons($gap);

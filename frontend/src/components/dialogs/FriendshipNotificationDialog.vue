@@ -28,5 +28,11 @@ const emit = defineEmits(["close"]);
 </template>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
+
+.friend-notification {
+  @include default-dialog-style($bg-color, red);
+}
 
 </style>
