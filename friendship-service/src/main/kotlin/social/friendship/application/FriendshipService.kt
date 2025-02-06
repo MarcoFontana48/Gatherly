@@ -361,32 +361,48 @@ class FriendshipServiceVerticle(
                 val eventJson = JsonObject(message.body())
 
                 when (topic) {
-                    FriendshipRequestAccepted.TOPIC -> friendshipRequestRelatedHandler(eventJson, userId, response, topic)
-                    FriendshipRequestRejected.TOPIC -> friendshipRequestRelatedHandler(eventJson, userId, response, topic)
-                    FriendshipRequestSent.TOPIC -> friendshipRequestRelatedHandler(eventJson, userId, response, topic)
+                    FriendshipRequestAccepted.TOPIC -> friendshipRequestAcceptedHandler(eventJson, userId, response, topic)
+                    FriendshipRequestRejected.TOPIC -> friendshipRequestRejectedHandler(eventJson, userId, response, topic)
+                    FriendshipRequestSent.TOPIC -> friendshipRequestSentHandler(eventJson, userId, response, topic)
                     MessageSent.TOPIC -> messageSentHandler(eventJson, userId, response, topic)
                 }
             }
         }
     }
 
-    private fun messageSentHandler(
-        eventJson: JsonObject,
-        userId: String,
-        response: HttpServerResponse?,
-        topic: String
-    ) {
+    private fun messageSentHandler(eventJson: JsonObject, userId: String, response: HttpServerResponse?, topic: String) {
         if (eventJson.getString("receiver") == userId) {
             sendSseEvent(response, userId, topic, eventJson)
         }
     }
 
-    private fun friendshipRequestRelatedHandler(
-        eventJson: JsonObject,
-        userId: String,
-        response: HttpServerResponse?,
-        topic: String
-    ) {
+    private fun friendshipRequestAcceptedHandler(eventJson: JsonObject, userId: String, response: HttpServerResponse?, topic: String) {
+        logger.trace("Friendship request sent handler called with arguments: {}, {}, {}, {}", eventJson, userId, response, topic)
+        val receiver = eventJson.getJsonObject("to").getJsonObject("userId").getString("value")
+        val sender = eventJson.getJsonObject("from").getJsonObject("userId").getString("value")
+        val jsonResponse = JsonObject().put("sender", sender).put("receiver", receiver)
+        if (sender == userId) {
+            logger.trace("receiver is equal to userId")
+            sendSseEvent(response, userId, topic, jsonResponse)
+        } else {
+            logger.trace("receiver '{}' is not equal to userId '{}'", receiver, userId)
+        }
+    }
+
+    private fun friendshipRequestRejectedHandler(eventJson: JsonObject, userId: String, response: HttpServerResponse?, topic: String) {
+        logger.trace("Friendship request sent handler called with arguments: {}, {}, {}, {}", eventJson, userId, response, topic)
+        val receiver = eventJson.getJsonObject("to").getJsonObject("userId").getString("value")
+        val sender = eventJson.getJsonObject("from").getJsonObject("userId").getString("value")
+        val jsonResponse = JsonObject().put("sender", sender).put("receiver", receiver)
+        if (sender == userId) {
+            logger.trace("receiver is equal to userId")
+            sendSseEvent(response, userId, topic, jsonResponse)
+        } else {
+            logger.trace("receiver '{}' is not equal to userId '{}'", receiver, userId)
+        }
+    }
+
+    private fun friendshipRequestSentHandler(eventJson: JsonObject, userId: String, response: HttpServerResponse?, topic: String) {
         logger.trace("Friendship request sent handler called with arguments: {}, {}, {}, {}", eventJson, userId, response, topic)
         val receiver = eventJson.getJsonObject("to").getJsonObject("userId").getString("value")
         val sender = eventJson.getJsonObject("from").getJsonObject("userId").getString("value")
