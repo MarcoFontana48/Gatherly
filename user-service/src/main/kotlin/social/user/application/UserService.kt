@@ -7,6 +7,7 @@ import social.common.events.UserCreated
 import social.common.events.UserUpdated
 import social.user.domain.User
 import social.user.domain.User.UserID
+import java.sql.SQLIntegrityConstraintViolationException
 
 /**
  * Interface to represent a service that manages users.
@@ -36,8 +37,12 @@ class UserServiceImpl(private val repository: UserRepository, private val kafkaP
     }
 
     override fun addUser(user: User) {
-        repository.save(user).let {
-            kafkaProducer.publishEvent(UserCreated(user.username, user.email))
+        try {
+            repository.save(user).let {
+                kafkaProducer.publishEvent(UserCreated(user.username, user.email))
+            }
+        } catch (e: SQLIntegrityConstraintViolationException) {
+            throw SQLIntegrityConstraintViolationException("Identifier already in use by another user, please choose another one")
         }
     }
 
