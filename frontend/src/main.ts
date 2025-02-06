@@ -45,7 +45,7 @@ function shouldRedirectToLogin(routeName: string | undefined): boolean {
 }
 
 function handleAuthenticatedNavigation(routeName: string | undefined, next: Function) {
-    console.log("user is authenticated, allowing navigation: (auth token:" + sessionStorage.getItem('authToken') + ")");
+    console.log("Current auth token:" + sessionStorage.getItem('authToken'));
 
     if (routeName === 'Settings') {
         handleSettingsRedirection(next);

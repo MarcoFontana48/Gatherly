@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/auth.ts"; // Import Pinia store
+import { useAuthStore } from "@/utils/auth.js"; // Import Pinia store
 import OverlayDialog from "@/components/dialogs/OverlayDialog.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import ErrorText from "@/components/text/ErrorText.vue";
+import axios from "axios";
+import {validateEmail} from "@/utils/validator.ts";
 
 const props = defineProps<{ showModal: boolean }>();
 const emit = defineEmits(["update:showModal"]);
-
 const email = ref("");
 const errorMessage = ref("");
 const router = useRouter();
-const authStore = useAuthStore(); // Use Pinia store
-
-import axios from "axios"; // Import axios
+const authStore = useAuthStore();
 
 const login = async () => {
   console.log("login function called");
@@ -42,24 +41,9 @@ const login = async () => {
       errorMessage.value = "No matching email found. Please try again.";
     }
   } catch (error: any) {
-    switch (error.response?.status) {
-      case 404:
-        errorMessage.value = "No matching email found. Please try again.";
-        break;
-      case 400:
-        errorMessage.value = "The email you have inserted is not formatted properly.\nA valid email should be in the format:\nemail@something.domain";
-        break;
-      default:
-        errorMessage.value = "An error occurred. Please try again later.";
-    }
     console.error("Error during login request:", error);
+    errorMessage.value = error.response.data
   }
-};
-
-
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
 };
 </script>
 

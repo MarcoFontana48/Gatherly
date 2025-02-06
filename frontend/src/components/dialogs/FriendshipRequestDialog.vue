@@ -1,24 +1,29 @@
 <script setup lang="ts">
-import {ref, onMounted } from 'vue';
+import {ref, watch, computed, inject} from 'vue';
 import UserIdText from "../text/UsernameText.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Dialog from "@/components/dialogs/Dialog.vue";
 import axios from 'axios';
+import {useAuthStore} from "@/utils/auth.js";
+import {defineSseEventSource} from "@/utils/sse.ts";
 
 // const senderId = ref("<sender-id>");
 const senderId = ref("");
 const acceptButtonLabel = ref("Accept");
 const denyButtonLabel = ref("Reject");
 const showRequest = ref(false);
-const email = sessionStorage.getItem('authToken');
+const authStore = useAuthStore();
+const email = computed(() => authStore.authToken);
 
 const acceptRequest = async () => {
   try {
     const payload = {
       from: senderId.value,
-      to: email,
+      to: email.value,
     };
+
+    console.log('Payload:', payload);
 
     const response = await axios.put('http://localhost:8081/friends/requests/accept', payload, {
       headers: { 'Content-Type': 'application/json' }
@@ -49,23 +54,24 @@ const denyRequest = async () => {
   }
 };
 
-//TODO: check if this is correct because the id may not be ready by the time the component is mounted
-onMounted(() => {
-  console.log("mounted with email:", email);
-  const eventSource = new EventSource('http://localhost:8081/notifications?id=' + email);
+watch(email, (newEmail) => {
+  if (newEmail) {
+    const eventSource = defineSseEventSource(newEmail);
 
-  eventSource.onmessage = (event) => {
-    console.log('Received event:', event.data);
+    eventSource.onmessage = (event: MessageEvent<any>) => {
+      console.log('Received event:', event.data);
+      const data = JSON.parse(event.data);
+      if (data.topic === "friendship-request-sent") {
+        senderId.value = data.sender;
+        showRequest.value = true;
 
-    const data = JSON.parse(event.data);
-    senderId.value = data.sender;
-    showRequest.value = true;
-
-    setTimeout(() => {
-      showRequest.value = false;
-    }, 10_000);
-  };
-});
+        setTimeout(() => {
+          showRequest.value = false;
+        }, 10_000);
+      }
+    };
+  }
+}, { immediate: true });
 </script>
 
 <template>

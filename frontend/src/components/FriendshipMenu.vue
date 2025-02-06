@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
+import {ref, computed, watch, onMounted, onBeforeUnmount, provide, inject} from "vue";
 import axios from "axios";
-import { useAuthStore } from "@/auth.ts";
+import { useAuthStore } from "@/utils/auth.js";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import FriendshipMenuSection from "@/components/FriendshipMenuSection.vue";
 import FriendshipMenuSeparator from "@/components/FriendshipMenuSeparator.vue";
@@ -10,15 +10,20 @@ import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import chatIcon from "@/assets/pen-solid.svg";
+import ErrorText from "@/components/text/ErrorText.vue";
+import {validateEmail} from "@/utils/validator.ts";
+import {defineSseEventSource} from "@/utils/sse.ts";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
 const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
 const friendEmail = ref("");
-
+const errorMessage = ref("");
 const props = defineProps<{ show: boolean }>();
 const emit = defineEmits<{ (event: "close"): void }>();
+
+const events: string[] | undefined = inject("friendshipEvents");
 
 // Function to retrieve friendships
 const fetchFriendships = async () => {
@@ -43,7 +48,9 @@ const fetchFriendshipRequests = async () => {
     console.log("Fetching friendships of userId: " + email.value);
     const response = await axios.get("http://localhost:8081/friends/requests", { params: { id: email.value } });
     console.log("Friendship requests fetched:", response.data);
-    friendshipRequests.value = response.data; //! assuming the response contains an array of requests
+    friendshipRequests.value = response.data.filter((request: any) => {
+      return email.value !== request.from.id.value;
+    });
     console.log("Friendship Requests:", friendshipRequests.value);
   } catch (error) {
     console.error("Failed to fetch friendship requests:", error);
@@ -53,6 +60,13 @@ const fetchFriendshipRequests = async () => {
 // Function to send a friendship request
 const sendFriendshipRequest = async () => {
   if (!friendEmail.value) return;
+  errorMessage.value = "";
+
+  if (!validateEmail(friendEmail.value)) {
+    errorMessage.value =
+        "The email you have inserted is not formatted properly.\nA valid email should be in the format:\nemail@something.domain";
+    return;
+  }
 
   try {
     const response = await axios.post("http://localhost:8081/friends/requests/send", {
@@ -60,8 +74,9 @@ const sendFriendshipRequest = async () => {
       to: friendEmail.value,
     });
     console.log("Friendship request sent:", response.data);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to send friendship request:", error);
+    errorMessage.value = error.response.data;
   }
 };
 
@@ -76,6 +91,22 @@ watch(
     },
     { immediate: true }
 );
+
+watch(email, (newEmail) => {
+  if (newEmail) {
+    const eventSource = defineSseEventSource(newEmail)
+
+    eventSource.onmessage = (event: MessageEvent<any>) => {
+      console.log(events)
+      console.log('Received event:', event.data);
+      const data = JSON.parse(event.data);
+      if (events && events.includes(data.topic)) {
+        fetchFriendshipRequests();
+        fetchFriendships();
+      }
+    };
+  }
+}, { immediate: true });
 
 // Close the menu when clicking outside
 const closeMenu = () => {
@@ -143,6 +174,9 @@ onBeforeUnmount(() => {
       <FriendshipMenuSection title="Send a friendship request" />
       <BaseInput v-model="friendEmail" type="email" placeholder="Your friend's email" />
       <NeutralButton @click="sendFriendshipRequest" class="menu-button">Send Request</NeutralButton>
+      <p>
+        <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
+      </p>
 
       <FriendshipMenuSeparator />
 

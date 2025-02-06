@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 </script>
 
 <template>

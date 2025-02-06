@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {provide, ref} from "vue";
 import MenuButton from "@/components/buttons/NavButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import FriendshipMenu from "@/components/FriendshipMenu.vue";
 import friendsIcon from "@/assets/friends-solid.svg";
 import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 
+const friendshipEvents = ref(["friendship-request-sent", "friendship-request-accepted", "friendship-request-rejected"]);
 const showDropdown = ref(false);
+
+provide("friendshipEvents", friendshipEvents.value);
 
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value;
