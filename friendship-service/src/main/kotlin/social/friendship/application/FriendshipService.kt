@@ -23,6 +23,7 @@ import social.friendship.domain.FriendshipRequest.FriendshipRequestID
 import social.friendship.domain.Message
 import social.friendship.domain.Message.MessageID
 import social.friendship.domain.User
+import social.friendship.exception.FriendshipAlreadyPresentException
 import social.friendship.social.friendship.application.DatabaseCredentials
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -179,7 +180,7 @@ class FriendshipServiceVerticle(
     override fun addFriendshipRequest(friendshipRequest: FriendshipRequest) {
         friendshipRepository.findAllFriendsOf(friendshipRequest.from.id).forEach {
             if (it.id.value == friendshipRequest.to.id.value) {
-                throw IllegalStateException("Cannot send friendship request to a friend")
+                throw FriendshipAlreadyPresentException("Cannot send friendship request to a friend")
             }
         }.apply {
             friendshipRequestRepository.save(friendshipRequest).let {
