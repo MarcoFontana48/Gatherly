@@ -22,8 +22,8 @@ import social.friendship.domain.Friendship
 import social.friendship.domain.FriendshipRequest
 import social.friendship.domain.Message
 import social.friendship.domain.User
-import social.friendship.exception.FriendshipAlreadyPresentException
 import social.friendship.infrastructure.persistence.sql.SQLStateError
+import java.lang.UnsupportedOperationException
 import java.sql.SQLException
 import java.sql.SQLIntegrityConstraintViolationException
 import java.util.UUID
@@ -92,7 +92,7 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
             when (error) {
                 is IllegalArgumentException, is MismatchedInputException -> sendResponse(ctx, StatusCode.BAD_REQUEST, error.message)
                 is IllegalStateException -> sendResponse(ctx, StatusCode.NOT_FOUND, error.message)
-                is FriendshipAlreadyPresentException -> sendResponse(ctx, StatusCode.FORBIDDEN, error.message)
+                is UnsupportedOperationException -> sendResponse(ctx, StatusCode.FORBIDDEN, error.message)
                 is SQLIntegrityConstraintViolationException -> sendResponse(ctx, StatusCode.FORBIDDEN, error.message)
                 is SQLException -> {
                     when (error.sqlState) {
