@@ -24,6 +24,7 @@ import social.friendship.domain.Message
 import social.friendship.domain.Message.MessageID
 import social.friendship.domain.User
 import social.friendship.social.friendship.application.DatabaseCredentials
+import social.utils.exception.FriendshipAlreadyExistsException
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -177,10 +178,16 @@ class FriendshipServiceVerticle(
      * @param friendshipRequest The friendship request to add.
      */
     override fun addFriendshipRequest(friendshipRequest: FriendshipRequest) {
-        friendshipRequestRepository.save(friendshipRequest).let {
-            val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
-            kafkaProducer.publishEvent(event)
-            vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
+        friendshipRepository.findAllFriendsOf(friendshipRequest.from.id).forEach {
+            if (it.id.value == friendshipRequest.to.id.value) {
+                throw FriendshipAlreadyExistsException("Cannot send friendship request to a friend")
+            }
+        }.apply {
+            friendshipRequestRepository.save(friendshipRequest).let {
+                val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
+                kafkaProducer.publishEvent(event)
+                vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
+            }
         }
     }
 
