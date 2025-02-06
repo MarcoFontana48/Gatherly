@@ -437,6 +437,18 @@ class FriendshipServiceVerticle(
 
     override fun addWebSocket(webSocket: ServerWebSocket) {
         clients.add(webSocket)
+
+        webSocket.textMessageHandler { message ->
+            logger.trace("Received message from client: {}", message)
+
+            clients.forEach { client ->
+//          if (client != webSocket && !client.isClosed) {
+                logger.trace("Sending message to client: {}", message)
+                client.writeTextMessage(message)
+//          }
+            }
+        }
+
         webSocket.closeHandler {
             clients.remove(webSocket)
         }
