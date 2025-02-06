@@ -442,10 +442,10 @@ class FriendshipServiceVerticle(
             logger.trace("Received message from client: {}", message)
 
             clients.forEach { client ->
-//          if (client != webSocket && !client.isClosed) {
-                logger.trace("Sending message to client: {}", message)
-                client.writeTextMessage(message)
-//          }
+                if (client != webSocket && !client.isClosed) {
+                    logger.trace("Sending message to client: {}", message)
+                    client.writeTextMessage(message)
+                }
             }
         }
 
