@@ -441,8 +441,11 @@ class FriendshipServiceVerticle(
         webSocket.textMessageHandler { message ->
             logger.trace("Received message from client: {}", message)
 
+            val jsonMessage = JsonObject(message)
+            val receiver = jsonMessage.getString("receiver")
+
             clients.forEach { client ->
-                if (client != webSocket && !client.isClosed) {
+                if (client != webSocket && !client.isClosed && client.query().split("id=")[1] == receiver) {
                     logger.trace("Sending message to client: {}", message)
                     client.writeTextMessage(message)
                 }
