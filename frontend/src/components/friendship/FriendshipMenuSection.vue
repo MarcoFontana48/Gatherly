@@ -12,7 +12,6 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
 
 .title-text {
   font-weight: bold;

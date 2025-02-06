@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import MenuNav from "@/components/MenuNav.vue";
-import Friendship from "@/components/section/FriendshipSection.vue";
+import FriendshipSection from "@/components/friendship/FriendshipSection.vue";
 import { RouterView } from "vue-router";
 import SettingsDialog from "@/components/dialogs/SettingsDialog.vue";
 
@@ -30,7 +30,7 @@ const toggleModal = () => {
       <RouterView />
     </div>
     <div class="right-column">
-      <Friendship />
+      <FriendshipSection />
     </div>
 
     <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />

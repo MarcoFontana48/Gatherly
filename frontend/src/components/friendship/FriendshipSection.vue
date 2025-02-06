@@ -2,9 +2,9 @@
 import {provide, ref} from "vue";
 import MenuButton from "@/components/buttons/NavButton.vue";
 import Icon from "@/components/images/Icon.vue";
-import FriendshipMenu from "@/components/FriendshipMenu.vue";
+import FriendshipMenu from "@/components/friendship/FriendshipMenu.vue";
 import friendsIcon from "@/assets/friends-solid.svg";
-import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
+import FriendshipNotificationSection from "@/components/friendship/FriendshipNotificationSection.vue";
 
 const friendshipEvents = ref(["friendship-request-sent", "friendship-request-accepted", "friendship-request-rejected"]);
 const showDropdown = ref(false);
@@ -24,7 +24,7 @@ const toggleDropdown = () => {
     </MenuButton>
   </div>
 
-  <FriendshipRequestDialog></FriendshipRequestDialog>
+  <FriendshipNotificationSection />
 
   <FriendshipMenu :show="showDropdown" @close="showDropdown = false" />
 </template>

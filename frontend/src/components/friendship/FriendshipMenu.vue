@@ -3,16 +3,16 @@ import {ref, computed, watch, onMounted, onBeforeUnmount, provide, inject} from 
 import axios from "axios";
 import { useAuthStore } from "@/utils/auth.js";
 import BaseInput from "@/components/inputs/BaseInput.vue";
-import FriendshipMenuSection from "@/components/FriendshipMenuSection.vue";
-import FriendshipMenuSeparator from "@/components/FriendshipMenuSeparator.vue";
+import FriendshipMenuSection from "@/components/friendship/FriendshipMenuSection.vue";
+import FriendshipMenuSeparator from "@/components/friendship/FriendshipMenuSeparator.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import chatIcon from "@/assets/pen-solid.svg";
 import ErrorText from "@/components/text/ErrorText.vue";
-import {validateEmail} from "@/utils/validator.ts";
-import {defineSseEventSource} from "@/utils/sse.ts";
+import {validateEmail} from "@/utils/validator.js";
+import {defineSseEventSource} from "@/utils/sse.js";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
@@ -208,8 +208,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@import "@/styles/mixins";
+@import "@/styles/global";
 
 .overlay {
   @include overlay-background;
