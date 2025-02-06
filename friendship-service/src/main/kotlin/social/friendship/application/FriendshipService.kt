@@ -26,6 +26,7 @@ import social.friendship.domain.User
 import social.friendship.social.friendship.application.DatabaseCredentials
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.sql.SQLIntegrityConstraintViolationException
 
 interface FriendshipService : FriendshipProcessor, FriendshipRequestProcessor, MessageProcessor, UserProcessor, Service {
     fun generateSseChannel(response: HttpServerResponse, userId: String)
@@ -182,10 +183,14 @@ class FriendshipServiceVerticle(
                 throw UnsupportedOperationException("Cannot send friendship request to a friend")
             }
         }.apply {
-            friendshipRequestRepository.save(friendshipRequest).let {
-                val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
-                kafkaProducer.publishEvent(event)
-                vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
+            try {
+                friendshipRequestRepository.save(friendshipRequest).let {
+                    val event = FriendshipRequestSent(friendshipRequest.to.id.value, friendshipRequest.from.id.value)
+                    kafkaProducer.publishEvent(event)
+                    vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
+                }
+            } catch (e: SQLIntegrityConstraintViolationException) {
+                throw SQLIntegrityConstraintViolationException("Friendship request already exists")
             }
         }
     }
