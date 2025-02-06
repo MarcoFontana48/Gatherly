@@ -13,6 +13,7 @@ import chatIcon from "@/assets/pen-solid.svg";
 import ErrorText from "@/components/text/ErrorText.vue";
 import {validateEmail} from "@/utils/validator.js";
 import {defineSseEventSource} from "@/utils/sse.js";
+import FriendshipNotificationSection from "@/components/friendship/FriendshipNotificationSection.vue";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
@@ -165,6 +166,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="show" class="overlay" @click.stop="closeMenu">
+    <FriendshipNotificationSection class="friendship-notification-section"/>
+
     <div class="side-panel" @click.stop>
       <div class="panel-header">
         <h3>Friends Menu</h3>
@@ -248,6 +251,11 @@ li {
 
 .chat-button {
   margin-left: 20%;
+}
+
+.friendship-notification-section {
+  justify-content: flex-end;
+  margin: 1vw;
 }
 
 @keyframes slide-in {
