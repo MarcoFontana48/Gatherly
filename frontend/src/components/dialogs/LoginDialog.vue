@@ -108,6 +108,6 @@ const signUp = async () => {
 }
 
 .buttons {
-  @include default-align-buttons(1vw);
+  @include default-align-items(1vw);
 }
 </style>

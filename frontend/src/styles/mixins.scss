@@ -135,6 +135,7 @@
   padding: 20px;
   transform: translateX(100%);
   animation: slide-in 0.3s forwards;
+  overflow-y: auto;
 }
 
 @mixin default-close-btn-style {
@@ -173,7 +174,7 @@
   }
 }
 
-@mixin default-align-buttons($gap) {
+@mixin default-align-items($gap) {
   margin-top: $gap;
   display: flex;
   justify-content: space-between;

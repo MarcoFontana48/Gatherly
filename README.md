@@ -41,6 +41,7 @@ or adding distinctive features.
 - Express
 - MySQL2
 - Jest
+- Mongoose
 ### Versioning
 - Conventional Commits
 - Semantic Versioning
@@ -48,6 +49,7 @@ or adding distinctive features.
 - Gradle
 - Docker Hub
 - GitHub Actions
+### Stack MEVN
 
 ## Getting Started
 ### Prerequisites

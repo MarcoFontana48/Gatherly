@@ -43,7 +43,7 @@ $gap: 1vw;
   @include default-dialog-style($bg-color, red);
 
   .buttons {
-    @include default-align-buttons($gap);
+    @include default-align-items($gap);
   }
 }
 </style>

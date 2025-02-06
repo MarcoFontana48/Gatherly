@@ -14,6 +14,7 @@ import ErrorText from "@/components/text/ErrorText.vue";
 import {validateEmail} from "@/utils/validator.js";
 import {defineSseEventSource} from "@/utils/sse.js";
 import FriendshipNotificationSection from "@/components/friendship/FriendshipNotificationSection.vue";
+import ChatDialog from "@/components/dialogs/ChatDialog.vue";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
@@ -23,6 +24,8 @@ const friendEmail = ref("");
 const errorMessage = ref("");
 const props = defineProps<{ show: boolean }>();
 const emit = defineEmits<{ (event: "close"): void }>();
+const showChat = ref(false);
+const selectedFriendId = ref("");
 
 const events: string[] | undefined = inject("friendshipEvents");
 
@@ -153,6 +156,11 @@ const declineRequest = async (from: string) => {
   }
 };
 
+const openChatWith = (friendId: string) => {
+  selectedFriendId.value = friendId;
+  showChat.value = true;
+};
+
 onMounted(() => {
   if (props.show) {
     document.addEventListener("click", closeMenu);
@@ -167,6 +175,7 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="show" class="overlay" @click.stop="closeMenu">
     <FriendshipNotificationSection class="friendship-notification-section"/>
+    <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
 
     <div class="side-panel" @click.stop>
       <div class="panel-header">
@@ -174,19 +183,22 @@ onBeforeUnmount(() => {
         <button class="close-btn" @click="closeMenu">&times;</button>
       </div>
 
-      <FriendshipMenuSection title="Send a friendship request" />
-      <BaseInput v-model="friendEmail" type="email" placeholder="Your friend's email" />
-      <NeutralButton @click="sendFriendshipRequest" class="menu-button">Send Request</NeutralButton>
-      <p>
-        <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
-      </p>
+      <div class="send-friendship-request-section">
+        <FriendshipMenuSection title="Send a friendship request" />
+        <div class="input">
+          <BaseInput v-model="friendEmail" type="email" class="email-input" placeholder="Your friend's email" />
+          <NeutralButton @click="sendFriendshipRequest" class="menu-button">Send Request</NeutralButton>
+          <p>
+            <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
+          </p>
+        </div>
+      </div>
 
       <FriendshipMenuSeparator />
 
-      <!-- Upper part: Friendship Requests -->
       <FriendshipMenuSection title="Pending received friendship requests" />
       <ul>
-        <li v-for="request in friendshipRequests" :key="request.id">
+        <li v-for="request in friendshipRequests" :key="request.id" class="friendship-request-section">
           {{ request.from.id.value }}
             <AcceptButton @click="acceptRequest(request.from.id.value)" class="chat-button">Accept</AcceptButton>
             <DeclineButton @click="declineRequest(request.from.id.value)">Decline</DeclineButton>
@@ -195,10 +207,9 @@ onBeforeUnmount(() => {
 
       <FriendshipMenuSeparator />
 
-      <!-- Lower part: Friendships -->
       <FriendshipMenuSection title="Your friends" />
       <ul>
-        <li v-for="friendship in friendships" :key="friendship.id">
+        <li v-for="friendship in friendships" :key="friendship.id" class="friendship-section">
           {{ friendship.id.value }}
           <NeutralButton @click="openChatWith(friendship.id.value)" class="chat-button">
             <Icon :src="chatIcon" :alt="chatIcon" />
@@ -220,15 +231,37 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-}
 
-.side-panel {
-  @include side-panel($bg-color);
-  padding: 5vh;
-  max-width: 66vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  .side-panel {
+    @include side-panel($bg-color);
+    padding: 2%;
+    max-width: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+
+    .send-friendship-request-section {
+      .input {
+        @include default-align-items(1%);
+
+        .email-input {
+          width: 66%;
+        }
+        .menu-button {
+          width: 33%;
+        }
+      }
+    }
+
+    .friendship-request-section {
+      @include default-align-items(1%);
+    }
+
+    .friendship-section {
+      @include default-align-items(1%);
+    }
+  }
 }
 
 .panel-header {
@@ -250,7 +283,7 @@ li {
 }
 
 .chat-button {
-  margin-left: 20%;
+  margin-left: 10vw;
 }
 
 .friendship-notification-section {
