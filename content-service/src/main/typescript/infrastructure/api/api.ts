@@ -1,5 +1,6 @@
 import express from "express";
-import http from "http";
+import cors from "cors";
+import * as http from "node:http";
 
 export class Server {
     private readonly port: number;
@@ -16,6 +17,14 @@ export class Server {
     async start(onStarted: () => void = () => {}) {
         return new Promise<void>((resolve) => {
             const app = express();
+
+            // Abilita CORS per tutte le richieste
+            app.use(cors({
+                origin: "http://localhost:5173", // Permetti richieste dal frontend Vue
+                methods: "GET,POST,PUT,DELETE",
+                allowedHeaders: "Content-Type,Authorization"
+            }));
+
             app.use(...this.middlewares);
             app.use("/", this.router);
             this.server = http.createServer(app);
@@ -26,21 +35,10 @@ export class Server {
             });
         });
     }
-
-    async stop() {
-        return new Promise<void>((resolve) => {
-            if (this.server) {
-                this.server.close(() => {
-                    resolve();
-                });
-            } else {
-                resolve();
-            }
-        });
-    }
 }
 
 export const EmptyRouter = express.Router();
 export const DefaultMiddlewares: express.RequestHandler[] = [
     express.json(),
+    cors()
 ];
