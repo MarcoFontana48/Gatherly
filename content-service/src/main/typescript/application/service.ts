@@ -53,7 +53,7 @@ export class ContentServiceImpl implements ContentService {
 
     async addPost(post: Post) {
         await this.postRepository.save(post);
-        console.log("post added, about to emit postAdded event");
+        console.log("post added, about to emit postAdded event: post:'{}'", post);
         this.eventEmitter.emit("postAdded", post);
     }
 

@@ -21,7 +21,7 @@ export class ContentServiceControllerImpl {
         res.flushHeaders();
 
         const postAddedListener = (post: Post) => {
-            console.log("received postAdded event, about to send it to client");
+            console.log("received postAdded event, about to send it to client: '{}'", post);
             res.write(`data: ${JSON.stringify(post)}\n\n`);
         };
 
