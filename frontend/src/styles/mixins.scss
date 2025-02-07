@@ -10,6 +10,14 @@
   }
 }
 
+@mixin adapt-background-color-based-on-bg($color, $amount, $bg-color) {
+  @if lightness($bg-color) > 60% {
+    background: darken($color, $amount);
+  } @else {
+    background: lighten($color, $amount);
+  }
+}
+
 @mixin align-to($align-items) {
   display: flex;
   justify-content: center;
@@ -206,4 +214,15 @@
   flex-direction: column;
   justify-content: $direction;
   align-items: $direction;
+}
+
+@mixin default-post-style($bg-color, $mix-amount) {
+  padding: 3%;
+  border-radius: 1%;
+  background: mix($bg-color, invert($bg-color), $mix-amount);
+}
+
+@mixin over-background-post-style($bg-color) {
+  @include default-post-style($bg-color, 97%);
+  box-shadow: 0 0.2vh 0.2vw rgba(0, 0, 0, 0.1);
 }

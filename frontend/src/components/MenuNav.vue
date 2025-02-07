@@ -26,5 +26,7 @@ const emit = defineEmits(['openModal']);
 
 .menu-nav {
   @include display-vertically;
+  position: fixed;
+  top: 5%;
 }
 </style>

@@ -3,6 +3,7 @@ import {ref, watch, defineProps, defineEmits, onMounted, onBeforeUnmount, comput
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import {useAuthStore} from "@/utils/auth.ts";
+import UsernameText from "@/components/text/UsernameText.vue";
 
 const props = defineProps<{ show: boolean; friendId: string }>();
 const emit = defineEmits<{ (event: "close"): void }>();
@@ -71,7 +72,9 @@ onBeforeUnmount(() => {
   <transition name="slide-up">
     <div v-if="show" class="chat-dialog" @click.stop>
       <div class="chat-header">
-        <h3>Chat with {{ friendId }}</h3>
+        <h4>Chat with
+          <UsernameText :text="friendId" />
+        </h4>
         <button class="close-btn" @click="closeDialog">&times;</button>
       </div>
       <div class="chat-messages">

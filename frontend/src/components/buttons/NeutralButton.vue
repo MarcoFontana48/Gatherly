@@ -22,10 +22,12 @@ import BaseButton from './BaseButton.vue';
 
   &:hover {
     @include adapt-color-based-on-bg($button-bg-color, $hover-darken-amount, $button-bg-color);
+    @include adapt-background-color-based-on-bg($button-bg-color, 10%, $button-bg-color);
   }
 
   &:active {
     @include adapt-color-based-on-bg($button-bg-color, $active-darken-amount, $button-bg-color);
+    @include adapt-background-color-based-on-bg($button-bg-color, 20%, $button-bg-color);
   }
 }
 </style>

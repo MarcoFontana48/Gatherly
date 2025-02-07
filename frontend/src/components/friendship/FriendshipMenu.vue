@@ -9,7 +9,7 @@ import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import AcceptButton from "@/components/buttons/AcceptButton.vue";
 import DeclineButton from "@/components/buttons/DeclineButton.vue";
 import Icon from "@/components/images/Icon.vue";
-import chatIcon from "@/assets/pen-solid.svg";
+import chatIcon from "@/assets/message-solid.svg";
 import ErrorText from "@/components/text/ErrorText.vue";
 import {validateEmail} from "@/utils/validator.js";
 import {defineSseEventSource} from "@/utils/sse.js";
@@ -26,6 +26,7 @@ const props = defineProps<{ show: boolean }>();
 const emit = defineEmits<{ (event: "close"): void }>();
 const showChat = ref(false);
 const selectedFriendId = ref("");
+const altChatIcon = 'Chat icon';
 
 const events: string[] | undefined = inject("friendshipEvents");
 
@@ -157,8 +158,12 @@ const declineRequest = async (from: string) => {
 };
 
 const openChatWith = (friendId: string) => {
-  selectedFriendId.value = friendId;
-  showChat.value = true;
+  if (selectedFriendId.value === friendId) {
+    showChat.value = !showChat.value;
+  } else {
+    selectedFriendId.value = friendId;
+    showChat.value = true;
+  }
 };
 
 onMounted(() => {
@@ -212,8 +217,7 @@ onBeforeUnmount(() => {
         <li v-for="friendship in friendships" :key="friendship.id" class="friendship-section">
           {{ friendship.id.value }}
           <NeutralButton @click="openChatWith(friendship.id.value)" class="chat-button">
-            <Icon :src="chatIcon" :alt="chatIcon" />
-            Open chat
+            <Icon :src="chatIcon" :alt="altChatIcon" />
           </NeutralButton>
         </li>
       </ul>

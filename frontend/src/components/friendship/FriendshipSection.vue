@@ -31,6 +31,8 @@ const toggleDropdown = () => {
 
 <style lang="scss" scoped>
 .friendship-container {
+  position: fixed;
+  top: 5%;
   display: inline-block;
 }
 </style>
