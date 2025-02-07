@@ -38,24 +38,19 @@ export class Server {
                 }
             });
 
-            // Setup Socket.io connection logic
             this.io.on('connection', (socket) => {
                 console.log('A user connected');
 
-                // Listen for the joinRoom event to bind a user to a post
                 socket.on('joinRoom', (postId) => {
-                    socket.join(postId); // Join a room based on the post ID
+                    socket.join(postId);
                     console.log(`User joined room for post: ${postId}`);
                 });
 
-                // Listen for messages related to a specific post
                 socket.on('sendMessage', (postId, messageData) => {
                     console.log(`Received message for post ${postId}:`, messageData);
-                    // Broadcast the message only to clients in the room for the specific post
                     this.io?.to(postId).emit('newMessage', messageData);
                 });
 
-                // Handle disconnections
                 socket.on('disconnect', () => {
                     console.log('A user disconnected');
                 });

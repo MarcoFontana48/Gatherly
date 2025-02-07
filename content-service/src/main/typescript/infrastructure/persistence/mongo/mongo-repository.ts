@@ -67,13 +67,16 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 
     async save(post: Post) {
+        console.log(`Saving post: author: ${post.author.email}, content: ${post.content}`);
         if (!this.connection) {
+            console.log('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         await this.connection;
 
         // Check if the author exists in the database
+        console.log(`Checking if author exists: ${post.author.email}`);
         const authorExists = await UserModel.exists({_id: post.author.email});
 
         if (!authorExists) {
@@ -81,12 +84,14 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             throw new Error(`Author with ID ${post.author.email} does not exist.`);
         }
 
+        console.log(`Author exists: ${post.author.email}`);
         const document = new PostModel({
             _id: post.id.id,
             author: post.author.email,
             content: post.content,
         });
 
+        console.log(`Saving post to database: author: ${post.author.email}, content: ${post.content}`);
         try {
             // Save the post
             const result = await document.save();
