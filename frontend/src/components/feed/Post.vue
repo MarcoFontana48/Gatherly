@@ -9,14 +9,19 @@ import chatIcon from "@/assets/message-solid.svg";
 
 const altChatIcon = 'Chat icon';
 const showChatDialog = ref(false);
-defineProps<{ content: string }>();
+
+const props = defineProps<{
+  content: string,
+  id: string,
+  author: string,
+}>();
 </script>
 
 <template>
   <div class="post-container">
     <div class="post-content-container">
-      <UsernameText text="Placeholder username" />
-      <PostText :content="content" />
+      <UsernameText :text="props.author" />
+      <PostText :content="props.content" />
     </div>
     <div class="post-buttons">
       <NeutralButton @click="showChatDialog = !showChatDialog">
@@ -24,7 +29,8 @@ defineProps<{ content: string }>();
       </NeutralButton>
     </div>
     <div>
-      <PostChatDialog :show="showChatDialog" friend-id="111" @close="showChatDialog = false" />
+      <!-- Pass the postId to the child component -->
+      <PostChatDialog :show="showChatDialog" @close="showChatDialog = false" :id="props.id" />
     </div>
   </div>
 </template>

@@ -1,25 +1,54 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { io, Socket } from 'socket.io-client';
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import Icon from "@/components/images/Icon.vue";
 import sendIcon from "@/assets/paper-plane-solid.svg";
 
-const props = defineProps<{ show: boolean }>();
+const props = defineProps<{
+  show: boolean;
+  id: string;
+}>();
 const emit = defineEmits<{ (event: 'close'): void }>();
-const messages = ref<{ sender: string; content: string }[]>([]);
+
+const messages = ref<{ content: string }[]>([]);
 const newMessage = ref('');
 const altSendIcon = 'Send message icon';
+
+// Socket.io client connection
+let socket: Socket;
+
+onMounted(() => {
+  socket = io('http://localhost:8082');
+
+  console.log('Joining room:', props.id);
+  socket.emit('joinRoom', props.id);
+
+  socket.on('newMessage', (messageData: { content: string }) => {
+    console.log("Received message '" + messageData.content + "' from socket on chat room '", props.id);
+    messages.value.push(messageData);
+  });
+});
+
+onBeforeUnmount(() => {
+  if (socket) {
+    socket.disconnect();
+  }
+});
 
 const sendMessage = () => {
   if (!newMessage.value.trim()) return;
 
   const messageData = {
-    sender: 'You',
     content: newMessage.value,
   };
 
-  messages.value.push(messageData);
+  console.log('Sending message:', messageData);
+
+  socket.emit('sendMessage', props.id, messageData);
+
+  // messages.value.push(messageData);
   newMessage.value = '';
 };
 
@@ -31,7 +60,7 @@ const closeDialog = () => {
 <template>
   <div v-if="show" class="post-chat-dialog">
     <div class="chat-header">
-      <h4>Global anonymous chat</h4>
+      <h4>anonymous global chat for this post</h4>
       <button class="close-btn" @click="closeDialog">&times;</button>
     </div>
     <div class="chat-messages">

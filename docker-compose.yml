@@ -111,26 +111,44 @@ services:
     networks:
       - app-network
 
-  content-sql-repository:
-    image: mysql:latest
-    container_name: content-sql-repository
+#  content-sql-repository:
+#    image: mysql:latest
+#    container_name: content-sql-repository
+#    environment:
+#      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+#      MYSQL_DATABASE: content
+#      MYSQL_USER: user
+#      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+#      DB_HOST: content-sql-repository
+#      DB_PORT: 3306
+#    ports:
+#      - "3309:3306"
+#    volumes:
+#      - content-sql-data:/var/lib/mysql
+#      - ./content-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+#      interval: 20s
+#      timeout: 5s
+#      retries: 5
+#    secrets:
+#      - db_root_password
+#      - db_password
+#    networks:
+#      - app-network
+
+  content-mongo-repository:
+    image: mongo:latest
+    container_name: content-mongo-repository
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: content
-      MYSQL_USER: user
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
-      DB_HOST: content-sql-repository
-      DB_PORT: 3306
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MONGO_INITDB_DATABASE: content
     ports:
-      - "3309:3306"
+      - "27017:27017"
     volumes:
-      - content-sql-data:/var/lib/mysql
-      - ./content-service/init.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 20s
-      timeout: 5s
-      retries: 5
+      - content-mongo-data:/data/db
+      - ./content-service/init.js:/docker-entrypoint-initdb.d/init.js
     secrets:
       - db_root_password
       - db_password
@@ -143,8 +161,6 @@ services:
     ports:
       - "8082:8080"
     depends_on:
-      content-sql-repository:
-        condition: service_healthy
       kafka:
         condition: service_healthy
     environment:
@@ -203,8 +219,6 @@ services:
         condition: service_healthy
       friendship-sql-repository:
         condition: service_healthy
-      content-sql-repository:
-        condition: service_healthy
     networks:
       - app-network
     healthcheck:
@@ -215,9 +229,9 @@ services:
 
 secrets:
   db_root_password:
-    file: db-root-password.txt
+    file: ./db-root-password.txt
   db_password:
-    file: db-password.txt
+    file: ./db-password.txt
 
 volumes:
   user-sql-data:
@@ -227,6 +241,8 @@ volumes:
   content-sql-data:
     driver: local
   kafka-data:
+    driver: local
+  content-mongo-data:
     driver: local
 
 networks:

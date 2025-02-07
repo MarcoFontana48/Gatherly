@@ -49,7 +49,7 @@ const closeNotification = (index: number) => {
 watch(email, (newEmail) => {
   if (!newEmail) return;
 
-  const eventSource = defineSseEventSource(newEmail);
+  const eventSource = defineSseEventSource(newEmail, "localhost", "8081");
 
   eventSource.onmessage = (event: MessageEvent<any>) => {
     console.log('Received event:', event.data);

@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref, onMounted, onUnmounted, computed} from 'vue';
 import Post from '@/components/feed/Post.vue';
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import plusIcon from "@/assets/plus-solid.svg";
 import Icon from "@/components/images/Icon.vue";
 import PostDialog from '@/components/dialogs/PostDialog.vue';
+import {useAuthStore} from "@/utils/auth.ts";
+import {defineSseEventSource} from "@/utils/sse.ts";
+import axios from 'axios';
 
 const altAddIcon = 'Add post icon';
+const authStore = useAuthStore();
+const email = computed(() => authStore.authToken);
 
 type PostType = {
-  id: number;
-  username: string;
-  content: string;
-  timestamp: string;
+  g_1: {
+    e_1: string,
+  },
+  author: {
+    email: string,
+    name: string,
+  },
+  content: string,
 };
 
 const posts = ref<PostType[]>([]);
@@ -25,14 +34,44 @@ const openContentDialog = () => {
   showContentDialog.value = true;
 };
 
-const addPost = () => {
+const fetchPosts = async () => {
+  try {
+    console.log('Fetching posts for user:', email.value);
+
+    const response = await axios.get('http://localhost:8082/contents/posts/feed/', { params: { userID: email.value } });
+
+    console.log('Posts:', response.data);
+
+    posts.value = response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+  }
+};
+
+const addPost = async () => {
   if (newPostContent.value.trim()) {
-    posts.value.push({
-      id: posts.value.length + 1,
-      username: 'User',
+    const postData = {
+      user: {
+        email: email.value,
+        name: "placeholder",
+      },
       content: newPostContent.value,
-      timestamp: new Date().toLocaleString(),
-    });
+    };
+
+    console.log('Adding post:', postData);
+
+    try {
+      const response = await axios.post('http://localhost:8082/contents/posts', postData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log("response:", response);
+
+    } catch (error) {
+      console.error('Error adding post:', error);
+    }
   }
   showContentDialog.value = false;
   newPostContent.value = '';
@@ -46,12 +85,38 @@ const toggleDialogs = () => {
     showDialog.value = true;
   }
 };
+
+const startSSE = () => {
+  const eventSource = defineSseEventSource(email.value, 'localhost', '8082');
+
+  eventSource.onmessage = (event: MessageEvent<any>) => {
+    console.log('Received event:', event.data);
+
+    try {
+      const newPost: PostType = JSON.parse(event.data);
+      console.log('New post:', newPost);
+
+      if (newPost.author && newPost.author.email) {
+        posts.value.push(newPost);
+      } else {
+        console.error('Post received without valid user information');
+      }
+    } catch (error) {
+      console.error('Error parsing SSE data:', error);
+    }
+  };
+};
+
+onMounted(() => {
+  fetchPosts();
+  startSSE();
+});
 </script>
 
 <template>
   <div class="feed-container">
     <div v-if="posts.length" class="post-list">
-      <Post v-for="post in posts" :key="post.id" :content="post.content" />
+      <Post v-for="post in posts" :key="post.g_1.e_1" :content="post.content" :id="post.g_1.e_1" :author="post.author.email" />
     </div>
     <p v-else>No posts available</p>
   </div>

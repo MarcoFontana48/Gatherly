@@ -99,7 +99,7 @@ watch(
 
 watch(email, (newEmail) => {
   if (newEmail) {
-    const eventSource = defineSseEventSource(newEmail)
+    const eventSource = defineSseEventSource(newEmail, "localhost", "8081");
 
     eventSource.onmessage = (event: MessageEvent<any>) => {
       console.log(events)
