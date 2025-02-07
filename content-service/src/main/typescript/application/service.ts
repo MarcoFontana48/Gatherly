@@ -8,6 +8,7 @@ import {
 } from "./repository";
 import {Feed, Friendship, FriendshipID, Post, PostID, User, UserID} from "../domain/domain";
 import {UnableToDelete} from "./service-errors";
+import {EventEmitter} from "events";
 
 export interface ContentService extends Service {
     addPost(post: Post): Promise<void>;
@@ -20,10 +21,11 @@ export interface ContentService extends Service {
     deleteFriendship(id: FriendshipID): Promise<Friendship | undefined>;
     getPostByAuthor(id: UserID): Promise<Post[]>;
     init(port: number): Promise<void>;
+    getPostAddedEmitter(): any;
 }
 
 export class ContentServiceImpl implements ContentService {
-
+    private eventEmitter = new EventEmitter();
     private friendshipRepository: FriendshipRepository;
     private postRepository: PostRepository;
     private userRepository: UserRepository;
@@ -49,8 +51,10 @@ export class ContentServiceImpl implements ContentService {
         return this.friendshipRepository.save(friendship);
     }
 
-    addPost(post: Post) {
-        return this.postRepository.save(post);
+    async addPost(post: Post) {
+        await this.postRepository.save(post);
+        console.log("post added, about to emit postAdded event");
+        this.eventEmitter.emit("postAdded", post);
     }
 
     addUser(user: User) {
@@ -94,4 +98,8 @@ export class ContentServiceImpl implements ContentService {
         return this.postRepository.findAllPostsByUserID(id);
     }
 
+    getPostAddedEmitter() {
+        console.log("returning postAdded emitter");
+        return this.eventEmitter;
+    }
 }

@@ -13,6 +13,25 @@ export class ContentServiceControllerImpl {
         this.service = service;
     }
 
+    sseHandler = (req: Request, res: Response) => {
+        // Set the necessary headers for SSE
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.flushHeaders();
+
+        const postAddedListener = (post: any) => {
+            console.log("received postAdded event, about to send it to client");
+            res.write(`data: ${JSON.stringify(post)}\n\n`);
+        };
+
+        this.service.getPostAddedEmitter().on("postAdded", postAddedListener);
+
+        req.on("close", () => {
+            this.service.getPostAddedEmitter().removeListener("postAdded", postAddedListener);
+        });
+    };
+
     getHealthCheckHandler = (_req: Request, res: Response) => {
         console.log("received health check request")
         res.status(StatusCode.OK).json("OK");
