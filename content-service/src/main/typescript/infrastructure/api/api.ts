@@ -19,13 +19,24 @@ export class Server {
     async start(onStarted: () => void = () => {}) {
         return new Promise<void>((resolve) => {
             const app = express();
-            app.use(cors());
+
+            app.use(cors({
+                origin: 'http://localhost:5173',
+                methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+                allowedHeaders: ['Content-Type', 'Authorization']
+            }));
+
             app.use(...this.middlewares);
             app.use("/", this.router);
 
-            // Create HTTP server and attach Socket.io
             this.server = http.createServer(app);
-            this.io = new SocketIOServer(this.server);
+
+            this.io = new SocketIOServer(this.server, {
+                cors: {
+                    origin: 'http://localhost:5173',
+                    methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+                }
+            });
 
             // Setup Socket.io connection logic
             this.io.on('connection', (socket) => {
