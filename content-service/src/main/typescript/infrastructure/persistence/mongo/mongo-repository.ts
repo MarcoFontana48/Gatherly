@@ -121,7 +121,9 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 
     async findAll(): Promise<Post[]> {
+        console.log('Finding all posts');
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
@@ -130,14 +132,18 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
                 const retrievedPosts = await PostModel.find().populate<{
                     author: { userName: string; email: string }
                 }>('author');
+                console.log(`Posts found in database: ${retrievedPosts.length} posts`);
 
                 return retrievedPosts.map((retrievedPost) => {
                     const {author, content, _id} = retrievedPost;
+                    console.log(`Post found in database: author: ${author}, content: ${content}`);
 
                     if (!author) {
+                        console.error(`Author not found for post with ID: ${_id}`);
                         throw new Error(`Author not found for post with ID: ${_id}`);
                     }
 
+                    console.log(`Author found for post with ID: ${_id}`);
                     return postOf(userOf(author.userName, author.email), content, _id);
                 });
             })
@@ -152,6 +158,7 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 
     async findByID(id: ID<string>): Promise<Post | undefined> {
+        console.log(`Finding post by ID: ${id.id}`);
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
         }
@@ -162,8 +169,10 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
                 const retrievedPost = await PostModel.findById(id.id).populate<{
                     author: { userName: string; _id: string }
                 }>('author');
+                console.log(`Post found in database: ${retrievedPost}`);
 
                 if (!retrievedPost) {
+                    console.error(`Post not found in database: ${id.id}`);
                     return undefined;
                 }
 
@@ -171,10 +180,12 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
 
                 // Validate the populated author
                 if (!author) {
+                    console.error(`Author not found for post with ID: ${id.id}`);
                     throw new Error(`Author not found for post with ID: ${id.id}`);
                 }
 
                 // Map the MongoDB document to the Post domain model
+                console.log(`Post found in database: author: ${author.userName}, content: ${content}`);
                 return postOf(userOf(author.userName, author._id), content, _id);
             })
             .then((result: Post | undefined) => {
@@ -190,12 +201,15 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 
     async update(entity: Post): Promise<void> {
+        console.log(`Updating post: author: ${entity.author.email}, content: ${entity.content}`);
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return await this.connection
             .then(() => {
+                console.log(`Updating post in database: author: ${entity.author.email}, content: ${entity.content}`);
                 return PostModel.findByIdAndUpdate(entity.id, entity);
             })
             .then((result: any) => {
@@ -207,6 +221,7 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 
     async findAllPostsByUserID(id: UserID): Promise<Post[]> {
+        console.log(`Finding all posts by user ID: ${id.id}`);
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
         }
@@ -217,13 +232,16 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
                     author: { userName: string; email: string }
                 }>('author');
 
+                console.log(`Posts found in database: ${retrievedPosts.length} posts`);
                 return retrievedPosts.map((retrievedPost) => {
                     const {author, content, _id} = retrievedPost;
 
                     if (!author) {
+                        console.error(`Author not found for post with ID: ${_id}`);
                         throw new Error(`Author not found for post with ID: ${_id}`);
                     }
 
+                    console.log(`Author found for post with ID: ${_id}`);
                     return postOf(userOf(author.userName, author.email), content, _id);
                 });
             })
@@ -249,11 +267,12 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             ]
         });
 
+        console.log(`Found friends: ${friends}`);
         const friendEmails = friends.map((friend: { user1: string; user2: string }) =>
             friend.user1 === user.email ? friend.user2 : friend.user1
         );
 
-        console.log(`Found friends: ${friendEmails}`);
+        console.log(`Found friends emails: ${friendEmails}`);
 
         const posts = await PostModel.find({author: {$in: friendEmails}}).exec();
 
@@ -273,6 +292,7 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
     }
 
     async save (user: User) {
+        console.log(`Saving user: email: ${user.email}, userName: ${user.userName}`);
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
         }
@@ -283,6 +303,7 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
                     _id: user.email,
                     userName: user.userName,
                 })
+                console.log(`Saving user to database: email: ${user.email}, userName: ${user.userName}`);
                 return document.save();
             })
             .then((result: { _id: any; userName: any; }) => {
@@ -298,8 +319,10 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
         return await this.connection
             .then(async () => {
                 const retrievedUser = await UserModel.findByIdAndDelete(id.id);
+                console.log(`User found in database: ${retrievedUser}`);
 
                 if (!retrievedUser) {
+                    console.error(`User not found in database: ${id.id}`);
                     return undefined; // User not found
                 }
 
@@ -330,6 +353,7 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
 
         return this.connection
             .then(() => {
+                console.log('Finding all users');
                 return UserModel.find();
             })
             .then((result: any) => {
@@ -349,8 +373,10 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
         return this.connection
             .then(async () => {
                 const retrievedUser = await UserModel.findById(id.id);
+                console.log(`User found in database: ${retrievedUser}`);
 
                 if (!retrievedUser) {
+                    console.error(`User not found in database: ${id.id}`);
                     return undefined;
                 }
 
@@ -367,12 +393,14 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
 
     async update(entity: User): Promise<void> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return this.connection
             .then(() => {
-            return UserModel.findByIdAndUpdate(entity.id.id, entity);
+                console.log(`Updating user: email: ${entity.email}, userName: ${entity.userName}`);
+                return UserModel.findByIdAndUpdate(entity.id.id, entity);
         })
             .then((result: any) => {
                 console.log(`User updated in database: ${result}`);
@@ -390,11 +418,13 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
     async deleteById(id: FriendshipID): Promise<Friendship | undefined> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return await this.connection
             .then(() => {
+                console.log(`Deleting friendship: ${id.id}`);
                 return FriendModel.findByIdAndDelete(id);
             })
             .then((result: any) => {
@@ -408,11 +438,13 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
     async findAll(): Promise<Friendship[]> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return await this.connection
             .then(() => {
+                console.log('Finding all friendships');
                 return FriendModel.find();
             })
             .then((result: any) => {
@@ -426,18 +458,21 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
     async findByID(id: FriendshipID): Promise<Friendship | undefined> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return await this.connection
             .then(async () => {
                 const friendshipId = id.id.x + id.id.y;
+                console.log(`Finding friendship by ID: ${friendshipId}`);
 
                 const retrievedFriendship = await FriendModel.findById(friendshipId).populate<{ user1: { userName: string; _id: string }, user2: { userName: string; _id: string } }>('user1 user2');
 
                 console.log(`Friendship found in database: ${retrievedFriendship}`);
 
                 if (!retrievedFriendship) {
+                    console.error(`Friendship not found in database: ${friendshipId}`);
                     return undefined;
                 }
 
@@ -462,6 +497,7 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
     async save(entity: Friendship): Promise<void> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
@@ -473,6 +509,8 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
                     user2: entity.user2.email,
                 })
 
+                console.log(`Saving friendship to database: user1:${entity.user1.email}, user2:${entity.user2.email}`);
+
                 // Check if the user (author) exists
                 const user1Exists = await UserModel.exists({_id: entity.user1.email});
                 const user2Exists = await UserModel.exists({_id: entity.user2.email});
@@ -481,6 +519,7 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
                     throw new Error(`Cannot store friendship since at least one of the users does not exist.`);
                 }
 
+                console.log(`Users exist: ${entity.user1.email}, ${entity.user2.email}`);
                 return document.save();
             })
             .then((result: { user1: any; user2: any; }) => {
@@ -490,12 +529,14 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
     async update(entity: Friendship): Promise<void> {
         if (!this.connection) {
+            console.error('No active MongoDB connection.');
             throw new TypeError('No active MongoDB connection.');
         }
 
         return await this.connection
             .then(() => {
-            return FriendModel.findByIdAndUpdate(entity.id, entity);
+                console.log(`Updating friendship: user1:${entity.user1.email}, user2:${entity.user2.email}`);
+                return FriendModel.findByIdAndUpdate(entity.id, entity);
         })
             .then((result: any) => {
                 console.log(`Friendship updated in database: ${result}`);
