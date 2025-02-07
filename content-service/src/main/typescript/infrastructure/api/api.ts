@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import cors from "cors";
 
 export class Server {
     private readonly port: number;
@@ -16,18 +17,7 @@ export class Server {
     async start(onStarted: () => void = () => {}) {
         return new Promise<void>((resolve) => {
             const app = express();
-
-            app.use((_req: any, res: any, next: any) => {
-                res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-                res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-                res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-                // if (req.method === "OPTIONS") {
-                //     return res.sendStatus(204);
-                // }
-                next();
-            });
-
+            app.use(cors());
             app.use(...this.middlewares);
             app.use("/", this.router);
             this.server = http.createServer(app);
@@ -38,8 +28,19 @@ export class Server {
             });
         });
     }
-}
 
+    async stop() {
+        return new Promise<void>((resolve) => {
+            if (this.server) {
+                this.server.close(() => {
+                    resolve();
+                });
+            } else {
+                resolve();
+            }
+        });
+    }
+}
 
 export const EmptyRouter = express.Router();
 export const DefaultMiddlewares: express.RequestHandler[] = [
