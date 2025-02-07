@@ -48,7 +48,7 @@ abstract class AbstractMongoRepository {
             // const password = (await fs.readFile('db-root-password.txt', 'utf-8')).trim();
 
             // MongoDB URI with authentication
-            this.uri = `mongodb://root:${encodeURIComponent("111")}@127.0.0.1:${config.port}/content?authSource=admin`;
+            this.uri = `mongodb://root:${encodeURIComponent("111")}@content-mongo-repository:${config.port}/content?authSource=admin`;
 
             // Connect to the database
             this.connection = mongoose.connect(this.uri);
