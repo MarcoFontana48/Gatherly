@@ -18,9 +18,8 @@ export class Server {
         return new Promise<void>((resolve) => {
             const app = express();
 
-            // Abilita CORS per tutte le richieste
             app.use(cors({
-                origin: "http://localhost:5173", // Permetti richieste dal frontend Vue
+                origin: "http://localhost:5173",
                 methods: "GET,POST,PUT,DELETE",
                 allowedHeaders: "Content-Type,Authorization"
             }));
