@@ -47,10 +47,10 @@ abstract class AbstractMongoRepository {
             // Read the password from the file
             const password = (await fs.readFile('db-root-password.txt', 'utf-8').catch(async () => {
                 return (await fs.readFile('content-service/db-root-password.txt', 'utf-8')).trim();
-            }).catch(() => '111')).trim();
+            }).catch(() => "111")).trim();
 
             // MongoDB URI with authentication
-            this.uri = `mongodb://root:${encodeURIComponent(password)}@127.0.0.1:${config.port}/content?authSource=admin`;
+            this.uri = `mongodb://127.0.0.1:${config.port}/content`;
 
             // Connect to the database
             this.connection = mongoose.connect(this.uri);
