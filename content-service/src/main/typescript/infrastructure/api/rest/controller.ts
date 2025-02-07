@@ -20,7 +20,7 @@ export class ContentServiceControllerImpl {
         res.setHeader("Connection", "keep-alive");
         res.flushHeaders();
 
-        const postAddedListener = (post: any) => {
+        const postAddedListener = (post: Post) => {
             console.log("received postAdded event, about to send it to client");
             res.write(`data: ${JSON.stringify(post)}\n\n`);
         };
