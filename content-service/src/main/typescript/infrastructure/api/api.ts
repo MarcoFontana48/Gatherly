@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import http from "http";
 
 export class Server {
@@ -18,12 +17,16 @@ export class Server {
         return new Promise<void>((resolve) => {
             const app = express();
 
-            // Abilita CORS per tutte le richieste
-            app.use(cors({
-                origin: "http://localhost:5173", // Permetti richieste dal frontend Vue
-                methods: "GET,POST,PUT,DELETE",
-                allowedHeaders: "Content-Type,Authorization"
-            }));
+            app.use((_req: any, res: any, next: any) => {
+                res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+                res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+                res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+                // if (req.method === "OPTIONS") {
+                //     return res.sendStatus(204);
+                // }
+                next();
+            });
 
             app.use(...this.middlewares);
             app.use("/", this.router);
@@ -37,8 +40,8 @@ export class Server {
     }
 }
 
+
 export const EmptyRouter = express.Router();
 export const DefaultMiddlewares: express.RequestHandler[] = [
     express.json(),
-    cors()
 ];
