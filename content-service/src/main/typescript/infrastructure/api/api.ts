@@ -22,7 +22,7 @@ export class Server {
 
             app.use(cors({
                 origin: 'http://localhost:5173',
-                methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+                methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
                 allowedHeaders: ['Content-Type', 'Authorization']
             }));
 
@@ -34,7 +34,7 @@ export class Server {
             this.io = new SocketIOServer(this.server, {
                 cors: {
                     origin: 'http://localhost:5173',
-                    methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+                    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
                 }
             });
 
