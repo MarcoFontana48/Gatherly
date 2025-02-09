@@ -8,13 +8,18 @@ defineProps<{
   requests: { senderId: string; id: number }[];
 }>();
 
-const emit = defineEmits(["accept", "reject"]);
+const emit = defineEmits(["accept", "reject", "close"]);
+
+const closeDialog = (index: number) => {
+  emit("close", index);
+};
 </script>
 
 <template>
   <Dialog v-for="(request, index) in requests" :key="request.id" class="friend-request" :showModal="true">
     <template #header>
       <h3>Friend Request</h3>
+      <button @click="closeDialog(index)" class="close-btn">&times;</button>
     </template>
 
     <template #body>
@@ -41,6 +46,15 @@ $gap: 1vw;
 .friend-request {
   @include default-text-styles($bg-color);
   @include default-dialog-style($bg-color, red);
+
+  position: relative;
+
+  .close-btn {
+    @include cross-close-button;
+    position: absolute;
+    top: 2%;
+    right: 2%;
+  }
 
   .buttons {
     @include default-align-items($gap);

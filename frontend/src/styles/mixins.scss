@@ -213,7 +213,6 @@
   display: flex;
   flex-direction: column;
   justify-content: $direction;
-  align-items: $direction;
 }
 
 @mixin default-post-style($bg-color, $mix-amount) {
@@ -253,4 +252,11 @@
   left: 50%;
   transform: translateX(-50%);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@mixin cross-close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
 }

@@ -89,7 +89,6 @@ const sendFriendshipRequest = async () => {
   }
 };
 
-// Watch for changes in 'show' prop and user authentication
 watch(
     () => [props.show, email],
     ([newShow, newEmail]) => {
@@ -183,7 +182,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="show" class="overlay" @click.stop="closeMenu">
-    <FriendshipNotificationSection class="friendship-notification-section"/>
+    <FriendshipNotificationSection class="friendship-notification-section" @click.stop />
     <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
 
     <div class="side-panel" @click.stop>
@@ -211,9 +210,13 @@ onBeforeUnmount(() => {
       <FriendshipMenuSection title="Pending received friendship requests" />
       <ul>
         <li v-for="request in friendshipRequests" :key="request.id" class="friendship-request-section">
-          {{ request.from.id.value }}
+          <div class="friend-name-text-container">
+            {{ request.from.id.value }}
+          </div>
+          <div class="handle-friendship-request-button">
             <AcceptButton @click="acceptRequest(request.from.id.value)" class="chat-button">Accept</AcceptButton>
-            <DeclineButton @click="declineRequest(request.from.id.value)">Decline</DeclineButton>
+            <DeclineButton @click="declineRequest(request.from.id.value)" class="chat-button">Decline</DeclineButton>
+          </div>
         </li>
       </ul>
 
@@ -222,10 +225,14 @@ onBeforeUnmount(() => {
       <FriendshipMenuSection title="Your friends" />
       <ul>
         <li v-for="friendship in friendships" :key="friendship.id" class="friendship-section">
-          {{ friendship.id.value }}
-          <NeutralButton @click="openChatWith(friendship.id.value)" class="chat-button">
-            <Icon :src="chatIcon" :alt="altChatIcon" />
-          </NeutralButton>
+          <div class="friend-name-text-container">
+            {{ friendship.id.value }}
+          </div>
+          <div class="chat-button">
+            <NeutralButton @click="openChatWith(friendship.id.value)">
+              <Icon :src="chatIcon" :alt="altChatIcon" />
+            </NeutralButton>
+          </div>
         </li>
       </ul>
     </div>
@@ -267,10 +274,28 @@ onBeforeUnmount(() => {
 
     .friendship-request-section {
       @include default-align-items(1%);
+
+      .friend-name-text-container {
+        max-width: 50%;
+      }
+
+      .handle-friendship-request-button {
+        @include align-horizonally-to(center);
+        gap: 1%;
+        max-width: 50%;
+      }
     }
 
     .friendship-section {
       @include default-align-items(1%);
+
+      .friend-name-text-container {
+        max-width: 50%;
+      }
+
+      .chat-button {
+        max-width: 50%;
+      }
     }
   }
 }
@@ -293,13 +318,10 @@ li {
   @include default-close-btn-style;
 }
 
-.chat-button {
-  margin-left: 10vw;
-}
-
 .friendship-notification-section {
   justify-content: flex-end;
   margin: 1vw;
+  overflow-y: auto;
 }
 
 @keyframes slide-in {

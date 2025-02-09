@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import MenuNav from "@/components/MenuNav.vue";
 import FriendshipSection from "@/components/friendship/FriendshipSection.vue";
 import { RouterView } from "vue-router";
@@ -19,17 +20,19 @@ const showModal = ref(false);
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
+
+const route = useRoute();
 </script>
 
 <template>
   <div class="app-container">
-    <div class="left-column">
+    <div v-if="route.path !== '/login'" class="left-column">
       <MenuNav :menuItems="menuItems" @openModal="toggleModal" />
     </div>
     <div class="center-column">
       <RouterView />
     </div>
-    <div class="right-column">
+    <div v-if="route.path !== '/login'" class="right-column">
       <FriendshipSection />
     </div>
 

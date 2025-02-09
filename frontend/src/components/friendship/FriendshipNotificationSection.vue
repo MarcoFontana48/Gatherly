@@ -80,8 +80,8 @@ watch(email, (newEmail) => {
 
 <template>
   <div class="friendship-requests">
-    <FriendshipRequestDialog :requests="friendRequests" @accept="acceptRequest" @reject="denyRequest" />
-    <FriendshipNotificationDialog :notifications="friendshipNotifications" @close="closeNotification" />
+    <FriendshipRequestDialog :requests="friendRequests" @accept="acceptRequest" @reject="denyRequest" @close="closeNotification"/>
+    <FriendshipNotificationDialog :notifications="friendshipNotifications" @close="closeNotification"/>
   </div>
 </template>
 
@@ -89,7 +89,7 @@ watch(email, (newEmail) => {
 @import "@/styles/mixins.scss";
 
 .friendship-requests {
-  @include align-vertically-to(center);
+  @include align-vertically-to(flex-start);
 }
 
 </style>

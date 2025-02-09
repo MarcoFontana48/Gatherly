@@ -91,10 +91,7 @@ const closeDialog = () => {
 }
 
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+  @include cross-close-button;
 }
 
 .chat-messages {
