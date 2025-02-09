@@ -16,7 +16,6 @@ const messages = ref<{ content: string }[]>([]);
 const newMessage = ref('');
 const altSendIcon = 'Send message icon';
 
-// Socket.io client connection
 let socket: Socket;
 
 onMounted(() => {
@@ -34,6 +33,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (socket) {
     socket.disconnect();
+    console.log('Disconnected from socket');
   }
 });
 

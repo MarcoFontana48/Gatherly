@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, computed, watch, onMounted, onBeforeUnmount, provide, inject} from "vue";
+import {ref, computed, watch, onMounted, onBeforeUnmount, provide, inject, onUnmounted} from "vue";
 import axios from "axios";
 import { useAuthStore } from "@/utils/auth.js";
 import BaseInput from "@/components/inputs/BaseInput.vue";
@@ -113,6 +113,13 @@ watch(email, (newEmail) => {
         fetchFriendships();
       }
     };
+
+    onUnmounted(() => {
+      if (eventSource) {
+        eventSource.close();
+        console.log('EventSource closed');
+      }
+    });
   }
 }, { immediate: true });
 

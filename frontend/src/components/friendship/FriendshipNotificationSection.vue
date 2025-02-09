@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import {ref, watch, computed, onUnmounted} from 'vue';
 import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 import FriendshipNotificationDialog from "@/components/dialogs/FriendshipNotificationDialog.vue";
 import axios from 'axios';
@@ -74,6 +74,13 @@ watch(email, (newEmail) => {
         addWithTimeout(friendshipNotifications.value, { message, id: Date.now() }, 5000);
         break;
     }
+
+    onUnmounted(() => {
+      if (eventSource) {
+        eventSource.close();
+        console.log('EventSource closed');
+      }
+    });
   };
 }, { immediate: true });
 </script>

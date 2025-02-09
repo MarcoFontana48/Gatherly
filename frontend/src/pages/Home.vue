@@ -106,6 +106,13 @@ const startSSE = () => {
       console.error('Error parsing SSE data:', error);
     }
   };
+
+  onUnmounted(() => {
+    if (eventSource) {
+      eventSource.close();
+      console.log('EventSource closed');
+    }
+  });
 };
 
 onMounted(() => {
