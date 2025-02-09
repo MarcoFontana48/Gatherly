@@ -11,7 +11,6 @@ import {validateEmail, wrongEmailFormatString} from "@/utils/validator.ts";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 
 const props = defineProps<{ showModal: boolean }>();
-const emit = defineEmits(["update:showModal"]);
 const email = ref("");
 const errorMessage = ref("");
 const router = useRouter();
@@ -20,7 +19,6 @@ const matchingEmailError = "No matching email found. Please try again.";
 
 async function authenticate() {
   authStore.setAuthToken(email.value);
-  emit("update:showModal", false);
   await router.push("/home");
 }
 
@@ -79,7 +77,7 @@ const signUp = async () => {
 </script>
 
 <template>
-  <OverlayDialog :showModal="props.showModal" @update:showModal="emit('update:showModal', $event)" class="overlay-dialog">
+  <OverlayDialog :showModal="props.showModal" class="overlay-dialog">
     <template #header>
       <h3>Social-Network</h3>
     </template>
