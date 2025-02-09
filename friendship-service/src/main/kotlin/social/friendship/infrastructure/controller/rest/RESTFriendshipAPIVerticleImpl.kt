@@ -205,7 +205,7 @@ class RESTFriendshipAPIVerticleImpl(private val service: FriendshipService) : Ab
             CorsHandler.create()
                 .addOrigin("http://localhost:5173") // Frontend port (Vue.js)
                 .allowedMethods(setOf(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS))
-                .allowedHeaders(setOf("Content-Type", "Authorization", "Cache-Control"))
+                .allowedHeaders(setOf("Content-Type", "Authorization"))
         )
         router.route().handler(BodyHandler.create())
 
