@@ -190,7 +190,7 @@ class FriendshipServiceVerticle(
                     vertx.eventBus().publish(FriendshipRequestSent.TOPIC, mapper.writeValueAsString(friendshipRequest))
                 }
             } catch (e: SQLIntegrityConstraintViolationException) {
-                throw SQLIntegrityConstraintViolationException("Friendship request already exists")
+                throw SQLIntegrityConstraintViolationException("Friendship request already exists or user does not exist")
             }
         }
     }
