@@ -244,3 +244,13 @@
   }
   white-space: pre-line;
 }
+
+@mixin post-dialog-style($bg-color) {
+  @include default-dialog-style($bg-color);
+  position: fixed;
+  bottom: 16%;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}

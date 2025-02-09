@@ -14,8 +14,8 @@ const email = computed(() => authStore.authToken);
 const socket = ref<WebSocket | null>(null);
 
 function clearChat() {
-  messages.value = []; // Clear existing chat messages
-  newMessage.value = ""; // Clear input field
+  messages.value = [];
+  newMessage.value = "";
 }
 
 const sendMessage = () => {

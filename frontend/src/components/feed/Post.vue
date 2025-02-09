@@ -28,8 +28,7 @@ const props = defineProps<{
         <Icon :src="chatIcon" :alt="altChatIcon" class="icon"/>
       </NeutralButton>
     </div>
-    <div>
-      <!-- Pass the postId to the child component -->
+    <div class="post-chat-dialog-container">
       <PostChatDialog :show="showChatDialog" @close="showChatDialog = false" :id="props.id" />
     </div>
   </div>
@@ -40,7 +39,7 @@ const props = defineProps<{
 @import "@/styles/global";
 
 .post-container {
-  @include default-post-style($bg-color, 95%);
+  @include default-post-style($bg-color, 85%);
   @include display-vertically;
 
   .post-content-container {
@@ -57,6 +56,10 @@ const props = defineProps<{
       width: 1.5rem;
       height: 1.5rem;
     }
+  }
+
+  .post-chat-dialog-container {
+    padding: 2%;
   }
 }
 

@@ -26,7 +26,7 @@ const closeDialog = () => {
     </template>
     <template #body>
       <p v-if="bodyText">{{ bodyText }}</p>
-      <BaseInput v-if="input" :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" placeholder="Write your post content here..." />
+      <BaseInput v-if="input" :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" placeholder="Write post content here..." />
     </template>
     <template #footer>
       <span class="buttons">
@@ -42,15 +42,7 @@ const closeDialog = () => {
 @import "@/styles/global";
 
 .fixed-dialog {
-  position: fixed;
-  width: 33%;
-  bottom: 16%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 2%;
-  border-radius: 1%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  @include post-dialog-style($bg-color);
 
   .buttons {
     @include default-align-items(1vw);

@@ -48,7 +48,6 @@ const sendMessage = () => {
 
   socket.emit('sendMessage', props.id, messageData);
 
-  // messages.value.push(messageData);
   newMessage.value = '';
 };
 
@@ -60,8 +59,8 @@ const closeDialog = () => {
 <template>
   <div v-if="show" class="post-chat-dialog">
     <div class="chat-header">
-      <h4>anonymous global chat for this post</h4>
-      <button class="close-btn" @click="closeDialog">&times;</button>
+      <h5>anonymous global chat for this post</h5>
+      <button class="close-btn" @click="closeDialog">&times;  <!-- cross icon --> </button>
     </div>
     <div class="chat-messages">
       <div v-for="(message, index) in messages" :key="index" class="message">
