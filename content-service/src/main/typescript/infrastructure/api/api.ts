@@ -3,6 +3,9 @@ import http from "http";
 import cors from "cors";
 import { Server as SocketIOServer } from 'socket.io';
 
+/**
+ * Server class
+ */
 export class Server {
     private readonly port: number;
     private readonly middlewares: express.RequestHandler[];
@@ -10,12 +13,22 @@ export class Server {
     public server?: http.Server;
     private io?: SocketIOServer;
 
+    /**
+     * Constructor
+     * @param port the port to run the server on
+     * @param middlewares middlewares to use
+     * @param router the router to use
+     */
     constructor(port: number, middlewares: express.RequestHandler[], router: express.Router) {
         this.port = port;
         this.middlewares = middlewares;
         this.router = router;
     }
 
+    /**
+     * Start the server
+     * @param onStarted callback to run when the server starts
+     */
     async start(onStarted: () => void = () => {}) {
         return new Promise<void>((resolve) => {
             const app = express();
@@ -64,6 +77,9 @@ export class Server {
         });
     }
 
+    /**
+     * Stop the server
+     */
     async stop() {
         return new Promise<void>((resolve) => {
             if (this.server) {

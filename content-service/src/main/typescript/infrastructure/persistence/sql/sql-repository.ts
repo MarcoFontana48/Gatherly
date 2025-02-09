@@ -30,12 +30,24 @@ import {social} from "../../../commons-lib";
 import {SqlErrors} from "./sql-errors";
 import ID = social.common.ddd.ID;
 
+/**
+ * SQL implementation of the post repository
+ */
 export class SqlPostRepository extends SqlErrors implements PostRepository {
 
+    /**
+     * Map the DTO to the domain object
+     * @param array the array of DTOs
+     * @return the array of Post
+     */
     private mapToPost(array: PostDTO[]) {
         return array.map(dto => postFrom(dto.userName, dto.author, dto.content, dto.id));
     }
 
+    /**
+     * Save a post
+     * @param post the post to save
+     */
     async save(post: Post) {
         try {
             await this.connection!.execute<ResultSetHeader>(INSERT_POST, [post.author.email, post.content, post.id.id]);
@@ -44,6 +56,11 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         }
     }
 
+    /**
+     * Find a post by its ID
+     * @param id the ID of the post
+     * @return the post if found, undefined otherwise
+     */
     async findByID(id: ID<string>): Promise<Post | undefined>{
         try {
             const result = await this.connection!.execute<PostDTO[]>(FIND_POST_BY_ID, [id.id]);
@@ -54,6 +71,11 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         }
     }
 
+    /**
+     * Delete a post by its ID
+     * @param id the ID of the post
+     * @return the post if found, undefined otherwise
+     */
     async deleteById(id: ID<string>): Promise<Post | undefined> {
         try {
             await this.connection!.beginTransaction();
@@ -68,6 +90,10 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         }
     }
 
+    /**
+     * Find all posts
+     * @return the array of posts
+     */
     async findAll(): Promise<Post[]> {
         try {
             const result = await this.connection!.execute<PostDTO[]>(FIND_ALL_POST);
@@ -78,6 +104,11 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         return [];
     }
 
+    /**
+     * Update a post
+     * @param post the post to update
+     * @return the updated post
+     */
     async update(post: Post): Promise<void> {
         try {
             await this.connection!.execute(UPDATE_POST, [post.author.email, post.content, post.id.id]);
@@ -86,6 +117,11 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         }
     }
 
+    /**
+     * Get the feed for a user
+     * @param user the user to get the feed for
+     * @return the feed
+     */
     async getFeed(user: User): Promise<Feed> {
         try {
             const result = await this.connection!.execute<PostDTO[]>(GET_FEED, [user.email, user.email]);
@@ -96,6 +132,11 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
         return feedOf(user, []);
     }
 
+    /**
+     * Find all posts by a user ID
+     * @param id the ID of the user
+     * @return the array of posts
+     */
     async findAllPostsByUserID(id: UserID): Promise<Post[]> {
         try {
             const result = await this.connection!.execute<PostDTO[]>(FIND_ALL_POST_BY_AUTHOR, [id.id]);
@@ -107,12 +148,24 @@ export class SqlPostRepository extends SqlErrors implements PostRepository {
     }
 }
 
+/**
+ * SQL implementation of the user repository
+ */
 export class SqlUserRepository extends SqlErrors implements UserRepository {
 
+    /**
+     * Map the DTO to the domain object
+     * @param array the array of DTOs
+     * @private the array of User
+     */
     private mapToUser(array: UserDTO[]): User[] {
         return array.map(dto => userOf(dto.userName, dto.email))
     }
 
+    /**
+     * Save a user
+     * @param user the user to save
+     */
     async save(user: User) {
         try {
             await this.connection!.execute<ResultSetHeader>(INSERT_USER, [user.userName, user.email]);
@@ -121,6 +174,11 @@ export class SqlUserRepository extends SqlErrors implements UserRepository {
         }
     }
 
+    /**
+     * Find a user by its ID
+     * @param id the ID of the user
+     * @return the user if found, undefined otherwise
+     */
     async findByID(id: ID<string>): Promise<User | undefined> {
         try {
             const result = await this.connection!.execute<UserDTO[]>(FIND_USER_BY_ID, [id.id]);
@@ -131,6 +189,11 @@ export class SqlUserRepository extends SqlErrors implements UserRepository {
         }
     }
 
+    /**
+     * Delete a user by its ID
+     * @param id the ID of the user
+     * @return the user if found, undefined otherwise
+     */
     async deleteById(id: ID<string>): Promise<User | undefined> {
         try {
             await this.connection!.beginTransaction();
@@ -145,6 +208,10 @@ export class SqlUserRepository extends SqlErrors implements UserRepository {
         }
     }
 
+    /**
+     * Find all users
+     * @return the array of users
+     */
     async findAll(): Promise<User[]> {
         try {
             const result = await this.connection!.execute<UserDTO[]>(FIND_ALL_USERS);
@@ -155,6 +222,10 @@ export class SqlUserRepository extends SqlErrors implements UserRepository {
         return [];
     }
 
+    /**
+     * Update a user
+     * @param user the user to update
+     */
     async update(user: User): Promise<void> {
         try {
             await this.connection!.execute(UPDATE_USER, [user.userName, user.email]);
@@ -164,12 +235,25 @@ export class SqlUserRepository extends SqlErrors implements UserRepository {
     }
 }
 
+/**
+ * SQL implementation of the friendship repository
+ */
 export class SqlFriendshipRepository extends SqlErrors implements FriendshipRepository {
+    /**
+     * Map the DTO to the domain object
+     * @param array the array of DTOs
+     * @private the array of Friendship
+     */
     private mapToFriendship(array: FriendshipDTO[]): Friendship[] {
         return array
             .map(dto => friendshipOf(userOf(dto.userName1, dto.user1), userOf(dto.userName2, dto.user2)))
     }
 
+    /**
+     * Delete a friendship by its ID
+     * @param id the ID of the friendship
+     * @return the friendship if found, undefined otherwise
+     */
     async deleteById(id: FriendshipID): Promise<Friendship | undefined> {
         try {
             await this.connection!.beginTransaction();
@@ -184,6 +268,10 @@ export class SqlFriendshipRepository extends SqlErrors implements FriendshipRepo
         }
     }
 
+    /**
+     * Find all friendships
+     * @return the array of friendships
+     */
     async findAll(): Promise<Friendship[]> {
         try {
             const result = await this.connection!.execute<FriendshipDTO[]>(FIND_ALL_FRIENDSHIP);
@@ -194,6 +282,11 @@ export class SqlFriendshipRepository extends SqlErrors implements FriendshipRepo
         return [];
     }
 
+    /**
+     * Find a friendship by its ID
+     * @param id the ID of the friendship
+     * @return the friendship if found, undefined otherwise
+     */
     async findByID(id: FriendshipID): Promise<Friendship | undefined> {
         try {
             const result =
@@ -205,6 +298,10 @@ export class SqlFriendshipRepository extends SqlErrors implements FriendshipRepo
         }
     }
 
+    /**
+     * Save a friendship
+     * @param friendship the friendship to save
+     */
     async save(friendship: Friendship): Promise<void> {
         try {
             await this.connection?.execute<ResultSetHeader>(INSERT_FRIENDSHIP, [friendship.user1.email, friendship.user2.email]);
@@ -213,7 +310,10 @@ export class SqlFriendshipRepository extends SqlErrors implements FriendshipRepo
         }
     }
 
-    // this operation is actually a save in this domain
+    /**
+     * Update a friendship
+     * @param friendship the friendship to update
+     */
     async update(friendship: Friendship): Promise<void> {
         try {
             await this.save(friendship);

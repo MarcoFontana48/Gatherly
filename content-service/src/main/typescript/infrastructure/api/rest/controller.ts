@@ -6,13 +6,23 @@ import {ContentService} from "../../../application/service";
 import {NoReferencedRowError} from "../../persistence/sql/sql-errors";
 import {UnableToDelete} from "../../../application/service-errors";
 
+/**
+ * Controller implementation for the content service
+ */
 export class ContentServiceControllerImpl {
     private service: ContentService;
 
+    /**
+     * Constructor
+     * @param service content service
+     */
     constructor(service: ContentService) {
         this.service = service;
     }
 
+    /**
+     * Handler for the SSE endpoint
+     */
     sseHandler = (req: Request, res: Response) => {
         // Set the necessary headers for SSE
         res.setHeader("Content-Type", "text/event-stream");
@@ -32,11 +42,17 @@ export class ContentServiceControllerImpl {
         });
     };
 
+    /**
+     * Handler for the health check endpoint
+     */
     getHealthCheckHandler = (_req: Request, res: Response) => {
         console.log("received health check request")
         res.status(StatusCode.OK).json("OK");
     }
 
+    /**
+     * Handler for the get post from user ID endpoint
+     */
     getPostFromUserId = async (req: Request, res: Response) => {
         try {
             const posts = await this.service.getPostByAuthor(new UserID(req.params.userID));
@@ -46,6 +62,9 @@ export class ContentServiceControllerImpl {
         }
     }
 
+    /**
+     * Handler for the add post endpoint
+     */
     addPostHandler = async (req: Request, res: Response) => {
         const body = req.body;
         if (this.isPost(body)) {
@@ -64,6 +83,9 @@ export class ContentServiceControllerImpl {
         }
     }
 
+    /**
+     * Handler for the get feed from user ID endpoint
+     */
     getFeedFromUserId = async (req: Request, res: Response) => {
         try {
             if(req.query.keyword) {
@@ -82,6 +104,9 @@ export class ContentServiceControllerImpl {
         }
     }
 
+    /**
+     * Handler for the delete post endpoint
+     */
     deletePostHandler = async (req: Request, res: Response)=> {
         try {
             const post = await this.service.deletePost(new PostID(req.params.post), new UserID(req.params.user));
@@ -95,10 +120,18 @@ export class ContentServiceControllerImpl {
         }
     }
 
+    /**
+     * Check if an object is a user
+     * @param obj
+     */
     isUser(obj: any): boolean {
         return "name" in obj && "email" in obj;
     }
 
+    /**
+     * Check if an object is a post
+     * @param obj
+     */
     isPost(obj: any): boolean {
         return "user" in obj && this.isUser(obj.user) && "content" in obj;
     }

@@ -31,17 +31,31 @@ const defaultHandler: Handler =
         }
     }
 
+/**
+ * Kafka consumer class to subscribe to events from Kafka
+ */
 export class KafkaConsumer {
     private readonly consumer;
     readonly emitter;
     private readonly service;
 
+    /**
+     * Constructor
+     * @param kafka kafka instance
+     * @param consumerConfig consumer configuration
+     * @param service content service
+     */
     constructor(kafka: Kafka, consumerConfig: ConsumerConfig, service: ContentService) {
         this.service = service;
         this.emitter = new EventEmitter();
         this.consumer = kafka.consumer(consumerConfig);
     }
 
+    /**
+     * Consume event messages from Kafka
+     * @param subscription subscription topics
+     * @param handler message handler function
+     */
     async consume(subscription = defaultSubscription, handler = defaultHandler) {
         await this.consumer.connect();
         await this.consumer.subscribe(subscription);
@@ -56,8 +70,10 @@ export class KafkaConsumer {
         });
     }
 
+    /**
+     * Stop the consumer
+     */
     async stop() {
         this.consumer.disconnect();
     }
-
 }

@@ -38,10 +38,17 @@ const PostModel = mongoose.model('Post', postSchema);
 const UserModel = mongoose.model('User', userSchema);
 const FriendModel = mongoose.model('Friend', friendSchema);
 
+/**
+ * Abstract MongoDB repository
+ */
 abstract class AbstractMongoRepository {
     protected uri: string | undefined;
     protected connection: Promise<mongoose.Mongoose> | undefined;
 
+    /**
+     * Connect to MongoDB
+     * @param config connection options
+     */
     async connectToMongoDB(config: ConnectionOptions): Promise<void> {
         try {
             // Read the password from the file
@@ -61,11 +68,23 @@ abstract class AbstractMongoRepository {
     }
 }
 
+/**
+ * MongoDB post repository
+ */
 export class MongoPostRepository extends AbstractMongoRepository implements PostRepository {
+
+    /**
+     * Connect to MongoDB
+     * @param config
+     */
     async connect(config: ConnectionOptions): Promise<void> {
         await this.connectToMongoDB(config);
     }
 
+    /**
+     * Save a post to the database
+     * @param post
+     */
     async save(post: Post) {
         console.log(`Saving post: author: ${post.author.email}, content: ${post.content}`);
         if (!this.connection) {
@@ -102,6 +121,11 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
         }
     }
 
+    /**
+     * Delete a post from the database
+     * @param id
+     * @returns the deleted post
+     */
     async deleteById(id: ID<string>): Promise<Post | undefined> {
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
@@ -120,6 +144,10 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             });
     }
 
+    /**
+     * Find all posts in the database
+     * @returns all posts
+     */
     async findAll(): Promise<Post[]> {
         console.log('Finding all posts');
         if (!this.connection) {
@@ -157,6 +185,10 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             });
     }
 
+    /**
+     * Find a post by its ID
+     * @param id the ID of the post
+     */
     async findByID(id: ID<string>): Promise<Post | undefined> {
         console.log(`Finding post by ID: ${id.id}`);
         if (!this.connection) {
@@ -200,6 +232,10 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             });
     }
 
+    /**
+     * Update a post in the database
+     * @param entity
+     */
     async update(entity: Post): Promise<void> {
         console.log(`Updating post: author: ${entity.author.email}, content: ${entity.content}`);
         if (!this.connection) {
@@ -220,6 +256,11 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             });
     }
 
+    /**
+     * Find all posts by user ID
+     * @param id the ID of the user
+     * @returns all posts by the user
+     */
     async findAllPostsByUserID(id: UserID): Promise<Post[]> {
         console.log(`Finding all posts by user ID: ${id.id}`);
         if (!this.connection) {
@@ -255,6 +296,11 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
             });
     }
 
+    /**
+     * Get the feed for a user, based on their friends. The feed contains posts from the user's friends.
+     * @param user
+     * @returns the feed
+     */
     async getFeed(user: User): Promise<Feed> {
         await this.connection;
 
@@ -286,11 +332,22 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
     }
 }
 
+/**
+ * MongoDB user repository
+ */
 export class MongoUserRepository extends AbstractMongoRepository implements UserRepository {
+    /**
+     * Connect to MongoDB
+     * @param config connection options
+     */
     async connect(config: ConnectionOptions): Promise<void> {
         await this.connectToMongoDB(config);
     }
 
+    /**
+     * Save a user to the database
+     * @param user
+     */
     async save (user: User) {
         console.log(`Saving user: email: ${user.email}, userName: ${user.userName}`);
         if (!this.connection) {
@@ -311,6 +368,11 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
             })
     }
 
+    /**
+     * Delete a user from the database
+     * @param id the ID of the user
+     * @returns the deleted user
+     */
     async deleteById(id: ID<string>): Promise<User | undefined> {
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
@@ -346,6 +408,10 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
             });
     }
 
+    /**
+     * Find all users in the database
+     * @returns all users
+     */
     async findAll(): Promise<User[]> {
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
@@ -365,6 +431,11 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
             });
     }
 
+    /**
+     * Find a user by their ID
+     * @param id the ID of the user
+     * @returns the user
+     */
     async findByID(id: ID<string>): Promise<User | undefined> {
         if (!this.connection) {
             throw new TypeError('No active MongoDB connection.');
@@ -391,6 +462,10 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
             });
     }
 
+    /**
+     * Update a user in the database
+     * @param entity the user to update
+     */
     async update(entity: User): Promise<void> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');
@@ -411,11 +486,23 @@ export class MongoUserRepository extends AbstractMongoRepository implements User
     }
 }
 
+/**
+ * MongoDB friendship repository
+ */
 export class MongoFriendshipRepository extends AbstractMongoRepository implements FriendshipRepository {
+    /**
+     * Connect to MongoDB
+     * @param config connection options
+     */
     async connect(config: ConnectionOptions): Promise<void> {
         await this.connectToMongoDB(config);
     }
 
+    /**
+     * Delete a friendship from the database
+     * @param id the ID of the friendship
+     * @returns the deleted friendship
+     */
     async deleteById(id: FriendshipID): Promise<Friendship | undefined> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');
@@ -436,6 +523,10 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
             });
     }
 
+    /**
+     * Find all friendships in the database
+     * @returns all friendships
+     */
     async findAll(): Promise<Friendship[]> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');
@@ -456,6 +547,11 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
             });
     }
 
+    /**
+     * Find a friendship by its ID
+     * @param id the ID of the friendship
+     * @returns the friendship
+     */
     async findByID(id: FriendshipID): Promise<Friendship | undefined> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');
@@ -495,6 +591,10 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
             });
     }
 
+    /**
+     * Save a friendship to the database
+     * @param entity the friendship to save
+     */
     async save(entity: Friendship): Promise<void> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');
@@ -527,6 +627,10 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
             })
     }
 
+    /**
+     * Update a friendship in the database
+     * @param entity the friendship to update
+     */
     async update(entity: Friendship): Promise<void> {
         if (!this.connection) {
             console.error('No active MongoDB connection.');

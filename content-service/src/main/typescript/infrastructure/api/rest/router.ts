@@ -2,6 +2,10 @@ import { Router } from "express";
 import {ContentService} from "../../../application/service";
 import {ContentServiceControllerImpl} from "./controller";
 
+/**
+ * Get the router for the content service
+ * @param service the content service
+ */
 export function getRouter(service: ContentService): Router {
     const controller = new ContentServiceControllerImpl(service);
 
