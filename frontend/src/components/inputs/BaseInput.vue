@@ -23,12 +23,12 @@ watch(inputValue, (newValue) => {
 
 .input-container {
   @include align-horizonally-to(center);
-}
 
-.custom-input {
-  @include default-text-styles($bg-color);
-  @include default-input-form-styles($bg-color);
-  margin-bottom: 1vh;
-  margin-top: 1vh;
+  .custom-input {
+    @include default-text-styles($bg-color);
+    @include default-input-form-styles($bg-color);
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+  }
 }
 </style>

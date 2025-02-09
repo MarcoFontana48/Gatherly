@@ -92,57 +92,41 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
 
 .chat-dialog {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 33vw;
-  background: white;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  max-height: 50vh;
-  overflow-y: auto;
-}
+  @include default-background-styles($bg-color);
+  @include default-chat-style;
 
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-}
+  .chat-header {
+    @include default-chat-header-style;
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.chat-messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 5px;
-  border-bottom: 1px solid #ddd;
-}
-
-.message {
-  margin-bottom: 5px;
-}
-
-.chat-input {
-  @include default-align-items(1vw);
-
-  .send-button {
-    width: 20%;
+    .close-btn {
+      @include cross-close-button;
+    }
   }
 
-  .message-container {
-    width: 80%;
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+
+    .message {
+      @include message-style;
+    }
+  }
+
+  .chat-input {
+    @include default-align-items(1vw);
+
+    .send-button {
+      width: 20%;
+    }
+
+    .message-container {
+      width: 80%;
+    }
   }
 }
 

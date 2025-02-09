@@ -148,12 +148,12 @@ onMounted(() => {
   margin: auto;
   padding: 1%;
   border-radius: 0.5%;
-}
 
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 
 .button-container {

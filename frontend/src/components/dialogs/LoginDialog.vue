@@ -85,7 +85,7 @@ const signUp = async () => {
       <p>Enter your credentials below to login</p>
       <BaseInput v-model="email" type="email" placeholder="Enter your email" />
       <p>
-        <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
+        <ErrorText v-if="errorMessage" :text="errorMessage" />
       </p>
     </template>
     <template #footer>
@@ -103,9 +103,9 @@ const signUp = async () => {
 
 .overlay-dialog {
   background: rgba(0, 0, 0, 1);
-}
 
-.buttons {
-  @include default-align-items(1vw);
+  .buttons {
+    @include default-align-items(1vw);
+  }
 }
 </style>

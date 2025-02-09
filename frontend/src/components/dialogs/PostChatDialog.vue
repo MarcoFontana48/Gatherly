@@ -60,7 +60,7 @@ const closeDialog = () => {
   <div v-if="show" class="post-chat-dialog">
     <div class="chat-header">
       <h5>anonymous global chat for this post</h5>
-      <button class="close-btn" @click="closeDialog">&times;  <!-- cross icon --> </button>
+      <button class="close-btn" @click="closeDialog">&times;</button>
     </div>
     <div class="chat-messages">
       <div v-for="(message, index) in messages" :key="index" class="message">
@@ -82,48 +82,37 @@ const closeDialog = () => {
 
 .post-chat-dialog {
   @include over-background-post-style($bg-color);
-}
 
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .chat-header {
+    @include default-chat-header-style;
 
-.close-btn {
-  @include cross-close-button;
-}
-
-.chat-messages {
-  max-height: 150px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.message {
-  margin-bottom: 5px;
-}
-
-.chat-input {
-  display: flex;
-  gap: 5px;
-
-  .send-button {
-    width: 5%;
-
-    .icon {
-      width: 1.5rem;
-      height: 1.5rem;
+    .close-btn {
+      @include cross-close-button;
     }
   }
-}
 
-.chat-input input {
-  flex-grow: 1;
-  padding: 1%;
-}
+  .chat-messages {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
 
-.chat-input button {
-  padding: 5px 10px;
+    .message {
+      @include message-style;
+    }
+  }
+
+  .chat-input {
+    display: flex;
+    gap: 5px;
+
+    .send-button {
+      width: 5%;
+
+      .icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
 }
 </style>

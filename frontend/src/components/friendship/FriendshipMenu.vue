@@ -257,6 +257,12 @@ onBeforeUnmount(() => {
   align-items: flex-start;
   justify-content: flex-end;
 
+  .friendship-notification-section {
+    justify-content: flex-end;
+    margin: 1vw;
+    overflow-y: auto;
+  }
+
   .side-panel {
     @include side-panel($bg-color);
     padding: 2%;
@@ -265,6 +271,24 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     max-height: 100vh;
+
+    .panel-header {
+      @include panel-header-styles;
+
+      .close-btn {
+        @include default-close-btn-style;
+      }
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        @include align-horizonally-to(center);
+        margin: 1vh;
+      }
+    }
 
     .send-friendship-request-section {
       .input {
@@ -305,30 +329,6 @@ onBeforeUnmount(() => {
       }
     }
   }
-}
-
-.panel-header {
-  @include panel-header-styles;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  @include align-horizonally-to(center);
-  margin: 1vh;
-}
-
-.close-btn {
-  @include default-close-btn-style;
-}
-
-.friendship-notification-section {
-  justify-content: flex-end;
-  margin: 1vw;
-  overflow-y: auto;
 }
 
 @keyframes slide-in {

@@ -28,10 +28,10 @@ const emit = defineEmits(['update:showModal']);
   @include overlay-background;
   @include align-to(center);
   @include default-text-styles($bg-color);
-}
 
-.modal-content {
-  @include default-text-styles($bg-color);
-  @include default-dialog-style($bg-color);
+  .modal-content {
+    @include default-text-styles($bg-color);
+    @include default-dialog-style($bg-color);
+  }
 }
 </style>
