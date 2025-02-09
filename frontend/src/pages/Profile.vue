@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue';
 import UsernameText from '@/components/text/UsernameText.vue';
 import ErrorText from '@/components/text/ErrorText.vue';
 import axios from 'axios';
-import Post from "@/components/feed/Post.vue";
 import ProfilePost from "@/components/feed/ProfilePost.vue";
 
 const email = sessionStorage.getItem('authToken');
@@ -32,7 +31,6 @@ const fetchPosts = async () => {
   }
 };
 
-// Fetch posts when component is mounted
 onMounted(() => {
   fetchPosts();
 });
@@ -43,12 +41,15 @@ onMounted(() => {
     <p v-if="email">
       Your email: <UsernameText :text="email" />
     </p>
-
     <p v-else>
       <ErrorText :text="errorMessage" />
     </p>
-
-    <!-- Display the posts -->
+    <p v-if="posts.length != 1">
+      You currently have {{ posts.length }} posts:
+    </p>
+    <p v-else>
+      You currently have 1 post:
+    </p>
     <div v-if="posts && posts.length" class="post-list">
       <ProfilePost v-for="post in posts" :content="post.content" :id="post.id" :author="email" @postDeleted="fetchPosts" />
     </div>

@@ -14,9 +14,7 @@ const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
 
 type PostType = {
-  g_1: {
-    e_1: string,
-  },
+  id: string,
   author: {
     email: string,
     name: string,
@@ -37,11 +35,15 @@ const openContentDialog = () => {
 const fetchPosts = async () => {
   try {
     console.log('Fetching posts for user:', email.value);
-
     const response = await axios.get(`http://localhost:8082/contents/posts/feed/${email.value}`);
     console.log('Posts:', response.data);
 
-    posts.value = response.data.posts;
+    if (Array.isArray(response.data.posts)) {
+      posts.value = response.data.posts;
+    } else {
+      console.error('Unexpected response structure:', response.data);
+      posts.value = [];
+    }
   } catch (error) {
     console.error('Error fetching posts:', error);
   }
@@ -115,7 +117,7 @@ onMounted(() => {
 <template>
   <div class="feed-container">
     <div v-if="posts.length" class="post-list">
-      <Post v-for="post in posts" :content="post.content" :id="post.g_1.e_1" :author="post.author.email" />
+      <Post v-for="post in posts" :content="post.content" :id="post.id" :author="post.author.email" />
     </div>
     <p v-else>No posts available</p>
   </div>
@@ -150,6 +152,5 @@ onMounted(() => {
 .button-container {
   position: fixed;
   bottom: 5%;
-  width: 5%;
 }
 </style>

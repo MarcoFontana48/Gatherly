@@ -1,5 +1,5 @@
 <template>
-  <span class="error-text">{{ text }}</span>
+  <span class="correct-response-text">{{ text }}</span>
 </template>
 
 <script setup lang="ts">
@@ -15,7 +15,7 @@ defineProps({
 @import "@/styles/mixins";
 @import "@/styles/global";
 
-.error-text {
-  @include error-text-style($bg-color);
+.correct-response-text {
+  @include correct-response-text-style($bg-color);
 }
 </style>

@@ -46,7 +46,7 @@ const closeDialog = () => {
   width: 33%;
   bottom: 16%;
   left: 50%;
-  transform: translateX(-48%);
+  transform: translateX(-50%);
   background: white;
   padding: 2%;
   border-radius: 1%;

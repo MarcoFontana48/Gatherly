@@ -15,6 +15,7 @@ import {validateEmail} from "@/utils/validator.js";
 import {defineSseEventSource} from "@/utils/sse.js";
 import FriendshipNotificationSection from "@/components/friendship/FriendshipNotificationSection.vue";
 import ChatDialog from "@/components/dialogs/ChatDialog.vue";
+import CorrectResponseText from "@/components/text/CorrectResponseText.vue";
 
 const friendships = ref<any[]>([]);
 const friendshipRequests = ref<any[]>([]);
@@ -22,6 +23,7 @@ const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
 const friendEmail = ref("");
 const errorMessage = ref("");
+const correctResponseText = ref("");
 const props = defineProps<{ show: boolean }>();
 const emit = defineEmits<{ (event: "close"): void }>();
 const showChat = ref(false);
@@ -66,6 +68,7 @@ const fetchFriendshipRequests = async () => {
 const sendFriendshipRequest = async () => {
   if (!friendEmail.value) return;
   errorMessage.value = "";
+  correctResponseText.value = "";
 
   if (!validateEmail(friendEmail.value)) {
     errorMessage.value =
@@ -79,6 +82,7 @@ const sendFriendshipRequest = async () => {
       to: friendEmail.value,
     });
     console.log("Friendship request sent:", response.data);
+    correctResponseText.value = "Friendship request sent!";
   } catch (error: any) {
     console.error("Failed to send friendship request:", error);
     errorMessage.value = error.response.data;
@@ -193,10 +197,13 @@ onBeforeUnmount(() => {
         <div class="input">
           <BaseInput v-model="friendEmail" type="email" class="email-input" placeholder="Your friend's email" />
           <NeutralButton @click="sendFriendshipRequest" class="menu-button">Send Request</NeutralButton>
-          <p>
-            <ErrorText v-if="errorMessage" :text="errorMessage" class="error-message" />
-          </p>
         </div>
+        <p>
+          <CorrectResponseText v-if="correctResponseText" :text="correctResponseText" />
+        </p>
+        <p>
+          <ErrorText v-if="errorMessage" :text="errorMessage" />
+        </p>
       </div>
 
       <FriendshipMenuSeparator />

@@ -226,3 +226,21 @@
   @include default-post-style($bg-color, 97%);
   box-shadow: 0 0.2vh 0.2vw rgba(0, 0, 0, 0.1);
 }
+
+@mixin error-text-style($bg-color) {
+  @if $bg-color == red {
+    color: invert($bg-color);
+  } @else {
+    color: mix(red, $bg-color, 90%);
+  }
+  white-space: pre-line;
+}
+
+@mixin correct-response-text-style($bg-color) {
+  @if $bg-color == green {
+    color: invert($bg-color);
+  } @else {
+    color: mix(green, $bg-color, 90%);
+  }
+  white-space: pre-line;
+}
