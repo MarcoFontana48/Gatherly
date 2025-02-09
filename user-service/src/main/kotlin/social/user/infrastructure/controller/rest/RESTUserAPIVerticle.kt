@@ -88,9 +88,9 @@ class RESTUserAPIVerticle(private val service: UserService) : AbstractVerticle()
         val router = Router.router(vertx)
         router.route().handler(
             CorsHandler.create()
-                .addOrigin("http://localhost:5173") // Frontend port (Vue.js)
+                .addOrigin("http://localhost:5173")
                 .allowedMethods(setOf(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS))
-                .allowedHeaders(setOf("Content-Type", "Authorization"))
+                .allowedHeaders(setOf("Content-Type", "Authorization", "Cache-Control"))
         )
         router.route().handler(BodyHandler.create())
 
