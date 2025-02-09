@@ -14,8 +14,7 @@ const emit = defineEmits(['openModal']);
   <nav class="menu-nav">
     <RouterLink v-for="item in menuItems" :key="item.path" :to="item.path">
       <MenuButton @click="item.label === 'Settings' && emit('openModal')">
-        <Icon :src="item.icon" :alt="`${item.label} Icon`" />
-        {{ item.label }}
+        <Icon :src="item.icon" :alt="`${item.label} Icon`" />{{ item.label }}
       </MenuButton>
     </RouterLink>
   </nav>
