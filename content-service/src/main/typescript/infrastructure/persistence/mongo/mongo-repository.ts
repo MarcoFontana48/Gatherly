@@ -279,7 +279,7 @@ export class MongoPostRepository extends AbstractMongoRepository implements Post
         console.log(`Found posts: ${posts}`);
 
         const domainPosts = posts.map((post: any) =>
-            postOf(userOf(post.author.userName, post.author.email), post.content, post._id)
+            postOf(userOf(post.author.userName, post.author), post.content, post._id)
         );
 
         return feedOf(user, domainPosts);
