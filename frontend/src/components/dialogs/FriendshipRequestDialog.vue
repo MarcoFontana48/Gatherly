@@ -10,6 +10,10 @@ defineProps<{
 
 const emit = defineEmits(["accept", "reject", "close"]);
 
+/**
+ * Close the dialog
+ * @param index - Index of the dialog to close
+ */
 const closeDialog = (index: number) => {
   emit("close", index);
 };

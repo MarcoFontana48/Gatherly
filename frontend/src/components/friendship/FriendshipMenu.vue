@@ -31,8 +31,11 @@ const selectedFriendId = ref("");
 const altChatIcon = 'Chat icon';
 
 const events: string[] | undefined = inject("friendshipEvents");
+let eventSource: EventSource | null = null;
 
-// Function to retrieve friendships
+/**
+ * Function to fetch friendships, sends a GET request to the server to retrieve the friendships of the user
+ */
 const fetchFriendships = async () => {
   if (!email.value) return;
 
@@ -47,7 +50,9 @@ const fetchFriendships = async () => {
   }
 };
 
-// Function to retrieve friendship requests
+/**
+ * Function to fetch friendship requests, sends a GET request to the server to retrieve the friendship requests of the user
+ */
 const fetchFriendshipRequests = async () => {
   if (!email.value) return;
 
@@ -64,7 +69,9 @@ const fetchFriendshipRequests = async () => {
   }
 };
 
-// Function to send a friendship request
+/**
+ * Function to send a friendship request, sends a POST request to the server to send a friendship request to a user
+ */
 const sendFriendshipRequest = async () => {
   if (!friendEmail.value) return;
   errorMessage.value = "";
@@ -89,6 +96,9 @@ const sendFriendshipRequest = async () => {
   }
 };
 
+/**
+ * Updates the friendships and friendship requests when the component is shown
+ */
 watch(
     () => [props.show, email],
     ([newShow, newEmail]) => {
@@ -100,11 +110,14 @@ watch(
     { immediate: true }
 );
 
+/**
+ * Watches for events and updates the friendships and friendship requests when a sse event is received
+ */
 watch(email, (newEmail) => {
   if (newEmail) {
-    const eventSource = defineSseEventSource(newEmail, "localhost", "8081");
+    eventSource = defineSseEventSource(newEmail, "localhost", "8081");
 
-    eventSource.onmessage = (event: MessageEvent<any>) => {
+    if (eventSource) eventSource.onmessage = (event: MessageEvent<any>) => {
       console.log(events)
       console.log('Received event:', event.data);
       const data = JSON.parse(event.data);
@@ -113,21 +126,27 @@ watch(email, (newEmail) => {
         fetchFriendships();
       }
     };
-
-    onUnmounted(() => {
-      if (eventSource) {
-        eventSource.close();
-        console.log('EventSource closed');
-      }
-    });
   }
 }, { immediate: true });
 
-// Close the menu when clicking outside
+onUnmounted(() => {
+  if (eventSource) {
+    eventSource.close();
+    console.log('EventSource closed');
+  }
+});
+
+/**
+ * Closes the menu
+ */
 const closeMenu = () => {
   emit("close");
 };
 
+/**
+ * Accepts a friendship request
+ * @param from the user id of the user who sent the request
+ */
 const acceptRequest = async (from: string) => {
   try {
     const payload = {
@@ -149,6 +168,10 @@ const acceptRequest = async (from: string) => {
   }
 };
 
+/**
+ * Declines a friendship request
+ * @param from the user id of the user who sent the request
+ */
 const declineRequest = async (from: string) => {
   try {
     const payload = {
@@ -167,6 +190,10 @@ const declineRequest = async (from: string) => {
   }
 };
 
+/**
+ * Opens a chat with a friend
+ * @param friendId the id of the friend to open a chat with
+ */
 const openChatWith = (friendId: string) => {
   if (selectedFriendId.value === friendId) {
     showChat.value = !showChat.value;
@@ -176,12 +203,19 @@ const openChatWith = (friendId: string) => {
   }
 };
 
+/**
+ * Closes the menu when the user clicks outside of it
+ * @param event the click event
+ */
 onMounted(() => {
   if (props.show) {
     document.addEventListener("click", closeMenu);
   }
 });
 
+/**
+ * Removes the event listener when the component is unmounted
+ */
 onBeforeUnmount(() => {
   document.removeEventListener("click", closeMenu);
 });

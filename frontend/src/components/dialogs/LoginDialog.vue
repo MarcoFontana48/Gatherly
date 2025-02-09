@@ -17,11 +17,17 @@ const router = useRouter();
 const authStore = useAuthStore();
 const matchingEmailError = "No matching email found. Please try again.";
 
+/**
+ * Authenticate user and redirect to home page
+ */
 async function authenticate() {
   authStore.setAuthToken(email.value);
   await router.push("/home");
 }
 
+/**
+ * Login user with email
+ */
 const login = async () => {
   console.log("login function called");
 
@@ -48,6 +54,9 @@ const login = async () => {
   }
 };
 
+/**
+ * Sign up user with email
+ */
 const signUp = async () => {
   console.log("sign up function called");
 

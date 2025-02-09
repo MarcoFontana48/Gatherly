@@ -32,6 +32,11 @@ const openContentDialog = () => {
   showContentDialog.value = true;
 };
 
+let eventSource: EventSource | null = null;
+
+/**
+ * Fetches posts from the server sending a GET request to the server
+ */
 const fetchPosts = async () => {
   try {
     console.log('Fetching posts for user:', email.value);
@@ -49,6 +54,9 @@ const fetchPosts = async () => {
   }
 };
 
+/**
+ * Adds a new post to the server sending a POST request
+ */
 const addPost = async () => {
   if (newPostContent.value.trim()) {
     const postData = {
@@ -78,6 +86,9 @@ const addPost = async () => {
   newPostContent.value = '';
 };
 
+/**
+ * Toggles the visibility of the dialogs
+ */
 const toggleDialogs = () => {
   if (showDialog.value || showContentDialog.value) {
     showDialog.value = false;
@@ -87,10 +98,13 @@ const toggleDialogs = () => {
   }
 };
 
+/**
+ * Starts the SSE connection to listen for new posts
+ */
 const startSSE = () => {
-  const eventSource = defineSseEventSource(email.value, 'localhost', '8082');
+  eventSource = defineSseEventSource(email.value, 'localhost', '8082');
 
-  eventSource.onmessage = (event: MessageEvent<any>) => {
+  if (eventSource) eventSource.onmessage = (event: MessageEvent<any>) => {
     console.log('Received event:', event.data);
 
     try {
@@ -106,15 +120,21 @@ const startSSE = () => {
       console.error('Error parsing SSE data:', error);
     }
   };
-
-  onUnmounted(() => {
-    if (eventSource) {
-      eventSource.close();
-      console.log('EventSource closed');
-    }
-  });
 };
 
+/**
+ * Closes the SSE connection when the component is unmounted
+ */
+onUnmounted(() => {
+  if (eventSource) {
+    eventSource.close();
+    console.log('EventSource closed');
+  }
+});
+
+/**
+ * Fetch posts and start SSE connection when component is mounted
+ */
 onMounted(() => {
   fetchPosts();
   startSSE();

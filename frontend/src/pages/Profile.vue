@@ -8,9 +8,11 @@ import ProfilePost from "@/components/feed/ProfilePost.vue";
 const email = sessionStorage.getItem('authToken');
 const errorMessage = 'No email found';
 
-// Ref to store fetched posts
 const posts = ref<any[]>([]);
 
+/**
+ * Fetch posts of the user from the server sending a GET request
+ */
 const fetchPosts = async () => {
   if (email) {
     try {
@@ -31,6 +33,9 @@ const fetchPosts = async () => {
   }
 };
 
+/**
+ * Fetch posts when the component is mounted
+ */
 onMounted(() => {
   fetchPosts();
 });

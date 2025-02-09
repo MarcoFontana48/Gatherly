@@ -11,6 +11,9 @@ const showDropdown = ref(false);
 
 provide("friendshipEvents", friendshipEvents.value);
 
+/**
+ * Toggles the visibility of the friendship dropdown menu
+ */
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value;
 };

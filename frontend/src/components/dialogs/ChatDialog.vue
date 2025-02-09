@@ -13,11 +13,17 @@ const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
 const socket = ref<WebSocket | null>(null);
 
+/**
+ * Clear chat messages and input field
+ */
 function clearChat() {
   messages.value = [];
   newMessage.value = "";
 }
 
+/**
+ * Send a message to friend via WebSocket
+ */
 const sendMessage = () => {
   if (!newMessage.value.trim()) return;
 
@@ -36,16 +42,25 @@ const sendMessage = () => {
   }
 };
 
+/**
+ * Clear chat messages when dialog is opened
+ */
 watch(() => [props.show, props.friendId], ([newShow, _]) => {
   if (newShow) {
     clearChat();
   }
 }, { immediate: true });
 
+/**
+ * Close the chat dialog
+ */
 const closeDialog = () => {
   emit("close");
 };
 
+/**
+ * Create WebSocket connection when component is mounted
+ */
 onMounted(() => {
   const userId = email.value;
   socket.value = new WebSocket(`ws://localhost:8081?id=${userId}`);
@@ -63,6 +78,9 @@ onMounted(() => {
   };
 });
 
+/**
+ * Close WebSocket connection when component is unmounted
+ */
 onBeforeUnmount(() => {
   socket.value?.close();
 });

@@ -14,6 +14,9 @@ defineProps<{
 
 const emit = defineEmits(["update:show", "confirm", "update:modelValue"]);
 
+/**
+ * Close the dialog
+ */
 const closeDialog = () => {
   emit("update:show", false);
 };

@@ -12,6 +12,12 @@ const email = computed(() => authStore.authToken);
 const friendRequests = ref<{ senderId: string; id: number }[]>([]);
 const friendshipNotifications = ref<{ message: string; id: number }[]>([]);
 
+let eventSource: EventSource | null = null;
+
+/**
+ * Accept a friendship request
+ * @param index - Index of the request to accept
+ */
 const acceptRequest = async (index: number) => {
   try {
     const request = friendRequests.value[index];
@@ -27,6 +33,10 @@ const acceptRequest = async (index: number) => {
   }
 };
 
+/**
+ * Deny a friendship request
+ * @param index - Index of the request to deny
+ */
 const denyRequest = async (index: number) => {
   try {
     const request = friendRequests.value[index];
@@ -42,16 +52,23 @@ const denyRequest = async (index: number) => {
   }
 };
 
+/**
+ * Close a notification
+ * @param index - Index of the notification to close
+ */
 const closeNotification = (index: number) => {
   friendshipNotifications.value.splice(index, 1);
 };
 
+/**
+ * Listens for friendship events via SSE and updates the UI accordingly
+ */
 watch(email, (newEmail) => {
   if (!newEmail) return;
 
-  const eventSource = defineSseEventSource(newEmail, "localhost", "8081");
+  eventSource = defineSseEventSource(newEmail, "localhost", "8081");
 
-  eventSource.onmessage = (event: MessageEvent<any>) => {
+  if (eventSource) eventSource.onmessage = (event: MessageEvent<any>) => {
     console.log('Received event:', event.data);
     const data = JSON.parse(event.data);
 
@@ -74,15 +91,15 @@ watch(email, (newEmail) => {
         addWithTimeout(friendshipNotifications.value, { message, id: Date.now() }, 5000);
         break;
     }
-
-    onUnmounted(() => {
-      if (eventSource) {
-        eventSource.close();
-        console.log('EventSource closed');
-      }
-    });
   };
 }, { immediate: true });
+
+onUnmounted(() => {
+  if (eventSource) {
+    eventSource.close();
+    console.log('EventSource closed');
+  }
+});
 </script>
 
 <template>

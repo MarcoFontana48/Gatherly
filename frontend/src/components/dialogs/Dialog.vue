@@ -7,6 +7,9 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:showModal']);
 
+/**
+ * Close the modal dialog
+ */
 const closeModal = () => {
   emit('update:showModal', false);
 };

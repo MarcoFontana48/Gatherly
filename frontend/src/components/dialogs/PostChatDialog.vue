@@ -18,6 +18,9 @@ const altSendIcon = 'Send message icon';
 
 let socket: Socket;
 
+/**
+ * Joins the chat room via WebSocket and listens for new messages
+ */
 onMounted(() => {
   socket = io('http://localhost:8082');
 
@@ -30,6 +33,9 @@ onMounted(() => {
   });
 });
 
+/**
+ * Disconnects from the WebSocket when the dialog is closed
+ */
 onBeforeUnmount(() => {
   if (socket) {
     socket.disconnect();
@@ -37,6 +43,9 @@ onBeforeUnmount(() => {
   }
 });
 
+/**
+ * Send a message to the chat room via WebSocket
+ */
 const sendMessage = () => {
   if (!newMessage.value.trim()) return;
 
@@ -51,6 +60,9 @@ const sendMessage = () => {
   newMessage.value = '';
 };
 
+/**
+ * Close the chat dialog
+ */
 const closeDialog = () => {
   emit('close');
 };

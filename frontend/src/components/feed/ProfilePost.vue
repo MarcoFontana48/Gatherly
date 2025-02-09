@@ -15,6 +15,9 @@ const props = defineProps<{
 
 const emit = defineEmits(['postDeleted']);
 
+/**
+ * Deletes the post from the database sending a DELETE request to the server
+ */
 const handleDelete = async () => {
   try {
     await axios.delete(`http://localhost:8082/contents/posts/${props.author}/${props.id}`);
