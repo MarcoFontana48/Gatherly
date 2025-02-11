@@ -152,7 +152,12 @@ onMounted(() => {
     <div v-if="posts.length" class="post-list">
       <Post v-for="post in posts" :content="post.content" :id="post.id" :author="post.author.email" />
     </div>
-    <p v-else>No posts available</p>
+    <p v-else style="text-align: center;">
+      Your feed is currently empty
+<!--      , posts will appear here as your friends create them.-->
+<!--      <br><br>-->
+<!--      Why not add a post yourself? Just click the button above!-->
+    </p>
   </div>
 
   <PostDialog :show="showDialog" title="Add a new post" body-text="Do you want to add a new post?" @update:show="showDialog = $event" @confirm="openContentDialog" />
@@ -166,9 +171,9 @@ onMounted(() => {
 .feed-container {
   @include default-text-styles($bg-color);
   width: 95%;
-  margin: auto;
   padding: 1%;
   border-radius: 0.5%;
+  margin-top: 20%;
 
   .post-list {
     display: flex;
@@ -179,5 +184,9 @@ onMounted(() => {
 
 .button-container {
   top: 6%;
+  position: fixed;
+
+  background-color: $bg-color;
+  padding: 0.2%;
 }
 </style>
