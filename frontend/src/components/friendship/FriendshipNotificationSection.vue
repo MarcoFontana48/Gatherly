@@ -14,6 +14,11 @@ const friendshipNotifications = ref<{ message: string; id: number }[]>([]);
 
 let eventSource: EventSource | null = null;
 
+// friendRequests.value = [{
+//   senderId: "test@gmail.com",
+//   id: 1,
+// }];
+
 /**
  * Accept a friendship request
  * @param index - Index of the request to accept

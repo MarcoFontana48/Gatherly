@@ -15,7 +15,7 @@ import BaseButton from './BaseButton.vue';
 .neutral-button {
   $button-bg-color: $bg-color;
 
-  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, invert($button-bg-color));
+  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, invert($bg-color));
   @include default-text-styles($button-bg-color);
   @include default-background-styles($button-bg-color);
   @include align-horizonally-to(center);

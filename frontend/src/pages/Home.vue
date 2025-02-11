@@ -142,16 +142,17 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="button-container">
+    <NeutralButton @click="toggleDialogs">
+      <Icon :src="plusIcon" :alt="altAddIcon" />
+    </NeutralButton>
+  </div>
+
   <div class="feed-container">
     <div v-if="posts.length" class="post-list">
       <Post v-for="post in posts" :content="post.content" :id="post.id" :author="post.author.email" />
     </div>
     <p v-else>No posts available</p>
-  </div>
-  <div class="button-container">
-    <NeutralButton @click="toggleDialogs">
-      <Icon :src="plusIcon" :alt="altAddIcon" />
-    </NeutralButton>
   </div>
 
   <PostDialog :show="showDialog" title="Add a new post" body-text="Do you want to add a new post?" @update:show="showDialog = $event" @confirm="openContentDialog" />
@@ -177,7 +178,6 @@ onMounted(() => {
 }
 
 .button-container {
-  position: fixed;
-  bottom: 5%;
+  top: 6%;
 }
 </style>

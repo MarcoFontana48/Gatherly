@@ -39,7 +39,7 @@ const props = defineProps<{
 @import "@/styles/global";
 
 .post-container {
-  @include default-post-style($bg-color, 85%);
+  @include default-post-style(cyan, 85%);
   @include display-vertically;
 
   .post-content-container {
