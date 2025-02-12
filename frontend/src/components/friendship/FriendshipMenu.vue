@@ -312,6 +312,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     max-height: 100vh;
+    height: 100vh;
 
     @media (max-width: $mobile-screen-size) {
       max-width: 96%;
