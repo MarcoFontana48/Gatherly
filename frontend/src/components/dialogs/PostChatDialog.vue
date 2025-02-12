@@ -115,7 +115,6 @@ const closeDialog = () => {
 
   .chat-input {
     display: flex;
-    gap: 5px;
 
     .send-button {
       width: 5%;

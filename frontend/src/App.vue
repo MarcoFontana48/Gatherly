@@ -26,17 +26,27 @@ const route = useRoute();
 
 <template>
   <div class="app-container">
-    <div v-if="route.path !== '/login'" class="left-column">
+    <div v-if="route.path !== '/login'" class="sidebar left-column">
       <MenuNav :menuItems="menuItems" @openModal="toggleModal" />
     </div>
+
     <div class="center-column">
       <RouterView />
     </div>
-    <div v-if="route.path !== '/login'" class="right-column">
+
+    <div v-if="route.path !== '/login'" class="sidebar right-column">
       <FriendshipSection />
     </div>
 
-    <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />
+    <div class="settings-dialog-container">
+      <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div v-if="route.path !== '/login'" class="mobile-nav">
+      <MenuNav :menuItems="menuItems" @openModal="toggleModal" />
+      <FriendshipSection />
+    </div>
   </div>
 </template>
 
@@ -45,20 +55,59 @@ const route = useRoute();
 @import "@/styles/global.scss";
 
 .app-container {
+  display: flex;
+  height: 100vh;
   @include default-app-style($bg-color);
+
+  @media (max-width: $mobile-screen-size) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  // Left & Right Columns (Hide on Mobile)
+  .left-column, .right-column {
+    width: 20%;
+    padding: 2.5vw;
+    flex: none;
+
+    @media (max-width: $mobile-screen-size) {
+      display: none;  // Hide on mobile
+    }
+  }
+
+  // Center Column (Takes Full Width on Mobile)
+  .center-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+
+    @media (max-width: $mobile-screen-size) {
+      width: 100%;
+    }
+  }
+
+  // Mobile Navigation (Show Only on Small Screens)
+  .mobile-nav {
+    display: none; // Hidden by default (desktop)
+
+    @media (max-width: $mobile-screen-size) {
+      display: flex; // Show on mobile
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: $bg-color;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .settings-dialog-container {
+    max-width: 20%;
+  }
 }
 
-.left-column {
-  @include default-column-style(flex-start);
-  @include align-to(flex-start);
-}
-
-.center-column {
-  @include default-column-style(center);
-}
-
-.right-column {
-  @include default-column-style(flex-end);
-  @include align-to(flex-end);
-}
 </style>

@@ -224,7 +224,9 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="show" class="overlay" @click.stop="closeMenu">
     <FriendshipNotificationSection class="friendship-notification-section" @click.stop />
-    <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
+    <div class="desktop-chat-dialog">
+      <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
+    </div>
 
     <div class="side-panel" @click.stop>
       <div class="panel-header">
@@ -276,6 +278,10 @@ onBeforeUnmount(() => {
           </div>
         </li>
       </ul>
+
+      <div class="mobile-chat-dialog">
+        <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
+      </div>
     </div>
   </div>
 </template>
@@ -305,6 +311,17 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     max-height: 100vh;
+
+    @media (max-width: $mobile-screen-size) {
+      max-width: 96%;
+      max-height: 100%;
+      height: 100vh;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: $bg-color;
+    }
 
     .panel-header {
       @include panel-header-styles;
@@ -361,6 +378,25 @@ onBeforeUnmount(() => {
       .chat-button {
         max-width: 50%;
       }
+    }
+
+    .mobile-chat-dialog {
+      @include default-chat-style;
+      width: 95%;
+      bottom: 2%;
+
+      @media (min-width: $mobile-screen-size) {
+        display: none;
+      }
+    }
+  }
+
+  .desktop-chat-dialog {
+    @include default-chat-style;
+    @include default-background-styles($bg-color);
+
+    @media (max-width: $mobile-screen-size) {
+      display: none;
     }
   }
 }

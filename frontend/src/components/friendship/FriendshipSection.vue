@@ -21,11 +21,12 @@ const toggleDropdown = () => {
 
 <template>
   <div class="friendship-container">
-    <MenuButton @click="toggleDropdown">
-      Friends
+    <MenuButton @click="toggleDropdown" class="friendship-button">
       <Icon :src="friendsIcon" alt="Friends Icon" />
+      <span class="menu-label">Friends</span>
     </MenuButton>
   </div>
+
   <div class="notifications-container">
     <FriendshipNotificationSection />
   </div>
@@ -35,11 +36,37 @@ const toggleDropdown = () => {
 
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
+@import "@/styles/global.scss";
 
 .friendship-container {
-  @include display-vertically;
-  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   top: 5%;
+
+  @media (max-width: $mobile-screen-size) {
+    flex-direction: row;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: $bg-color;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.menu-label {
+  @media (max-width: $mobile-screen-size) {
+    display: none;
+  }
+}
+
+.friendship-button {
+  @media (max-width: $mobile-screen-size) {
+    margin-left: auto;
+  }
 }
 
 .notifications-container {

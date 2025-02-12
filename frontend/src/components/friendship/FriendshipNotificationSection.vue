@@ -14,6 +14,7 @@ const friendshipNotifications = ref<{ message: string; id: number }[]>([]);
 
 let eventSource: EventSource | null = null;
 
+// example notification
 // friendRequests.value = [{
 //   senderId: "test@gmail.com",
 //   id: 1,
@@ -119,6 +120,7 @@ onUnmounted(() => {
 
 .friendship-requests {
   @include align-vertically-to(flex-start);
+  margin: 10px;
 }
 
 </style>

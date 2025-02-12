@@ -160,8 +160,10 @@ onMounted(() => {
     </p>
   </div>
 
-  <PostDialog :show="showDialog" title="Add a new post" body-text="Do you want to add a new post?" @update:show="showDialog = $event" @confirm="openContentDialog" />
-  <PostDialog :show="showContentDialog" title="Write your post" input v-model="newPostContent" @update:show="showContentDialog = $event" @confirm="addPost" />
+  <div class="post-dialog-container">
+    <PostDialog :show="showDialog" title="Add a new post" body-text="Do you want to add a new post?" @update:show="showDialog = $event" @confirm="openContentDialog" />
+    <PostDialog :show="showContentDialog" title="Write your post" input v-model="newPostContent" @update:show="showContentDialog = $event" @confirm="addPost" />
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -183,10 +185,17 @@ onMounted(() => {
 }
 
 .button-container {
-  top: 6%;
+  top: 2%;
   position: fixed;
 
   background-color: $bg-color;
   padding: 0.2%;
+}
+
+.post-dialog-container {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

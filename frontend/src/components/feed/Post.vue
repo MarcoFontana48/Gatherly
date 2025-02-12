@@ -53,13 +53,19 @@ const props = defineProps<{
     width: 2%;
 
     .icon {
-      width: 1.5rem;
-      height: 1.5rem;
+      @media (max-width: $mobile-screen-size) {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+      @media (min-width: $mobile-screen-size) {
+        width: 1.7rem;
+        height: 1.7rem;
+      }
     }
   }
 
   .post-chat-dialog-container {
-    padding: 2%;
+    padding: 1%;
   }
 }
 

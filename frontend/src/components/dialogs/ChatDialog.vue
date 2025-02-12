@@ -4,6 +4,8 @@ import BaseInput from "@/components/inputs/BaseInput.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import {useAuthStore} from "@/utils/auth.ts";
 import UsernameText from "@/components/text/UsernameText.vue";
+import Icon from "@/components/images/Icon.vue";
+import sendIcon from "@/assets/paper-plane-solid.svg";
 
 const props = defineProps<{ show: boolean; friendId: string }>();
 const emit = defineEmits<{ (event: "close"): void }>();
@@ -12,7 +14,7 @@ const newMessage = ref("");
 const authStore = useAuthStore();
 const email = computed(() => authStore.authToken);
 const socket = ref<WebSocket | null>(null);
-
+const altSendIcon = "Send message icon";
 /**
  * Clear chat messages and input field
  */
@@ -102,7 +104,9 @@ onBeforeUnmount(() => {
       </div>
       <div class="chat-input">
         <BaseInput v-model="newMessage" placeholder="Type a message..." class="message-container"/>
-        <NeutralButton @click="sendMessage" class="send-button">Send</NeutralButton>
+        <NeutralButton @click="sendMessage" class="send-button">
+          <Icon :src="sendIcon" :alt="altSendIcon" class="icon"/>
+        </NeutralButton>
       </div>
     </div>
   </transition>
@@ -114,7 +118,6 @@ onBeforeUnmount(() => {
 
 .chat-dialog {
   @include default-background-styles($bg-color);
-  @include default-chat-style;
 
   .chat-header {
     @include default-chat-header-style;
