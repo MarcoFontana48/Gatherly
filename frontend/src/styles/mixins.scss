@@ -188,7 +188,6 @@
   display: flex;
   justify-content: space-between;
   gap: $gap;
-  width: 100%;
 }
 
 @mixin default-input-form-styles($bg-color) {

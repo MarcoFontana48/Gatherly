@@ -55,17 +55,17 @@ const toggleDropdown = () => {
     padding: 10px 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
-}
 
-.menu-label {
-  @media (max-width: $mobile-screen-size) {
-    display: none;
-  }
-}
+  .friendship-button {
+    @media (max-width: $mobile-screen-size) {
+      margin-left: auto;
+    }
 
-.friendship-button {
-  @media (max-width: $mobile-screen-size) {
-    margin-left: auto;
+    .menu-label {
+      @media (max-width: $mobile-screen-size) {
+        display: none;
+      }
+    }
   }
 }
 
