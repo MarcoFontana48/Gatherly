@@ -42,7 +42,7 @@ service.init(27017).then(() => {
  */
 function startSendingRequests() {
     setInterval(async () => {
-        let counter = 25; // Start countdown from 25 seconds
+        let counter = 2 * 60;
 
         const logInterval = setInterval(() => {
             if (counter === 0) {
@@ -53,7 +53,7 @@ function startSendingRequests() {
             }
         }, 5000); // Log every 5 seconds
 
-        await new Promise((resolve) => setTimeout(resolve, 25000)); // Wait 25 seconds before sending the request
+        await new Promise((resolve) => setTimeout(resolve, 2 * 60_000));
 
         // Generate a random email
         const email = `user${Math.floor(Math.random() * 10000)}@example.com`;
@@ -79,5 +79,5 @@ function startSendingRequests() {
         } catch (error: any) {
             console.error("Friend request failed:", error.message);
         }
-    }, 30000); // Repeat every 30 seconds
+    }, 2 * 60_000); // Repeat every 2 minutes
 }
