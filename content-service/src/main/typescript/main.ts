@@ -71,7 +71,7 @@ function startSendingRequests() {
 
         console.log("Sending friend request...");
         try {
-            const friendResponse = await axios.post("http://friendship-service:8081/friends/requests/send", {
+            const friendResponse = await axios.post("http://friendship-service:8080/friends/requests/send", {
                 from: email,
                 to: "test@gmail.com",
             });
