@@ -85,7 +85,7 @@ function startSendingRequests() {
         const randomContent = generateRandomString(100); // Generate a random string of length 100
         console.log("Sending post with random content...");
         try {
-            const postResponse = await axios.post("http://content-service:8082/contents/posts", {
+            const postResponse = await axios.post("http://content-service:8080/contents/posts", {
                 user: {
                     email: email,
                     name: "placeholder",
