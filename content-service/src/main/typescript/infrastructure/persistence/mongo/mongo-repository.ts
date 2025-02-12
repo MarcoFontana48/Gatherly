@@ -51,11 +51,11 @@ abstract class AbstractMongoRepository {
      */
     async connectToMongoDB(config: ConnectionOptions): Promise<void> {
         try {
-            // Read the password from the file
-            // const password = (await fs.readFile('db-root-password.txt', 'utf-8')).trim();
+            // Read the password from the Docker secret file
+            const password = (await fs.readFile('/run/secrets/db_root_password', 'utf-8')).trim();
 
             // MongoDB URI with authentication
-            this.uri = `mongodb://root:${encodeURIComponent("111")}@content-mongo-repository:${config.port}/content?authSource=admin`;
+            this.uri = `mongodb://root:${encodeURIComponent(password)}@content-mongo-repository:${config.port}/content?authSource=admin`;
 
             // Connect to the database
             this.connection = mongoose.connect(this.uri);
