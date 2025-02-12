@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch, computed, onUnmounted} from 'vue';
+import {ref, watch, computed, onUnmounted, defineEmits} from 'vue';
 import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 import FriendshipNotificationDialog from "@/components/dialogs/FriendshipNotificationDialog.vue";
 import axios from 'axios';
@@ -14,11 +14,7 @@ const friendshipNotifications = ref<{ message: string; id: number }[]>([]);
 
 let eventSource: EventSource | null = null;
 
-// example notification
-// friendRequests.value = [{
-//   senderId: "test@gmail.com",
-//   id: 1,
-// }];
+const emit = defineEmits(['refreshFriendships']);
 
 /**
  * Accept a friendship request
@@ -34,6 +30,9 @@ const acceptRequest = async (index: number) => {
     });
 
     friendRequests.value.splice(index, 1);
+
+    // emit event to the parent component to call fetchFriendships in order to update the UI
+    emit('refreshFriendships');
   } catch (error) {
     console.error('Error accepting friendship request:', error);
   }

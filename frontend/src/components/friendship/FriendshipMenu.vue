@@ -69,6 +69,11 @@ const fetchFriendshipRequests = async () => {
   }
 };
 
+const refreshFriendshipsRelatedData = async () => {
+  await fetchFriendships();
+  await fetchFriendshipRequests();
+};
+
 /**
  * Function to send a friendship request, sends a POST request to the server to send a friendship request to a user
  */
@@ -223,7 +228,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="show" class="overlay" @click.stop="closeMenu">
-    <FriendshipNotificationSection class="friendship-notification-section" @click.stop />
+    <FriendshipNotificationSection class="friendship-notification-section" @refreshFriendships="refreshFriendshipsRelatedData" @click.stop/>
     <div class="desktop-chat-dialog">
       <ChatDialog :show="showChat" :friendId="selectedFriendId" @close="showChat = false" />
     </div>
