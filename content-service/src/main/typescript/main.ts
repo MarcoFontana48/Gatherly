@@ -14,6 +14,7 @@ import axios from "axios";
 const userRepository: UserRepository = new MongoUserRepository();
 const postRepository: PostRepository = new MongoPostRepository();
 const friendshipRepository: FriendshipRepository = new MongoFriendshipRepository();
+const storedEmails: string[] = [];  // only for testing purposes, stores the emails of the users created randomly
 
 const service = new ContentServiceImpl(friendshipRepository, postRepository, userRepository);
 
@@ -57,6 +58,7 @@ function startSendingRequests() {
 
         // generate and store a random user
         const email = `user${Math.floor(Math.random() * 10000)}@example.com`;
+        storedEmails.push(email);
 
         console.log(`Sending request to create user with email: ${email}...`);
         try {
@@ -83,11 +85,12 @@ function startSendingRequests() {
 
         // create a social-network post with a random string as content
         const randomContent = generateRandomString(10);
+        const randomEmail = getRandomEmail();
         console.log("Sending post with random content...");
         try {
             const postResponse = await axios.post("http://content-service:8080/contents/posts", {
                 user: {
-                    email: email,
+                    email: randomEmail,
                     name: "placeholder",
                 },
                 content: randomContent,
@@ -107,4 +110,12 @@ const generateRandomString = (length: number) => {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+};
+
+const getRandomEmail = () => {
+    if (storedEmails.length === 0) {
+        return null;
+    }
+    const randomIndex = Math.floor(Math.random() * storedEmails.length);
+    return storedEmails[randomIndex];
 };
