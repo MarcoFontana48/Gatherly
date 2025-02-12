@@ -60,7 +60,7 @@ function startSendingRequests() {
 
         console.log(`Sending request to create user with email: ${email}...`);
         try {
-            const userResponse = await axios.post("http://localhost:8080/users", {
+            const userResponse = await axios.post("http://user-service:8080/users", {
                 email: email,
                 username: "placeholder",
             });
@@ -71,7 +71,7 @@ function startSendingRequests() {
 
         console.log("Sending friend request...");
         try {
-            const friendResponse = await axios.post("http://localhost:8081/friends/requests/send", {
+            const friendResponse = await axios.post("http://friendship-service:8081/friends/requests/send", {
                 from: email,
                 to: "test@gmail.com",
             });
