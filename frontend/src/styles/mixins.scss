@@ -137,8 +137,6 @@
 }
 
 @mixin side-panel($bg-color) {
-  width: 30vw;
-  height: 100vh;
   background: $bg-color;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -260,9 +258,6 @@
 }
 
 @mixin default-chat-style {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 33vw;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -283,4 +278,13 @@
 
 @mixin message-style {
   margin-bottom: 5px;
+}
+
+@mixin break-word-and-ellipsis {
+  flex-grow: 1;
+  min-width: 0;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }

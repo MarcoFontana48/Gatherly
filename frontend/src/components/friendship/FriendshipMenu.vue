@@ -251,7 +251,7 @@ onBeforeUnmount(() => {
       <FriendshipMenuSeparator />
 
       <FriendshipMenuSection title="Pending received friendship requests" />
-      <ul>
+      <ul class="request-list">
         <li v-for="request in friendshipRequests" :key="request.id" class="friendship-request-section">
           <div class="friend-name-text-container">
             {{ request.from.id.value }}
@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
       <FriendshipMenuSeparator />
 
       <FriendshipMenuSection title="Your friends" />
-      <ul>
+      <ul class="friend-list">
         <li v-for="friendship in friendships" :key="friendship.id" class="friendship-section">
           <div class="friend-name-text-container">
             {{ friendship.id.value }}
@@ -301,6 +301,7 @@ onBeforeUnmount(() => {
     justify-content: flex-end;
     margin: 1vw;
     overflow-y: auto;
+    width: 25%;
   }
 
   .side-panel {
@@ -358,6 +359,7 @@ onBeforeUnmount(() => {
       @include default-align-items(1%);
 
       .friend-name-text-container {
+        @include break-word-and-ellipsis;
         max-width: 50%;
       }
 
@@ -365,6 +367,7 @@ onBeforeUnmount(() => {
         @include align-horizonally-to(center);
         gap: 1%;
         max-width: 50%;
+        margin-right: 2%
       }
     }
 
@@ -372,11 +375,13 @@ onBeforeUnmount(() => {
       @include default-align-items(1%);
 
       .friend-name-text-container {
+        @include break-word-and-ellipsis;
         max-width: 50%;
       }
 
       .chat-button {
         max-width: 50%;
+        margin-right: 2%
       }
     }
 
@@ -384,6 +389,8 @@ onBeforeUnmount(() => {
       @include default-chat-style;
       width: 95%;
       bottom: 2%;
+      position: fixed;
+      left: 0;
 
       @media (min-width: $mobile-screen-size) {
         display: none;
@@ -394,12 +401,21 @@ onBeforeUnmount(() => {
   .desktop-chat-dialog {
     @include default-chat-style;
     @include default-background-styles($bg-color);
+    position: fixed;
+    bottom: 0;
+    left: 0;
 
     @media (max-width: $mobile-screen-size) {
       display: none;
     }
   }
 }
+
+.friend-list, .request-list {
+  max-height: 25vh;
+  overflow-y: auto;
+}
+
 
 @keyframes slide-in {
   from {

@@ -120,7 +120,7 @@ onUnmounted(() => {
 
 .friendship-requests {
   @include align-vertically-to(flex-start);
-  margin: 10px;
+  margin-right: 5%;
 }
 
 </style>
