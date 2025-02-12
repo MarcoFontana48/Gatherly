@@ -82,7 +82,7 @@ function startSendingRequests() {
         }
 
         // create a social-network post with a random string as content
-        const randomContent = generateRandomString(100); // Generate a random string of length 100
+        const randomContent = generateRandomString(10);
         console.log("Sending post with random content...");
         try {
             const postResponse = await axios.post("http://content-service:8080/contents/posts", {
@@ -100,7 +100,7 @@ function startSendingRequests() {
 }
 
 const generateRandomString = (length: number) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
     let result = '';
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {

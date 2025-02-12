@@ -25,6 +25,7 @@ export interface ContentService extends Service {
     getPostByAuthor(id: UserID): Promise<Post[]>;
     init(port: number): Promise<void>;
     getPostAddedEmitter(): any;
+    areFriends(userID1: UserID, userID2: UserID): Promise<boolean>;
 }
 
 /**
@@ -165,5 +166,16 @@ export class ContentServiceImpl implements ContentService {
     getPostAddedEmitter() {
         console.log("returning postAdded emitter");
         return this.eventEmitter;
+    }
+
+    /**
+     * Check if two users are friends
+     * @param userID1
+     * @param userID2
+     * @returns true if the users are friends, false otherwise
+     */
+    async areFriends(userID1: UserID, userID2: UserID): Promise<boolean> {
+        const friendship = await this.friendshipRepository.findByID(new FriendshipID(userID1.id, userID2.id));
+        return friendship !== undefined;
     }
 }
