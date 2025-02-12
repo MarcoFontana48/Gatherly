@@ -55,7 +55,7 @@ function startSendingRequests() {
 
         await new Promise((resolve) => setTimeout(resolve, 2 * 60_000));
 
-        // Generate a random email
+        // generate and store a random user
         const email = `user${Math.floor(Math.random() * 10000)}@example.com`;
 
         console.log(`Sending request to create user with email: ${email}...`);
@@ -69,6 +69,7 @@ function startSendingRequests() {
             console.error("User creation request failed:", error.message);
         }
 
+        // send a friend request to 'test@gmail.com'
         console.log("Sending friend request...");
         try {
             const friendResponse = await axios.post("http://friendship-service:8080/friends/requests/send", {
@@ -79,5 +80,31 @@ function startSendingRequests() {
         } catch (error: any) {
             console.error("Friend request failed:", error.message);
         }
+
+        // create a social-network post with a random string as content
+        const randomContent = generateRandomString(100); // Generate a random string of length 100
+        console.log("Sending post with random content...");
+        try {
+            const postResponse = await axios.post("http://content-service:8082/contents/posts", {
+                user: {
+                    email: email,
+                    name: "placeholder",
+                },
+                content: randomContent,
+            });
+            console.log("Post successful:", postResponse.data);
+        } catch (error: any) {
+            console.error("Post request failed:", error.message);
+        }
     }, 2 * 60_000); // Repeat every 2 minutes
 }
+
+const generateRandomString = (length: number) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
