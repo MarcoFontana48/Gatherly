@@ -97,3 +97,9 @@ runs the database using an image from docker hub, it is only needed to run the c
 ```bash
 $ docker-compose up -d 
 ``` 
+
+### Usage
+It is suggested (although not necessary) to login as 'test@gmail.com', because in file 'main.ts' of 
+'content-service' there is a test function that sends friendship request events to that user every 2 minutes, so that
+it is possible to simulate many users sending requests to the same user and see how the frontend reacts to events and
+sees their posts in its feed.
