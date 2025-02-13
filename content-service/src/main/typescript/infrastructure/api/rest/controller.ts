@@ -31,8 +31,8 @@ export class ContentServiceControllerImpl {
         res.flushHeaders();
 
         const postAddedListener = async (post: Post) => {
-            console.log("received postAdded event, about to send it to client '" + req.params.userID + "': ", post);
-            if (await this.service.areFriends(new UserID(req.params.userID), post.author.id)) {
+            console.log("received postAdded event, about to send it to client '" + req.params.id + "': ", post);
+            if (await this.service.areFriends(new UserID(req.params.id), post.author.id)) {
                 res.write(`data: ${JSON.stringify(post)}\n\n`);
             }
         };
