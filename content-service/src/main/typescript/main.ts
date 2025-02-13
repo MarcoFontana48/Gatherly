@@ -85,7 +85,7 @@ function startSendingRequests() {
         }
 
         // create a social-network post with a random string as content
-        const randomContent = generateRandomString(10);
+        const randomContent = generateRandomString();
         const randomEmail = getRandomEmail();
         console.log("Sending post with random content...");
         try {
@@ -103,7 +103,7 @@ function startSendingRequests() {
     }, 2 * 60_000); // Repeat every 2 minutes
 }
 
-const generateRandomString = (length: number) => {
+const generateRandomString = () => {
     const words = ['world', 'friends', 'everyone'];
     const randomWord = words[Math.floor(Math.random() * words.length)];
     return `Hello ${randomWord}`;
