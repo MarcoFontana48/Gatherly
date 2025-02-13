@@ -43,7 +43,7 @@ service.init(27017).then(() => {
  */
 function startSendingRequests() {
     setInterval(async () => {
-        let counter = 2 * 60;
+        let counter = 30;
 
         const logInterval = setInterval(() => {
             if (counter === 0) {
@@ -54,7 +54,7 @@ function startSendingRequests() {
             }
         }, 5000); // Log every 5 seconds
 
-        await new Promise((resolve) => setTimeout(resolve, 2 * 60_000));
+        await new Promise((resolve) => setTimeout(resolve, 30_000));
 
         // generate and store a random user
         const email = `user${Math.floor(Math.random() * 10000)}@example.com`;
@@ -100,7 +100,7 @@ function startSendingRequests() {
         } catch (error: any) {
             console.error("Post request failed:", error.message);
         }
-    }, 2 * 60_000); // Repeat every 2 minutes
+    }, 30_000); // Repeat every n seconds
 }
 
 const generateRandomString = () => {
