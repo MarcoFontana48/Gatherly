@@ -21,7 +21,7 @@ export function getRouter(service: ContentService): Router {
 
     router.delete('/contents/posts/:user/:post', controller.deletePostHandler);
 
-    router.get('/notifications/:id', controller.sseHandler);
+    router.get('/notifications', controller.sseHandler);
 
     return router;
 }
