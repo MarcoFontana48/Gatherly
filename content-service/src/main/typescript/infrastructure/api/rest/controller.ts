@@ -30,6 +30,8 @@ export class ContentServiceControllerImpl {
         res.setHeader("Connection", "keep-alive");
         res.flushHeaders();
 
+        console.log("received notification request from client '" + req + "'");
+
         const postAddedListener = async (post: Post) => {
             console.log("received postAdded event, about to send it to client '" + req.params.id + "': ", post);
             if (await this.service.areFriends(new UserID(req.params.id), post.author.id)) {
