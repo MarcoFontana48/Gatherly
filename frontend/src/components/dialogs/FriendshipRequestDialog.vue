@@ -28,7 +28,7 @@ const closeDialog = (index: number) => {
 
     <template #body>
       <p class="request-text">
-        <UserIdText :text="request.senderId" /> wants to add you as a friend.
+        <UserIdText :text="request.senderId" /> wants to add you to his friends.
       </p>
     </template>
 

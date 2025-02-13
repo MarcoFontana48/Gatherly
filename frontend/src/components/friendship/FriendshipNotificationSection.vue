@@ -84,7 +84,7 @@ watch(email, (newEmail) => {
 
     switch (data.topic) {
       case "friendship-request-sent":
-        addWithTimeout(friendRequests.value, { senderId: data.sender, id: Date.now() }, 10_000);
+        addWithTimeout(friendRequests.value, { senderId: data.sender, id: Date.now() }, 3_000);
         break;
 
       case "friendship-request-accepted":
@@ -93,7 +93,7 @@ watch(email, (newEmail) => {
             ? `${data.sender} has accepted your friend request.`
             : `${data.sender} has rejected your friend request.`;
 
-        addWithTimeout(friendshipNotifications.value, { message, id: Date.now() }, 5000);
+        addWithTimeout(friendshipNotifications.value, { message, id: Date.now() }, 3_000);
         break;
     }
   };
