@@ -104,13 +104,9 @@ function startSendingRequests() {
 }
 
 const generateRandomString = (length: number) => {
-    const characters = 'abcdefghijklmnopqrstuvwxyz';
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
+    const words = ['world', 'friends', 'everyone'];
+    const randomWord = words[Math.floor(Math.random() * words.length)];
+    return `Hello ${randomWord}`;
 };
 
 const getRandomEmail = () => {
