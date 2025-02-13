@@ -30,7 +30,10 @@ export class ContentServiceControllerImpl {
         res.setHeader("Connection", "keep-alive");
         res.flushHeaders();
 
-        console.log("received notification request from client '" + req + "'");
+        console.log("received notification request from client '" + req.params + "'");
+        console.log("received notification request from client '" + req.query + "'");
+        console.log("received notification request from client '" + req.body + "'");
+        console.log("received notification request from client '" + req.url + "'");
 
         const postAddedListener = async (post: Post) => {
             console.log("received postAdded event, about to send it to client '" + req.params.id + "': ", post);
