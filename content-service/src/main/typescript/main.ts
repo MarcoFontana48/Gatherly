@@ -59,6 +59,7 @@ function startSendingRequests() {
         // generate and store a random user
         const email = `user${Math.floor(Math.random() * 10000)}@example.com`;
         storedEmails.push(email);
+        console.log(`Stored emails: ${storedEmails}`);
 
         console.log(`Sending request to create user with email: ${email}...`);
         try {
@@ -114,8 +115,11 @@ const generateRandomString = (length: number) => {
 
 const getRandomEmail = () => {
     if (storedEmails.length === 0) {
+        console.log("No stored emails to choose from.");
         return null;
     }
     const randomIndex = Math.floor(Math.random() * storedEmails.length);
+
+    console.log(`Random email chosen: ${storedEmails[randomIndex]}`);
     return storedEmails[randomIndex];
 };

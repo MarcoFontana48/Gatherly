@@ -560,24 +560,24 @@ export class MongoFriendshipRepository extends AbstractMongoRepository implement
 
         return await this.connection
             .then(async () => {
-                const friendshipId = id.id.x + id.id.y;
-                console.log(`Finding friendship by ID: ${friendshipId}`);
+                const friendshipId1 = id.id.x + id.id.y;
+                const friendshipId2 = id.id.y + id.id.x;
 
-                const retrievedFriendship = await FriendModel.findById(friendshipId).populate<{ user1: { userName: string; _id: string }, user2: { userName: string; _id: string } }>('user1 user2');
+                const retrievedFriendship = await FriendModel.findOne({
+                    $or: [{ _id: friendshipId1 }, { _id: friendshipId2 }]
+                }).populate<{ user1: { userName: string; _id: string }, user2: { userName: string; _id: string } }>('user1 user2');
 
                 console.log(`Friendship found in database: ${retrievedFriendship}`);
 
                 if (!retrievedFriendship) {
-                    console.error(`Friendship not found in database: ${friendshipId}`);
+                    console.error(`Friendship between ${id.id.x} and ${id.id.y} not found in database`);
                     return undefined;
                 }
-
-                console.log(`Friendship found in database: ${retrievedFriendship}`);
 
                 const user1 = userOf(retrievedFriendship.user1.userName, retrievedFriendship.user1._id);
                 const user2 = userOf(retrievedFriendship.user2.userName, retrievedFriendship.user2._id);
 
-                console.log(`Friendship found in database: ${user1}, ${user2}`);
+                console.log(`Users of friendship found in database: ${user1}, ${user2}`);
 
                 return friendshipOf(user1, user2);
             })
