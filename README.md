@@ -57,7 +57,7 @@ or adding distinctive features.
 ### Installation
 1. Clone the repository
 ```bash
-$ git clone https://github.com/GiacomoRomagnoli/Social-Network.git
+$ git clone https://github.com/MarcoFontana48/Social-Network.git
 ```
 2. Navigate to folder
 ```bash
