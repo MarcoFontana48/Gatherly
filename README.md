@@ -91,15 +91,20 @@ $ docker build -t social-network-friendship-service -f Dockerfile .
 $ docker-compose up -d
 ```
 
+5. to run the frontend, move to the 'frontend' directory and run the following commands:
+```bash
+npm install
+npm run dev
+```
+
+It is suggested (although not necessary) to login as 'test@gmail.com', because in file 'main.ts' of
+'content-service' there is a test function that sends friendship request events to that user every 30 seconds, so that
+it is possible to simulate many users sending requests to the same user and see how the frontend reacts to events and
+sees their posts in its feed.
+
 Note: About 'content-service', if required, in order to build the service it is necessary to first run gradle task
 'compileTypescript' in order to install the necessary dependencies and avoid errors. Since the docker-compose file only
 runs the database using an image from docker hub, it is only needed to run the command:
 ```bash
 $ docker-compose up -d 
-``` 
-
-### Usage
-It is suggested (although not necessary) to login as 'test@gmail.com', because in file 'main.ts' of 
-'content-service' there is a test function that sends friendship request events to that user every 2 minutes, so that
-it is possible to simulate many users sending requests to the same user and see how the frontend reacts to events and
-sees their posts in its feed.
+```
