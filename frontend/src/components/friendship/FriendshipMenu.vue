@@ -43,7 +43,7 @@ const fetchFriendships = async () => {
     console.log("Fetching friendships of userId: " + email.value);
     const response = await axios.get("http://localhost:8081/friends/friendships", { params: { id: email.value } });
     console.log("Friendships fetched:", response.data);
-    friendships.value = response.data; //! assuming the response contains an array of friendships
+    friendships.value = response.data;
     console.log("Friendships:", friendships.value);
   } catch (error) {
     console.error("Failed to fetch friendships:", error);
