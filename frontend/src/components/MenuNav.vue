@@ -26,18 +26,18 @@ const emit = defineEmits(['openModal']);
 
 .menu-nav {
   display: flex;
-  flex-direction: column; // Default (Desktop)
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
   position: fixed;
   top: 5%;
 
   @media (max-width: 768px) {
-    flex-direction: row; // Horizontal layout on mobile
+    flex-direction: row;
     justify-content: space-around;
     width: 100%;
     position: fixed;
-    bottom: 0; // Fix at the bottom
+    bottom: 0;
     top: auto;
     background-color: global.$bg-color;
     padding: 10px 0;
@@ -45,7 +45,6 @@ const emit = defineEmits(['openModal']);
   }
 }
 
-/* Hide labels on mobile */
 .menu-label {
   @media (max-width: 768px) {
     display: none;

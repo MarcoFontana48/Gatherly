@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import LoginDialog from '@/components/dialogs/LoginDialog.vue';
 
-const showModal = ref(true); // Show login dialog automatically
+const showModal = ref(true);
 
 const handleLogin = (email: string) => {
   console.log("User logged in with email:", email);

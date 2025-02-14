@@ -1,4 +1,3 @@
-<!-- AcceptButton.vue -->
 <template>
   <BaseButton class="decline-button">
     <slot></slot>
