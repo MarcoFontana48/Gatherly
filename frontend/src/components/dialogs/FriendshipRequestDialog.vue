@@ -42,26 +42,26 @@ const closeDialog = (index: number) => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 $gap: 1vw;
 
 .friend-request {
-  @include default-text-styles($bg-color);
-  @include default-dialog-style($bg-color, red);
+  @include mixins.default-text-styles(global.$bg-color);
+  @include mixins.default-dialog-style(global.$bg-color, red);
 
   position: relative;
 
   .close-btn {
-    @include cross-close-button;
+    @include mixins.cross-close-button;
     position: absolute;
     top: 2%;
     right: 2%;
   }
 
   .buttons {
-    @include default-align-items($gap);
+    @include mixins.default-align-items($gap);
   }
 }
 </style>

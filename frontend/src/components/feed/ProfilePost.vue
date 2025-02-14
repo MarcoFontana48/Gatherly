@@ -41,12 +41,12 @@ const handleDelete = async () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .profile-post-container {
-  @include default-post-style($bg-color, 95%);
-  @include display-vertically;
+  @include mixins.default-post-style(global.$bg-color, 95%);
+  @include mixins.display-vertically;
   margin-bottom: 1rem;
 
   .post-buttons {

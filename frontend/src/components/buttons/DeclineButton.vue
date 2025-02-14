@@ -10,22 +10,22 @@ import BaseButton from './BaseButton.vue';
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .decline-button {
   $button-bg-color: red;
 
-  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, $button-bg-color);
-  @include default-text-styles($button-bg-color);
-  @include default-background-styles($button-bg-color);
+  @include mixins.adapt-border-color-based-on-bg($button-bg-color, global.$mix-color-amount, $button-bg-color);
+  @include mixins.default-text-styles($button-bg-color);
+  @include mixins.default-background-styles($button-bg-color);
 
   &:hover {
-    @include adapt-color-based-on-bg($button-bg-color, $hover-darken-amount, $button-bg-color);
+    @include mixins.adapt-color-based-on-bg($button-bg-color, global.$hover-darken-amount, $button-bg-color);
   }
 
   &:active {
-    @include adapt-color-based-on-bg($button-bg-color, $active-darken-amount, $button-bg-color);
+    @include mixins.adapt-color-based-on-bg($button-bg-color, global.$active-darken-amount, $button-bg-color);
   }
 }
 </style>

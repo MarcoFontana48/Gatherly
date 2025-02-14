@@ -1,20 +1,22 @@
+@use "sass:color";
+
 @mixin black-or-white-based-on-bg-lightness($bg-color) {
-  color: if(lightness($bg-color) > 60%, black, white);
+  color: if(color.channel($bg-color, "lightness", $space: hsl) > 60%, black, white);
 }
 
 @mixin adapt-color-based-on-bg($color, $amount, $bg-color) {
-  @if lightness($bg-color) > 60% {
-    color: darken($color, $amount);
+  @if color.channel($bg-color, "lightness", $space: hsl) > 60% {
+    color: color.adjust($color, $lightness: -$amount);
   } @else {
-    color: lighten($color, $amount);
+    color: color.adjust($color, $lightness: $amount);
   }
 }
 
 @mixin adapt-background-color-based-on-bg($color, $amount, $bg-color) {
-  @if lightness($bg-color) > 60% {
-    background: darken($color, $amount);
+  @if color.channel($bg-color, "lightness", $space: hsl) > 60% {
+    background: color.adjust($color, $lightness: -$amount);
   } @else {
-    background: lighten($color, $amount);
+    background: color.adjust($color, $lightness: $amount);
   }
 }
 
@@ -55,10 +57,10 @@
 }
 
 @mixin adapt-border-color-based-on-bg($color, $amount, $bg-color) {
-  border-color: mix($color, $bg-color, $amount);
+  border-color: color.mix($color, $bg-color, $amount);
 }
 
-@mixin default-dialog-style($bg-color, $border-color: invert($bg-color)) {
+@mixin default-dialog-style($bg-color, $border-color: color.invert($bg-color)) {
   $friendship-request-window-bg-color: $bg-color;
 
   $padding: 2vw;
@@ -70,7 +72,7 @@
   min-width: $min-window-width;
   text-align: center;
   border-radius: $border-radius;
-  border: 0.5vh solid mix($bg-color, $border-color, 0%);
+  border: 0.5vh solid color.mix($bg-color, $border-color, 0%);
 }
 
 @mixin default-text-styles($bg-color) {
@@ -192,14 +194,14 @@
 
 @mixin default-input-form-styles($bg-color) {
   padding: 2vh;
-  border: 0.2vh solid mix($bg-color, invert($bg-color), 50%);
+  border: 0.2vh solid color.mix($bg-color, color.invert($bg-color), 50%);
   border-radius: 0.2vh;
   outline: none;
   transition: border 0.3s;
   width: 80%;
 
   &:focus {
-    border-color: invert($bg-color);
+    border-color: color.invert($bg-color);
   }
 }
 
@@ -218,7 +220,7 @@
 @mixin default-post-style($bg-color, $mix-amount) {
   padding: 3%;
   border-radius: 1%;
-  background: mix($bg-color, invert($bg-color), $mix-amount);
+  background: color.mix($bg-color, color.invert($bg-color), $mix-amount);
 }
 
 @mixin over-background-post-style($bg-color) {
@@ -228,18 +230,18 @@
 
 @mixin error-text-style($bg-color) {
   @if $bg-color == red {
-    color: invert($bg-color);
+    color: color.invert($bg-color);
   } @else {
-    color: mix(red, $bg-color, 90%);
+    color: color.mix(red, $bg-color, 90%);
   }
   white-space: pre-line;
 }
 
 @mixin correct-response-text-style($bg-color) {
   @if $bg-color == green {
-    color: invert($bg-color);
+    color: color.invert($bg-color);
   } @else {
-    color: mix(green, $bg-color, 90%);
+    color: color.mix(green, $bg-color, 90%);
   }
   white-space: pre-line;
 }

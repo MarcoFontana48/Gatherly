@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch, computed, onUnmounted, defineEmits} from 'vue';
+import {ref, watch, computed, onUnmounted} from 'vue';
 import FriendshipRequestDialog from "@/components/dialogs/FriendshipRequestDialog.vue";
 import FriendshipNotificationDialog from "@/components/dialogs/FriendshipNotificationDialog.vue";
 import axios from 'axios';
@@ -115,10 +115,10 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins" as mixins;
 
 .friendship-requests {
-  @include align-vertically-to(flex-start);
+  @include mixins.align-vertically-to(flex-start);
   margin-right: 5%;
 }
 

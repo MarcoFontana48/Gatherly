@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{ modelValue: string; placeholder?: string; type?: string }>();
 const emit = defineEmits(['update:modelValue']);
@@ -18,16 +18,16 @@ watch(inputValue, (newValue) => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .input-container {
-  @include align-horizonally-to(center);
+  @include mixins.align-horizonally-to(center);
   width: 100%;
 
   .custom-input {
-    @include default-text-styles($bg-color);
-    @include default-input-form-styles($bg-color);
+    @include mixins.default-text-styles(global.$bg-color);
+    @include mixins.default-input-form-styles(global.$bg-color);
     margin-bottom: 1vh;
     margin-top: 1vh;
   }

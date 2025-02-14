@@ -9,25 +9,26 @@ import BaseButton from './BaseButton.vue';
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
+@use "sass:color";
 
 .neutral-button {
-  $button-bg-color: $bg-color;
+  $button-bg-color: global.$bg-color;
 
-  @include adapt-border-color-based-on-bg($button-bg-color, $mix-color-amount, invert($bg-color));
-  @include default-text-styles($button-bg-color);
-  @include default-background-styles($button-bg-color);
-  @include align-horizonally-to(center);
+  @include mixins.adapt-border-color-based-on-bg($button-bg-color, global.$mix-color-amount, color.invert(global.$bg-color));
+  @include mixins.default-text-styles($button-bg-color);
+  @include mixins.default-background-styles($button-bg-color);
+  @include mixins.align-horizonally-to(center);
 
   &:hover {
-    @include adapt-color-based-on-bg($button-bg-color, $hover-darken-amount, $button-bg-color);
-    @include adapt-background-color-based-on-bg($button-bg-color, 10%, $button-bg-color);
+    @include mixins.adapt-color-based-on-bg($button-bg-color, global.$hover-darken-amount, $button-bg-color);
+    @include mixins.adapt-background-color-based-on-bg($button-bg-color, 10%, $button-bg-color);
   }
 
   &:active {
-    @include adapt-color-based-on-bg($button-bg-color, $active-darken-amount, $button-bg-color);
-    @include adapt-background-color-based-on-bg($button-bg-color, 20%, $button-bg-color);
+    @include mixins.adapt-color-based-on-bg($button-bg-color, global.$active-darken-amount, $button-bg-color);
+    @include mixins.adapt-background-color-based-on-bg($button-bg-color, 20%, $button-bg-color);
   }
 }
 </style>

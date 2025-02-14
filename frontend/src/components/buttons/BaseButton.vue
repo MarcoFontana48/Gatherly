@@ -9,9 +9,9 @@
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
+@use "@/styles/mixins" as mixins;
 
 .base-button {
-  @include default-button-style;
+  @include mixins.default-button-style;
 }
 </style>

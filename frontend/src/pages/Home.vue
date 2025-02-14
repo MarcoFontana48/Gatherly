@@ -167,11 +167,11 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .feed-container {
-  @include default-text-styles($bg-color);
+  @include mixins.default-text-styles(global.$bg-color);
   width: 95%;
   padding: 1%;
   border-radius: 0.5%;
@@ -188,7 +188,7 @@ onMounted(() => {
   top: 2%;
   position: fixed;
 
-  background-color: $bg-color;
+  background-color: global.$bg-color;
   padding: 0.2%;
 }
 

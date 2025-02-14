@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
 import MenuButton from "@/components/buttons/NavButton.vue";
 import Icon from "@/components/images/Icon.vue";
 
@@ -22,8 +21,8 @@ const emit = defineEmits(['openModal']);
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .menu-nav {
   display: flex;
@@ -40,7 +39,7 @@ const emit = defineEmits(['openModal']);
     position: fixed;
     bottom: 0; // Fix at the bottom
     top: auto;
-    background-color: $bg-color;
+    background-color: global.$bg-color;
     padding: 10px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   }

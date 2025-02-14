@@ -107,14 +107,14 @@ const signUp = async () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .overlay-dialog {
   background: rgba(0, 0, 0, 1);
 
   .buttons {
-    @include default-align-items(1vw);
+    @include mixins.default-align-items(1vw);
   }
 }
 </style>

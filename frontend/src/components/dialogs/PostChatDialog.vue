@@ -89,17 +89,17 @@ const closeDialog = () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .post-chat-dialog {
-  @include over-background-post-style($bg-color);
+  @include mixins.over-background-post-style(global.$bg-color);
 
   .chat-header {
-    @include default-chat-header-style;
+    @include mixins.default-chat-header-style;
 
     .close-btn {
-      @include cross-close-button;
+      @include mixins.cross-close-button;
     }
   }
 
@@ -109,7 +109,7 @@ const closeDialog = () => {
     margin-bottom: 10px;
 
     .message {
-      @include message-style;
+      @include mixins.message-style;
     }
   }
 

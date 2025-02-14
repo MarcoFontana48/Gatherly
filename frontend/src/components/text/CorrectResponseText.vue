@@ -12,10 +12,10 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .correct-response-text {
-  @include correct-response-text-style($bg-color);
+  @include mixins.correct-response-text-style(global.$bg-color);
 }
 </style>

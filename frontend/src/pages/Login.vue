@@ -16,11 +16,11 @@ const handleLogin = (email: string) => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .login-page {
-  @include default-text-styles($bg-color);
-  @include default-dialog-style($bg-color);
+  @include mixins.default-text-styles(global.$bg-color);
+  @include mixins.default-dialog-style(global.$bg-color);
 }
 </style>

@@ -41,14 +41,14 @@ const closeDialog = () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .fixed-dialog {
-  @include post-dialog-style($bg-color);
+  @include mixins.post-dialog-style(global.$bg-color);
 
   .buttons {
-    @include default-align-items(1vw);
+    @include mixins.default-align-items(1vw);
   }
 }
 </style>

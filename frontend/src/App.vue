@@ -42,7 +42,6 @@ const route = useRoute();
       <SettingsDialog :showModal="showModal" @update:showModal="showModal = $event" />
     </div>
 
-    <!-- Mobile Bottom Navigation -->
     <div v-if="route.path !== '/login'" class="mobile-nav">
       <MenuNav :menuItems="menuItems" @openModal="toggleModal" />
       <FriendshipSection />
@@ -51,31 +50,29 @@ const route = useRoute();
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .app-container {
   display: flex;
   height: 100vh;
-  @include default-app-style($bg-color);
+  @include mixins.default-app-style(global.$bg-color);
 
-  @media (max-width: $mobile-screen-size) {
+  @media (max-width: global.$mobile-screen-size) {
     flex-direction: column;
     height: auto;
   }
 
-  // Left & Right Columns (Hide on Mobile)
   .left-column, .right-column {
     width: 20%;
     padding: 2.5vw;
     flex: none;
 
-    @media (max-width: $mobile-screen-size) {
-      display: none;  // Hide on mobile
+    @media (max-width: global.$mobile-screen-size) {
+      display: none;
     }
   }
 
-  // Center Column (Takes Full Width on Mobile)
   .center-column {
     flex: 1;
     display: flex;
@@ -83,23 +80,22 @@ const route = useRoute();
     align-items: center;
     overflow-y: auto;
 
-    @media (max-width: $mobile-screen-size) {
+    @media (max-width: global.$mobile-screen-size) {
       width: 100%;
     }
   }
 
-  // Mobile Navigation (Show Only on Small Screens)
   .mobile-nav {
-    display: none; // Hidden by default (desktop)
+    display: none;
 
-    @media (max-width: $mobile-screen-size) {
-      display: flex; // Show on mobile
+    @media (max-width: global.$mobile-screen-size) {
+      display: flex;
       justify-content: space-around;
       align-items: center;
       position: fixed;
       bottom: 0;
       width: 100%;
-      background-color: $bg-color;
+      background-color: global.$bg-color;
       padding: 10px 0;
       box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     }

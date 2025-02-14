@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch, defineProps, defineEmits, onMounted, onBeforeUnmount, computed} from "vue";
+import {ref, watch, onMounted, onBeforeUnmount, computed} from "vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import NeutralButton from "@/components/buttons/NeutralButton.vue";
 import {useAuthStore} from "@/utils/auth.ts";
@@ -113,17 +113,17 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .chat-dialog {
-  @include default-background-styles($bg-color);
+  @include mixins.default-background-styles(global.$bg-color);
 
   .chat-header {
-    @include default-chat-header-style;
+    @include mixins.default-chat-header-style;
 
     .close-btn {
-      @include cross-close-button;
+      @include mixins.cross-close-button;
     }
   }
 
@@ -134,12 +134,12 @@ onBeforeUnmount(() => {
     border-bottom: 1px solid #ddd;
 
     .message {
-      @include message-style;
+      @include mixins.message-style;
     }
   }
 
   .chat-input {
-    @include default-align-items(1vw);
+    @include mixins.default-align-items(1vw);
 
     .send-button {
       width: 20%;

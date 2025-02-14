@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, computed, watch, onMounted, onBeforeUnmount, provide, inject, onUnmounted} from "vue";
+import {ref, computed, watch, onMounted, onBeforeUnmount, inject, onUnmounted} from "vue";
 import axios from "axios";
 import { useAuthStore } from "@/utils/auth.js";
 import BaseInput from "@/components/inputs/BaseInput.vue";
@@ -292,12 +292,12 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .overlay {
-  @include overlay-background;
-  @include default-text-styles($bg-color);
+  @include mixins.overlay-background;
+  @include mixins.default-text-styles(global.$bg-color);
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -310,7 +310,7 @@ onBeforeUnmount(() => {
   }
 
   .side-panel {
-    @include side-panel($bg-color);
+    @include mixins.side-panel(global.$bg-color);
     padding: 2%;
     max-width: 33%;
     width: 100%;
@@ -319,7 +319,7 @@ onBeforeUnmount(() => {
     max-height: 100vh;
     height: 100vh;
 
-    @media (max-width: $mobile-screen-size) {
+    @media (max-width: global.$mobile-screen-size) {
       max-width: 96%;
       max-height: 100%;
       height: 100vh;
@@ -327,14 +327,14 @@ onBeforeUnmount(() => {
       position: fixed;
       top: 0;
       left: 0;
-      background-color: $bg-color;
+      background-color: global.$bg-color;
     }
 
     .panel-header {
-      @include panel-header-styles;
+      @include mixins.panel-header-styles;
 
       .close-btn {
-        @include default-close-btn-style;
+        @include mixins.default-close-btn-style;
       }
     }
 
@@ -343,14 +343,14 @@ onBeforeUnmount(() => {
       padding: 0;
 
       li {
-        @include align-horizonally-to(center);
+        @include mixins.align-horizonally-to(center);
         margin: 1vh;
       }
     }
 
     .send-friendship-request-section {
       .input {
-        @include default-align-items(1%);
+        @include mixins.default-align-items(1%);
 
         .email-input {
           width: 66%;
@@ -362,15 +362,15 @@ onBeforeUnmount(() => {
     }
 
     .friendship-request-section {
-      @include default-align-items(1%);
+      @include mixins.default-align-items(1%);
 
       .friend-name-text-container {
-        @include break-word-and-ellipsis;
+        @include mixins.break-word-and-ellipsis;
         max-width: 50%;
       }
 
       .handle-friendship-request-button {
-        @include align-horizonally-to(center);
+        @include mixins.align-horizonally-to(center);
         gap: 1%;
         max-width: 50%;
         margin-right: 2%
@@ -378,10 +378,10 @@ onBeforeUnmount(() => {
     }
 
     .friendship-section {
-      @include default-align-items(1%);
+      @include mixins.default-align-items(1%);
 
       .friend-name-text-container {
-        @include break-word-and-ellipsis;
+        @include mixins.break-word-and-ellipsis;
         max-width: 50%;
       }
 
@@ -392,26 +392,26 @@ onBeforeUnmount(() => {
     }
 
     .mobile-chat-dialog {
-      @include default-chat-style;
+      @include mixins.default-chat-style;
       width: 95%;
       bottom: 2%;
       position: fixed;
       left: 0;
 
-      @media (min-width: $mobile-screen-size) {
+      @media (min-width: global.$mobile-screen-size) {
         display: none;
       }
     }
   }
 
   .desktop-chat-dialog {
-    @include default-chat-style;
-    @include default-background-styles($bg-color);
+    @include mixins.default-chat-style;
+    @include mixins.default-background-styles(global.$bg-color);
     position: fixed;
     bottom: 0;
     left: 0;
 
-    @media (max-width: $mobile-screen-size) {
+    @media (max-width: global.$mobile-screen-size) {
       display: none;
     }
   }

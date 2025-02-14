@@ -35,8 +35,8 @@ const toggleDropdown = () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .friendship-container {
   display: flex;
@@ -45,24 +45,24 @@ const toggleDropdown = () => {
   gap: 1rem;
   top: 5%;
 
-  @media (max-width: $mobile-screen-size) {
+  @media (max-width: global.$mobile-screen-size) {
     flex-direction: row;
     justify-content: center;
     position: fixed;
     top: 0;
     right: 0;
-    background-color: $bg-color;
+    background-color: global.$bg-color;
     padding: 10px 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
   .friendship-button {
-    @media (max-width: $mobile-screen-size) {
+    @media (max-width: global.$mobile-screen-size) {
       margin-left: auto;
     }
 
     .menu-label {
-      @media (max-width: $mobile-screen-size) {
+      @media (max-width: global.$mobile-screen-size) {
         display: none;
       }
     }

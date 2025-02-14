@@ -10,10 +10,10 @@ defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins" as mixins;
 
 .icon {
-  @include default-icon-size;
-  @include default-icon-margin;
+  @include mixins.default-icon-size;
+  @include mixins.default-icon-margin;
 }
 </style>

@@ -63,11 +63,11 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/mixins.scss';
-@import '@/styles/global.scss';
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .profile-container {
-  @include default-text-styles($bg-color);
+  @include mixins.default-text-styles(global.$bg-color);
   width: 95%;
   margin: auto;
   padding: 1%;

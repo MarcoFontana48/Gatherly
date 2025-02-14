@@ -35,15 +35,15 @@ const props = defineProps<{
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "@/styles/global";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .post-container {
-  @include default-post-style(cyan, 85%);
-  @include display-vertically;
+  @include mixins.default-post-style(cyan, 85%);
+  @include mixins.display-vertically;
 
   .post-content-container {
-    @include over-background-post-style($bg-color);
+    @include mixins.over-background-post-style(global.$bg-color);
 
   }
 
@@ -53,11 +53,11 @@ const props = defineProps<{
     width: 2%;
 
     .icon {
-      @media (max-width: $mobile-screen-size) {
+      @media (max-width: global.$mobile-screen-size) {
         width: 1.2rem;
         height: 1.2rem;
       }
-      @media (min-width: $mobile-screen-size) {
+      @media (min-width: global.$mobile-screen-size) {
         width: 1.7rem;
         height: 1.7rem;
       }

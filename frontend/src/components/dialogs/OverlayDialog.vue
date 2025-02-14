@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps<{
   showModal: boolean;
@@ -21,17 +20,17 @@ const emit = defineEmits(['update:showModal']);
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
-@import "@/styles/global.scss";
+@use "@/styles/mixins" as mixins;
+@use "@/styles/global" as global;
 
 .modal-overlay {
-  @include overlay-background;
-  @include align-to(center);
-  @include default-text-styles($bg-color);
+  @include mixins.overlay-background;
+  @include mixins.align-to(center);
+  @include mixins.default-text-styles(global.$bg-color);
 
   .modal-content {
-    @include default-text-styles($bg-color);
-    @include default-dialog-style($bg-color);
+    @include mixins.default-text-styles(global.$bg-color);
+    @include mixins.default-dialog-style(global.$bg-color);
   }
 }
 </style>
