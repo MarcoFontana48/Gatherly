@@ -19,7 +19,7 @@ plugins {
 //    createHooks()
 // }
 
-rootProject.name = "Social-Network"
+rootProject.name = "Gatherly"
 
 include("commons")
 include("user-service")
