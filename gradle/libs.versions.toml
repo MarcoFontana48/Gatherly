@@ -12,7 +12,7 @@ kover = "0.9.1"
 junit-version = "5.10.0"
 mysql-version = "8.0.33"
 shadowjar-version = "8.1.1"
-task-tree-version = "4.0.0"
+task-tree-version = "4.0.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
